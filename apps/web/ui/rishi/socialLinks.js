@@ -7,8 +7,9 @@ import {
   LinkedinLogo,
   YoutubeLogo,
 } from "@phosphor-icons/react";
-import { cleanLink } from "lib/utils";
-import { Button } from "ui";
+
+import { Button } from "../../ui";
+import { cleanLink } from "../utilities/utils";
 
 const getIcon = ({ forId }) => {
   switch (forId) {

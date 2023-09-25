@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { UserCircle } from "ui/icons/user";
+
+import { UserCircle } from "../../ui/icons/user";
 
 const PhotoUpload = (props) => {
   useEffect(() => {

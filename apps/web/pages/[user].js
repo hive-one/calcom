@@ -1,3 +1,13 @@
+import insertNonBreakingSpaces from "@ui/utilities/insert-non-breaking-spaces";
+import BioLink from "@ui/valery/bio-link";
+import BookItem from "@ui/valery/book-item";
+import CirclesBackground from "@ui/valery/circles-background";
+import ExperienceItem from "@ui/valery/experience-item";
+import FactItem from "@ui/valery/fact-item";
+import PodcastItem from "@ui/valery/podcast-item";
+import ProjectItem from "@ui/valery/project-item";
+import Publication from "@ui/valery/publication-item";
+import VideoItem from "@ui/valery/video-item";
 import { cva } from "class-variance-authority";
 // import { createCheckoutSession } from "lib/stripe";
 import { useAuthContext } from "context/authContext";
@@ -10,17 +20,6 @@ import { titleCase } from "title-case";
 import { Button, Tooltip } from "@calcom/ui";
 
 import PageWrapper from "@components/PageWrapper";
-
-import insertNonBreakingSpaces from "./ui/utilities/insert-non-breaking-spaces";
-import BioLink from "./ui/valery/bio-link";
-import BookItem from "./ui/valery/book-item";
-import CirclesBackground from "./ui/valery/circles-background";
-import ExperienceItem from "./ui/valery/experience-item";
-import FactItem from "./ui/valery/fact-item";
-import PodcastItem from "./ui/valery/podcast-item";
-import ProjectItem from "./ui/valery/project-item";
-import Publication from "./ui/valery/publication-item";
-import VideoItem from "./ui/valery/video-item";
 
 const Section = ({ title, tileLayout = false, children }) => {
   const childrenLayoutClasses = cva([], {
