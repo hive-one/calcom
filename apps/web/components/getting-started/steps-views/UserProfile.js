@@ -1,7 +1,7 @@
 import { Button as Xbutton } from "@shadcdn/ui";
 import { useRouter } from "next/navigation";
 import { useRef, useState, useEffect } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 
 import OrganizationAvatar from "@calcom/features/ee/organizations/components/OrganizationAvatar";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
@@ -76,6 +76,7 @@ const UserProfile = () => {
     },
   });
   const onSubmit = handleSubmit((data) => {
+    console.info({ data, errors });
     if (!data?.advises?.length) {
       setError("advises", { type: "custom", message: "This field is required" });
       return;
@@ -176,26 +177,32 @@ const UserProfile = () => {
       </fieldset>
       <fieldset className="mb-3">
         <Label className="mb-2 mt-8">Call charges</Label>
-        <Select
-          required
-          isSearchable={false}
-          className="mb-0 h-[38px] w-full capitalize md:min-w-[150px] md:max-w-[200px]"
-          // defaultValue={durationTypeOptions.find(
-          //   (option) => option.value === minimumBookingNoticeDisplayValues.type
-          // )}
-          // onChange={(input) => {
-          //   if (input) {
-          //     setMinimumBookingNoticeDisplayValues({
-          //       ...minimumBookingNoticeDisplayValues,
-          //       type: input.value,
-          //     });
-          //   }
-          // }}
-          options={chargeOptions?.map((item) => ({ label: `$${item.value}`, value: item.priceIdProd }))}
+        <Controller
+          control={control}
+          name="call_charges"
+          rules={{ required: true }}
+          render={({ field: { onChange } }) => (
+            <Select
+              isSearchable={true}
+              className="mb-0 h-[38px] w-full capitalize md:min-w-[150px] md:max-w-[200px]"
+              // defaultValue={durationTypeOptions.find(
+              //   (option) => option.value === minimumBookingNoticeDisplayValues.type
+              // )}
+              onChange={onChange}
+              options={chargeOptions?.map((item) => ({ label: `$${item.value}`, value: item.priceIdProd }))}
+            />
+          )}
         />
         <p className="dark:text-inverted text-default mt-2 font-sans text-sm font-normal">
           How much would you like to charge per hour?
         </p>
+        {errors?.call_charges ? (
+          <p data-testid="required" className="text-xs text-red-500">
+            This field is required
+          </p>
+        ) : (
+          ""
+        )}
       </fieldset>
       {/* Things you can advise on */}
       <div className="mt-8 w-full">
@@ -232,7 +239,6 @@ const UserProfile = () => {
               </div>
             </section>
           ))}
-          {console.log({ errors })}
           {errors?.advises?.length || errors?.advises?.message ? (
             <p data-testid="required" className="text-xs text-red-500">
               This field is required
