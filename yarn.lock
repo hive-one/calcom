@@ -4137,7 +4137,7 @@ __metadata:
     sanitize-html: ^2.10.0
     schema-dts: ^1.1.0
     short-uuid: ^4.2.0
-    stripe: ^9.16.0
+    stripe: ^13.7.0
     superjson: 1.9.1
     tailwindcss: ^3.3.1
     tailwindcss-animate: ^1.0.6
@@ -29767,6 +29767,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"qs@npm:^6.11.0":
+  version: 6.11.2
+  resolution: "qs@npm:6.11.2"
+  dependencies:
+    side-channel: ^1.0.4
+  checksum: e812f3c590b2262548647d62f1637b6989cc56656dc960b893fe2098d96e1bd633f36576f4cd7564dfbff9db42e17775884db96d846bebe4f37420d073ecdc0b
+  languageName: node
+  linkType: hard
+
 "qs@npm:~6.5.2":
   version: 6.5.3
   resolution: "qs@npm:6.5.3"
@@ -33362,6 +33371,16 @@ __metadata:
     "@types/node": ">=8.1.0"
     qs: ^6.10.3
   checksum: 0ccf3c66a259450a63b8d6f27920e04be1fad1207fb6a9c93bdffc250008e1dc915c44bac1d8b4a63be10fcd1865d4aa3de90c79f7966798c43fecab7e4f489d
+  languageName: node
+  linkType: hard
+
+"stripe@npm:^13.7.0":
+  version: 13.7.0
+  resolution: "stripe@npm:13.7.0"
+  dependencies:
+    "@types/node": ">=8.1.0"
+    qs: ^6.11.0
+  checksum: 5c0f068662590175d766f703e60f148fa623b40add0f1ba2c828e1114d98c63da05e02cb24befb6740ce51583ad5cb782e2a9bdc52936b6b85251add3ede7af8
   languageName: node
   linkType: hard
 

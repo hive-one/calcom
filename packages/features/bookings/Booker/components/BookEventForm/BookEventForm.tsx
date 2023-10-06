@@ -7,25 +7,21 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { FieldError } from "react-hook-form";
 import { useForm } from "react-hook-form";
+import short from "short-uuid";
 import { z } from "zod";
 
 import type { EventLocationType } from "@calcom/app-store/locations";
 import { createPaymentLink } from "@calcom/app-store/stripepayment/lib/client";
 import dayjs from "@calcom/dayjs";
 import { VerifyCodeDialog } from "@calcom/features/bookings/components/VerifyCodeDialog";
-import {
-  createBooking,
-  createRecurringBooking,
-  mapBookingToMutationInput,
-  mapRecurringBookingToMutationInput,
-  useTimePreferences,
-} from "@calcom/features/bookings/lib";
+import { createBooking, createRecurringBooking, useTimePreferences } from "@calcom/features/bookings/lib";
 import getBookingResponsesSchema, {
   getBookingResponsesPartialSchema,
 } from "@calcom/features/bookings/lib/getBookingResponsesSchema";
 import { getFullName } from "@calcom/features/form-builder/utils";
 import { useBookingSuccessRedirect } from "@calcom/lib/bookingSuccessRedirect";
 import { MINUTES_TO_BOOK } from "@calcom/lib/constants";
+import { post } from "@calcom/lib/fetch-wrapper";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { useRouterQuery } from "@calcom/lib/hooks/useRouterQuery";
 import { HttpError } from "@calcom/lib/http-error";
@@ -292,7 +288,24 @@ export const BookEventFormChild = ({
       />
     );
 
-  const bookEvent = (values: BookingFormValues) => {
+  interface CheckoutPayload {
+    bookingInputId: string;
+    email: string;
+    priceId: string;
+  }
+
+  interface ApiResponse {
+    url: string;
+  }
+
+  const generateCheckoutLink = async (data: CheckoutPayload): Promise<string> => {
+    const response = await post<CheckoutPayload, ApiResponse>("/api/create-checkout-link", data);
+    const { url } = response;
+    return url;
+  };
+
+  const bookEvent = async (values: BookingFormValues) => {
+    console.log(values);
     // Clears form values stored in store, so old values won't stick around.
     setFormValues({});
     bookingForm.clearErrors();
@@ -304,8 +317,8 @@ export const BookEventFormChild = ({
       return;
     }
 
-    // Ensures that duration is an allowed value, if not it defaults to the
-    // default eventQuery duration.
+    // // Ensures that duration is an allowed value, if not it defaults to the
+    // // default eventQuery duration.
     const validDuration =
       duration &&
       eventQuery.data.metadata?.multipleDuration &&
@@ -334,13 +347,15 @@ export const BookEventFormChild = ({
         ),
     };
 
-    if (eventQuery.data?.recurringEvent?.freq && recurringEventCount) {
-      createRecurringBookingMutation.mutate(
-        mapRecurringBookingToMutationInput(bookingInput, recurringEventCount)
-      );
-    } else {
-      createBookingMutation.mutate(mapBookingToMutationInput(bookingInput));
-    }
+    const uuid = short.generate();
+    const bookingInputString = JSON.stringify(bookingInput);
+    localStorage.setItem(uuid, bookingInputString);
+    const url = await generateCheckoutLink({
+      bookingInputId: uuid,
+      email: values?.responses?.email,
+      priceId: "price_1NfM8hCt3U7PjutYOXR6zeny",
+    });
+    window.location.href = url;
   };
 
   if (!eventType) {
@@ -400,11 +415,7 @@ export const BookEventFormChild = ({
             color="primary"
             loading={createBookingMutation.isLoading || createRecurringBookingMutation.isLoading}
             data-testid={rescheduleUid ? "confirm-reschedule-button" : "confirm-book-button"}>
-            {rescheduleUid
-              ? t("reschedule")
-              : renderConfirmNotVerifyEmailButtonCond
-              ? t("confirm")
-              : t("verify_email_email_button")}
+            Book
           </Button>
         </div>
       </Form>
