@@ -212,7 +212,7 @@ const DateOverrideInputDialog = ({
   const [open, setOpen] = useState(false);
   {
     /* enableOverflow is used to allow overflow when there are too many overrides to show on mobile.
-       ref:- https://github.com/calcom/cal.com/pull/6215
+       ref:- https://github.com/hive-one/calcom/pull/6215
       */
   }
   const enableOverflow = isMobile;

@@ -28,7 +28,7 @@ And it makes it easy for anyone to integrate with Cal.com at the application pro
 1. Clone the main repo (NOT THIS ONE)
 
    ```sh
-   git clone --recurse-submodules -j8 https://github.com/calcom/cal.com.git
+   git clone --recurse-submodules -j8 https://github.com/hive-one/calcom.git
    ```
 
 1. Go to the project folder
@@ -218,7 +218,7 @@ Add this command: `./scripts/vercel-deploy.sh`
 
 See `scripts/vercel-deploy.sh` for more info on how the deployment is done.
 
-> _❗ IMORTANT: If you're forking the API repo you will need to update the URLs in both the main repo [`.gitmodules`](https://github.com/calcom/cal.com/blob/main/.gitmodules#L7) and this repo [`./scripts/vercel-deploy.sh`](https://github.com/calcom/api/blob/main/scripts/vercel-deploy.sh#L3) ❗_
+> _❗ IMORTANT: If you're forking the API repo you will need to update the URLs in both the main repo [`.gitmodules`](https://github.com/hive-one/calcom/blob/main/.gitmodules#L7) and this repo [`./scripts/vercel-deploy.sh`](https://github.com/calcom/api/blob/main/scripts/vercel-deploy.sh#L3) ❗_
 
 ## Environment variables
 

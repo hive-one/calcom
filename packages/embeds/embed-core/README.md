@@ -6,7 +6,7 @@ This is the vanilla JS core script that embeds Cal Link.
 
 See <https://developer.cal.com/embed/install-with-javascript>
 
-You can also see various example usages [here](https://github.com/calcom/cal.com/blob/main/packages/embeds/embed-core/index.html)
+You can also see various example usages [here](https://github.com/hive-one/calcom/blob/main/packages/embeds/embed-core/index.html)
 
 ## Development
 

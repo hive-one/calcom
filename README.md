@@ -1,6 +1,6 @@
 <!-- PROJECT LOGO -->
 <p align="center">
-  <a href="https://github.com/calcom/cal.com">
+  <a href="https://github.com/hive-one/calcom">
    <img src="https://user-images.githubusercontent.com/8019099/210054112-5955e812-a76e-4160-9ddd-58f2c72f1cce.png" alt="Logo">
   </a>
 
@@ -16,7 +16,7 @@
     ·
     <a href="https://cal.com">Website</a>
     ·
-    <a href="https://github.com/calcom/cal.com/issues">Issues</a>
+    <a href="https://github.com/hive-one/calcom/issues">Issues</a>
     ·
     <a href="https://cal.com/roadmap">Roadmap</a>
   </p>
@@ -26,16 +26,16 @@
    <a href="https://go.cal.com/discord"><img src="https://img.shields.io/badge/Discord-go.cal.com%2Fdiscord-%234A154B" alt="Join Cal.com Discord"></a>
    <a href="https://producthunt.com/posts/calendso"><img src="https://img.shields.io/badge/Product%20Hunt-%231%20Product%20of%20the%20Month-%23DA552E" alt="Product Hunt"></a>
    <a href="https://status.cal.com"><img height="20px" src="https://betteruptime.com/status-badges/v1/monitor/a9kf.svg" alt="Uptime"></a>
-   <a href="https://github.com/calcom/cal.com/stargazers"><img src="https://img.shields.io/github/stars/calcom/cal.com" alt="Github Stars"></a>
+   <a href="https://github.com/hive-one/calcom/stargazers"><img src="https://img.shields.io/github/stars/calcom/cal.com" alt="Github Stars"></a>
    <a href="https://news.ycombinator.com/item?id=34507672"><img src="https://img.shields.io/badge/Hacker%20News-%231-%23FF6600" alt="Hacker News"></a>
-   <a href="https://github.com/calcom/cal.com/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-AGPLv3-purple" alt="License"></a>
-   <a href="https://github.com/calcom/cal.com/pulse"><img src="https://img.shields.io/github/commit-activity/m/calcom/cal.com" alt="Commits-per-month"></a>
+   <a href="https://github.com/hive-one/calcom/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-AGPLv3-purple" alt="License"></a>
+   <a href="https://github.com/hive-one/calcom/pulse"><img src="https://img.shields.io/github/commit-activity/m/calcom/cal.com" alt="Commits-per-month"></a>
    <a href="https://cal.com/pricing"><img src="https://img.shields.io/badge/Pricing-Free-brightgreen" alt="Pricing"></a>
    <a href="https://jitsu.com?utm_source=github/calcom/cal.com"><img src="https://img.shields.io/badge/Metrics_tracked_by-JITSU-AA00FF?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACKSURBVHgBrZDRCYAwDEQv6gCOoKO4hOCXI9QVnEZwiY5iF5GaVClaBNtioCSUvCR3tMJaxIfZgW4AGUoEPVwgPZoS0Dmgg3NBVDFNbMIsmYCak3J1jDk9iCQvsKJvkzr71N81Gj6vDT/LU2P6RhY63jcafk3YJEbgeZpiFyc/5HJKv8Ef273NSfABGbQfUZhnOSAAAAAASUVORK5CYII=" alt="Jitsu Tracked"></a>
    <img src="https://api.checklyhq.com/v1/badges/checks/5e048048-1b51-47ba-9209-60607507622e?responseTime=true" alt="Checkly Availability" />
    <a href="https://hub.docker.com/r/calendso/calendso"><img src="https://img.shields.io/docker/pulls/calendso/calendso"></a>
    <a href="https://twitch.tv/calcomtv"><img src="https://img.shields.io/twitch/status/calcomtv?style=flat"></a>
-   <a href="https://github.com/calcom/cal.com/issues?q=is:issue+is:open+label:%22%F0%9F%99%8B%F0%9F%8F%BB%E2%80%8D%E2%99%82%EF%B8%8Fhelp+wanted%22"><img src="https://img.shields.io/badge/Help%20Wanted-Contribute-blue"></a>
+   <a href="https://github.com/hive-one/calcom/issues?q=is:issue+is:open+label:%22%F0%9F%99%8B%F0%9F%8F%BB%E2%80%8D%E2%99%82%EF%B8%8Fhelp+wanted%22"><img src="https://img.shields.io/badge/Help%20Wanted-Contribute-blue"></a>
    <a href="https://cal.com/figma"><img src="https://img.shields.io/badge/Figma-Design%20System-blueviolet"></a>
    <a href="https://discord.com/channels/1125390093386010654/1125398231585661040"><img src="https://img.shields.io/badge/translations-contribute-brightgreen" /></a>
    <a href="https://contributor-covenant.org/version/1/4/code-of-conduct/ "><img src="https://img.shields.io/badge/Contributor%20Covenant-1.4-purple" /></a>
@@ -46,7 +46,7 @@
 
 ## About the Project
 
-<img width="100%" alt="booking-screen" src="https://github.com/calcom/cal.com/assets/8019099/407e727e-ff19-4ca4-bcae-049dca05cf02">
+<img width="100%" alt="booking-screen" src="https://github.com/hive-one/calcom/assets/8019099/407e727e-ff19-4ca4-bcae-049dca05cf02">
 
 # Scheduling infrastructure for absolutely everyone
 
@@ -122,13 +122,13 @@ Here is what you need to be able to run Cal.com.
 
 ### Setup
 
-1. Clone the repo into a public GitHub repository (or fork https://github.com/calcom/cal.com/fork). If you plan to distribute the code, keep the source code public to comply with [AGPLv3](https://github.com/calcom/cal.com/blob/main/LICENSE). To clone in a private repository, [acquire a commercial license](https://cal.com/sales))
+1. Clone the repo into a public GitHub repository (or fork https://github.com/hive-one/calcom/fork). If you plan to distribute the code, keep the source code public to comply with [AGPLv3](https://github.com/hive-one/calcom/blob/main/LICENSE). To clone in a private repository, [acquire a commercial license](https://cal.com/sales))
 
    ```sh
-   git clone https://github.com/calcom/cal.com.git
+   git clone https://github.com/hive-one/calcom.git
    ```
 
-   > If you are on Windows, run the following command on `gitbash` with admin privileges: <br> > `git clone -c core.symlinks=true https://github.com/calcom/cal.com.git` <br>
+   > If you are on Windows, run the following command on `gitbash` with admin privileges: <br> > `git clone -c core.symlinks=true https://github.com/hive-one/calcom.git` <br>
    > See [docs](https://cal.com/docs/how-to-guides/how-to-troubleshoot-symbolic-link-issues-on-windows#enable-symbolic-links) for more details.
 
 1. Go to the project folder
@@ -171,7 +171,7 @@ echo 'NEXT_PUBLIC_DEBUG=1' >> .env
 
 2. This will open a fully configured workspace in your browser with all the necessary dependencies already installed.
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/calcom/cal.com)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/hive-one/calcom)
 
 #### Manual setup
 
@@ -363,7 +363,7 @@ Please see our [contributing guide](/CONTRIBUTING.md).
 
 ### Good First Issues
 
-We have a list of [help wanted](https://github.com/calcom/cal.com/issues?q=is:issue+is:open+label:%22%F0%9F%99%8B%F0%9F%8F%BB%E2%80%8D%E2%99%82%EF%B8%8Fhelp+wanted%22) that contain small features and bugs which have a relatively limited scope. This is a great place to get started, gain experience, and get familiar with our contribution process.
+We have a list of [help wanted](https://github.com/hive-one/calcom/issues?q=is:issue+is:open+label:%22%F0%9F%99%8B%F0%9F%8F%BB%E2%80%8D%E2%99%82%EF%B8%8Fhelp+wanted%22) that contain small features and bugs which have a relatively limited scope. This is a great place to get started, gain experience, and get familiar with our contribution process.
 
 <!-- BOUNTIES -->
 
@@ -380,7 +380,7 @@ We have a list of [help wanted](https://github.com/calcom/cal.com/issues?q=is:is
 
 ### Contributors
 
-<a href="https://github.com/calcom/cal.com/graphs/contributors">
+<a href="https://github.com/hive-one/calcom/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=calcom/cal.com" />
 </a>
 
@@ -542,7 +542,7 @@ For example, `Cal.com (support@cal.com)`.
 
 ## License
 
-Distributed under the [AGPLv3 License](https://github.com/calcom/cal.com/blob/main/LICENSE). See `LICENSE` for more information.
+Distributed under the [AGPLv3 License](https://github.com/hive-one/calcom/blob/main/LICENSE). See `LICENSE` for more information.
 
 <!-- ACKNOWLEDGEMENTS -->
 

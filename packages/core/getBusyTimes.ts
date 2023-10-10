@@ -70,7 +70,7 @@ export async function getBusyTimes(params: {
    *   - The current user has a different booking at this time he/she attends
    *
    * See further discussion within this GH issue:
-   * https://github.com/calcom/cal.com/issues/6374
+   * https://github.com/hive-one/calcom/issues/6374
    *
    * NOTE: Changes here will likely require changes to some mocking
    *  logic within getSchedule.test.ts:addBookings

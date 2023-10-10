@@ -28,7 +28,7 @@ export default function Credits() {
           </Link>
           {vercelCommitHash && IS_CALCOM ? (
             <Link
-              href={`https://github.com/calcom/cal.com/commit/${vercelCommitHash}`}
+              href={`https://github.com/hive-one/calcom/commit/${vercelCommitHash}`}
               target="_blank"
               className="hover:underline">
               {commitHash}

@@ -79,7 +79,7 @@ export const getConnectedCalendars = async (
             },
           };
         }
-        // HACK https://github.com/calcom/cal.com/pull/7644/files#r1131508414
+        // HACK https://github.com/hive-one/calcom/pull/7644/files#r1131508414
         if (destinationCalendar && !Object.isFrozen(destinationCalendar)) {
           destinationCalendar.primaryEmail = primary.email;
           destinationCalendar.integrationTitle = integration.title;
@@ -248,7 +248,7 @@ export const createEvent = async (
           }
           log.error("createEvent failed", JSON.stringify(error), calEvent);
           // @TODO: This code will be off till we can investigate an error with it
-          //https://github.com/calcom/cal.com/issues/3949
+          //https://github.com/hive-one/calcom/issues/3949
           // await sendBrokenIntegrationEmail(calEvent, "calendar");
           return undefined;
         })
@@ -294,7 +294,7 @@ export const updateEvent = async (
           })
           .catch(async (e: { calError: string }) => {
             // @TODO: This code will be off till we can investigate an error with it
-            // @see https://github.com/calcom/cal.com/issues/3949
+            // @see https://github.com/hive-one/calcom/issues/3949
             // await sendBrokenIntegrationEmail(calEvent, "calendar");
             log.error("updateEvent failed", e, calEvent);
             if (e?.calError) {
