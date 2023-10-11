@@ -3,9 +3,10 @@ import type { AppMeta } from "@calcom/types/App";
 import _package from "./package.json";
 
 export const metadata = {
+  enabled: false,
   name: "Lark Calendar",
   description: _package.description,
-  installed: false,
+  installed: true,
   type: "lark_calendar",
   title: "Lark Calendar",
   variant: "calendar",

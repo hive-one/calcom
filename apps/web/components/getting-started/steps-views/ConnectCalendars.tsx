@@ -28,6 +28,7 @@ const ConnectedCalendars = (props: IConnectCalendarsProps) => {
   );
   const disabledNextButton = firstCalendar === undefined;
   const destinationCalendar = queryConnectedCalendars.data?.destinationCalendar;
+
   return (
     <>
       {/* Already connected calendars  */}
