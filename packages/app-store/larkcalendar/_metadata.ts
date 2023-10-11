@@ -5,7 +5,7 @@ import _package from "./package.json";
 export const metadata = {
   name: "Lark Calendar",
   description: _package.description,
-  installed: true,
+  installed: false,
   type: "lark_calendar",
   title: "Lark Calendar",
   variant: "calendar",
