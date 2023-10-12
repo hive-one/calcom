@@ -1,6 +1,6 @@
 import { Button as Xbutton } from "@shadcdn/ui";
 import { useRouter } from "next/navigation";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 
 import OrganizationAvatar from "@calcom/features/ee/organizations/components/OrganizationAvatar";
@@ -26,20 +26,19 @@ const UserProfile = () => {
     handleSubmit,
     getValues,
     setError,
-    clearErrors,
     formState: { errors },
   } = useForm({
-    defaultValues: { bio: user?.bio || "", advises: [""] },
+    defaultValues: {
+      bio: user?.bio || "",
+      advises: user?.adviceOn || [""],
+      pricePerHour: user?.pricePerHour || 300,
+    },
   });
 
   const { fields, prepend, remove } = useFieldArray({
     control,
     name: "advises",
   });
-
-  useEffect(() => {
-    setValue("advises", [""]);
-  }, []);
 
   const { data: eventTypes } = trpc.viewer.eventTypes.list.useQuery();
   const [imageSrc, setImageSrc] = useState(user?.avatar || "");
@@ -85,11 +84,11 @@ const UserProfile = () => {
     const payload = {
       bio: data?.bio,
       adviceOn: data?.advises,
-      pricePerHour: data?.call_charges?.value,
-      // completedOnboarding: true,
+      pricePerHour: data?.pricePerHour?.value,
+      completedOnboarding: true,
     };
 
-    // telemetry.event(telemetryEventTypes.onboardingFinished);
+    telemetry.event(telemetryEventTypes.onboardingFinished);
 
     mutation.mutate(payload);
   });
@@ -187,27 +186,28 @@ const UserProfile = () => {
         <Label className="mb-2 mt-8">Call charges</Label>
         <Controller
           control={control}
-          name="call_charges"
+          defaultValue={getValues("pricePerHour") || user?.pricePerHour || ""}
+          name="pricePerHour"
           rules={{ required: true }}
-          render={({ field: { onChange } }) => (
-            <Select
-              isSearchable={true}
-              className="mb-0 h-[38px] w-full capitalize md:min-w-[150px] md:max-w-[200px]"
-              // defaultValue={durationTypeOptions.find(
-              //   (option) => option.value === minimumBookingNoticeDisplayValues.type
-              // )}
-              onChange={onChange}
-              options={chargeOptions?.map((item) => ({
-                label: formatter.format(item.value),
-                value: item.value,
-              }))}
-            />
+          render={({ field: { onChange, value } }) => (
+            <>
+              <Select
+                isSearchable={true}
+                className="mb-0 h-[38px] w-full capitalize md:min-w-[150px] md:max-w-[200px]"
+                defaultValue={{ label: formatter.format(value), value }}
+                onChange={onChange}
+                options={chargeOptions?.map((item) => ({
+                  label: formatter.format(item.value),
+                  value: item.value,
+                }))}
+              />
+            </>
           )}
         />
         <p className="dark:text-inverted text-default mt-2 font-sans text-sm font-normal">
           How much would you like to charge per hour?
         </p>
-        {errors?.call_charges ? (
+        {errors?.pricePerHour ? (
           <p data-testid="required" className="text-xs text-red-500">
             This field is required
           </p>
