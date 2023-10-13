@@ -413,6 +413,8 @@ model Booking {
   /// @zod.custom(imports.bookingMetadataSchema)
   metadata              Json?
   isRecorded            Boolean              @default(false)
+  customerId            Int?
+  customer              Customer?            @relation(fields: [customerId], references: [id], onDelete: Cascade)
 
   @@index([eventTypeId])
   @@index([userId])
@@ -420,6 +422,19 @@ model Booking {
   @@index([recurringEventId])
   @@index([uid])
   @@index([status])
+}
+
+model Customer {
+  id                 Int       @id @default(autoincrement())
+  email              String
+  name               String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  stripeId           String?
+  stripeCustomerLink String?
+  bookings           Booking[]
+
+  @@unique([email])
 }
 
 model Schedule {

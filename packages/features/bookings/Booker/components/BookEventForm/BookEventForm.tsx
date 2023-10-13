@@ -353,6 +353,7 @@ export const BookEventFormChild = ({
     const url = await generateCheckoutLink({
       bookingInputId: uuid,
       email: values?.responses?.email,
+      name: values?.responses?.name,
       priceId: "price_1NfM8hCt3U7PjutYOXR6zeny",
     });
     window.location.href = url;
