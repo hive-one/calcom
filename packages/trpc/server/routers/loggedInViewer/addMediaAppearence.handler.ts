@@ -3,27 +3,27 @@ import type { GetServerSidePropsContext, NextApiResponse } from "next";
 import { prisma } from "@calcom/prisma";
 import type { TrpcSessionUser } from "@calcom/trpc/server/trpc";
 
-import type { TPodcastAddSchema } from "./addPodcast.schema";
+import type { TMediaAppearenceAddSchema } from "./addMediaAppearence.schema";
 
-type AddPodcast = {
+type AddMediaAppearence = {
   ctx: {
     user: NonNullable<TrpcSessionUser>;
     res?: NextApiResponse | GetServerSidePropsContext["res"];
   };
-  input: TPodcastAddSchema;
+  input: TMediaAppearenceAddSchema;
 };
 
-export const addPodcastHandler = async ({ ctx, input }: AddPodcast) => {
+export const addMediaAppearenceHandler = async ({ ctx, input }: AddMediaAppearence) => {
   const { user } = ctx;
   console.log("handler", user);
   console.log("post input", input);
 
-  const addPodcast = await prisma.user.update({
+  const addMediaAppearence = await prisma.user.update({
     where: {
       id: ctx.user.id,
     },
     data: {
-      podcasts: {
+      mediaAppearences: {
         create: {
           ...input,
           updatedAt: new Date(),
@@ -32,5 +32,5 @@ export const addPodcastHandler = async ({ ctx, input }: AddPodcast) => {
     },
   });
 
-  return { ...addPodcast };
+  return { ...addMediaAppearence };
 };

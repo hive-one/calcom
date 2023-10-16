@@ -3,34 +3,26 @@ import type { GetServerSidePropsContext, NextApiResponse } from "next";
 import { prisma } from "@calcom/prisma";
 import type { TrpcSessionUser } from "@calcom/trpc/server/trpc";
 
-import type { TPodcastAddSchema } from "./addPodcast.schema";
+import type { TBookRemoveSchema } from "./removeBook.schema";
 
-type AddPodcast = {
+type RemoveBook = {
   ctx: {
     user: NonNullable<TrpcSessionUser>;
     res?: NextApiResponse | GetServerSidePropsContext["res"];
   };
-  input: TPodcastAddSchema;
+  input: TBookRemoveSchema;
 };
 
-export const addPodcastHandler = async ({ ctx, input }: AddPodcast) => {
+export const removeBookHandler = async ({ ctx, input }: RemoveBook) => {
   const { user } = ctx;
   console.log("handler", user);
   console.log("post input", input);
 
-  const addPodcast = await prisma.user.update({
+  const removeBookRes = await prisma.book.delete({
     where: {
-      id: ctx.user.id,
-    },
-    data: {
-      podcasts: {
-        create: {
-          ...input,
-          updatedAt: new Date(),
-        },
-      },
+      isbn: input.isbn,
     },
   });
 
-  return { ...addPodcast };
+  return { ...removeBookRes };
 };
