@@ -7,9 +7,12 @@ type AddFact = {
 };
 
 export const addFactHandler = async ({ input }: AddFact) => {
-  const addSocialLinkRes = await prisma.fact.create({
-    data: input,
+  const addFactRes = await prisma.fact.create({
+    data: {
+      ...input,
+      updatedAt: new Date(),
+    },
   });
 
-  return { ...addSocialLinkRes };
+  return { ...addFactRes };
 };
