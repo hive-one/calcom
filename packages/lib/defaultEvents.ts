@@ -50,6 +50,9 @@ const user: User & { credentials: CredentialPayload[] } = {
   allowDynamicBooking: true,
   timeFormat: 12,
   organizationId: null,
+  adviceOn: ["Crypto", "Stocks", "Options"],
+  pricePerHour: 200,
+  priceCurrency: "usd",
 };
 
 const customInputs: CustomInputSchema[] = [];
