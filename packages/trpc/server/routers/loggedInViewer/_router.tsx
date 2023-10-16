@@ -1,5 +1,6 @@
 import authedProcedure from "../../procedures/authedProcedure";
 import { router } from "../../trpc";
+import { ZSocialLinkInputSchema } from "./addSocialLink.schema";
 import { ZAppByIdInputSchema } from "./appById.schema";
 import { ZAppCredentialsByTypeInputSchema } from "./appCredentialsByType.schema";
 import { ZAwayInputSchema } from "./away.schema";
@@ -11,10 +12,12 @@ import { ZGetCalVideoRecordingsInputSchema } from "./getCalVideoRecordings.schem
 import { ZGetDownloadLinkOfCalVideoRecordingsInputSchema } from "./getDownloadLinkOfCalVideoRecordings.schema";
 import { ZIntegrationsInputSchema } from "./integrations.schema";
 import { ZLocationOptionsInputSchema } from "./locationOptions.schema";
+import { ZSocialLinkRemoveSchema } from "./removeSocialLink.schema";
 import { ZRoutingFormOrderInputSchema } from "./routingFormOrder.schema";
 import { ZSetDestinationCalendarInputSchema } from "./setDestinationCalendar.schema";
 import { ZSubmitFeedbackInputSchema } from "./submitFeedback.schema";
 import { ZUpdateProfileInputSchema } from "./updateProfile.schema";
+import { ZSocialLinkUpdateSchema } from "./updateSocialLink.schema";
 import { ZUpdateUserDefaultConferencingAppInputSchema } from "./updateUserDefaultConferencingApp.schema";
 import { ZWorkflowOrderInputSchema } from "./workflowOrder.schema";
 
@@ -32,7 +35,6 @@ type AppsRouterHandlerCache = {
   appCredentialsByType?: typeof import("./appCredentialsByType.handler").appCredentialsByTypeHandler;
   stripeCustomer?: typeof import("./stripeCustomer.handler").stripeCustomerHandler;
   updateProfile?: typeof import("./updateProfile.handler").updateProfileHandler;
-  updateLinks?: typeof import("./updateLinks.handler").updateLinksHandler;
   eventTypeOrder?: typeof import("./eventTypeOrder.handler").eventTypeOrderHandler;
   routingFormOrder?: typeof import("./routingFormOrder.handler").routingFormOrderHandler;
   workflowOrder?: typeof import("./workflowOrder.handler").workflowOrderHandler;
@@ -45,6 +47,9 @@ type AppsRouterHandlerCache = {
   getUsersDefaultConferencingApp?: typeof import("./getUsersDefaultConferencingApp.handler").getUsersDefaultConferencingAppHandler;
   updateUserDefaultConferencingApp?: typeof import("./updateUserDefaultConferencingApp.handler").updateUserDefaultConferencingAppHandler;
   teamsAndUserProfilesQuery?: typeof import("./teamsAndUserProfilesQuery.handler").teamsAndUserProfilesQuery;
+  addSocialLink?: typeof import("./addSocialLink.handler").addSocialLinkHandler;
+  removeSocialLink?: typeof import("./removeSocialLink.handler").removeSocialLinkHandler;
+  updateSocialLink?: typeof import("./updateSocialLink.handler").updateSocialLinkHandler;
 };
 
 const UNSTABLE_HANDLER_CACHE: AppsRouterHandlerCache = {};
@@ -220,18 +225,48 @@ export const loggedInViewerRouter = router({
     return UNSTABLE_HANDLER_CACHE.updateProfile({ ctx, input });
   }),
 
-  // updateLinks: authedProcedure.input(_SocialLinkModel).mutation(async ({ ctx, input }) => {
-  //   if (!UNSTABLE_HANDLER_CACHE.updateLinks) {
-  //     UNSTABLE_HANDLER_CACHE.updateLinks = (await import("./updateLinks.handler")).updateLinksHandler;
-  //   }
+  addSocialLink: authedProcedure.input(ZSocialLinkInputSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addSocialLink) {
+      UNSTABLE_HANDLER_CACHE.addSocialLink = (await import("./addSocialLink.handler")).addSocialLinkHandler;
+    }
 
-  //   // Unreachable code but required for type safety
-  //   if (!UNSTABLE_HANDLER_CACHE.updateLinks) {
-  //     throw new Error("Failed to load handler");
-  //   }
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addSocialLink) {
+      throw new Error("Failed to load handler");
+    }
 
-  //   return UNSTABLE_HANDLER_CACHE.updateLinks({ ctx, input });
-  // }),
+    return UNSTABLE_HANDLER_CACHE.addSocialLink({ ctx, input });
+  }),
+
+  removeSocialLink: authedProcedure.input(ZSocialLinkRemoveSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.removeSocialLink) {
+      UNSTABLE_HANDLER_CACHE.removeSocialLink = (
+        await import("./removeSocialLink.handler")
+      ).removeSocialLinkHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.removeSocialLink) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.removeSocialLink({ ctx, input });
+  }),
+
+  updateSocialLink: authedProcedure.input(ZSocialLinkUpdateSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.updateSocialLink) {
+      UNSTABLE_HANDLER_CACHE.updateSocialLink = (
+        await import("./updateSocialLink.handler")
+      ).updateSocialLinkHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.updateSocialLink) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.updateSocialLink({ ctx, input });
+  }),
 
   eventTypeOrder: authedProcedure.input(ZEventTypeOrderInputSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.eventTypeOrder) {

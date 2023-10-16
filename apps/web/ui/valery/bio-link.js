@@ -21,83 +21,83 @@ import { Keybase, GoogleScholar } from "../../ui/icons/social";
 
 const linkTypes = [
   {
-    type: "generic_link",
+    key: "OTHER",
     label: "Custom",
     icon: Link45deg,
   },
   {
-    type: "twitter",
+    key: "TWITTER",
     label: "Twitter",
     icon: Twitter,
   },
   {
-    type: "linkedin",
+    key: "LINKEDIN",
     label: "LinkedIn",
     icon: Linkedin,
   },
   {
-    type: "github",
+    key: "GITHUB",
     label: "GitHub",
     icon: Github,
   },
   {
-    type: "stackexchange",
+    key: "STACKEXCHANGE",
     label: "Stack Exchange",
     icon: StackOverflow,
   },
-  { type: "wikipedia", label: "Wikipedia", icon: Wikipedia },
+  { key: "wikipedia", label: "Wikipedia", icon: Wikipedia },
   {
-    type: "google-scholar",
+    key: "GOOGLESCHOLAR",
     label: "Google scholar",
     icon: GoogleScholar,
   },
   {
-    type: "youtube",
+    key: "YOUTUBE",
     label: "YouTube",
     icon: Youtube,
   },
   {
-    type: "facebook",
+    key: "FAECBOOK",
     label: "Facebook",
     icon: Facebook,
   },
   {
-    type: "instagram",
+    key: "INSTAGRAM",
     label: "Instagram",
     icon: Instagram,
   },
   {
-    type: "medium",
+    key: "MEDIUM",
     label: "Medium",
     icon: Medium,
   },
   {
-    type: "quora",
+    key: "QUORA",
     label: "Quora",
     icon: Quora,
   },
   {
-    type: "reddit",
+    key: "REDDIT",
     label: "Reddit",
     icon: Reddit,
   },
   {
-    type: "twitch",
+    key: "TWITCH",
     label: "Twitch",
     icon: Twitch,
   },
   {
-    type: "telegram",
+    key: "TELEGRAM",
     label: "Telegram",
     icon: Telegram,
   },
   {
-    type: "mastodon",
+    key: "MASTODON",
     label: "Mastodon",
     icon: Mastodon,
   },
   {
-    type: "keybase",
+    key: "KEYBASE",
     label: "Keybase",
     icon: Keybase,
   },
@@ -113,23 +113,25 @@ const iconProps = {
   className: "shrink-0 text-gray-400 group-hover:text-gray-500",
 };
 
-const linkTypeToIcon = (type) => {
-  const IconComponent = linkTypes.find((link) => link.type === type)?.icon;
+const linkTypeToIcon = (key) => {
+  console.log("asdasd", key);
+  const IconComponent = linkTypes.find((link) => link.key.toLowerCase() === key?.toLowerCase())?.icon;
   return IconComponent ? <IconComponent {...iconProps} /> : null;
 };
 
 // TODO: Add tooltip for icon links
-const BioLink = ({ type, url, name }) => (
+const BioLink = ({ itemKey, url, name }) => (
   <Link
     href={url}
     target="_blank"
     className="group flex flex-row items-center gap-1 text-gray-600 decoration-gray-300 underline-offset-4 hover:text-gray-700 hover:underline"
-    title={type !== "generic_link" && type !== "website" && name}
-    id={`link-${type}`}>
+    title={itemKey !== "other" && itemKey !== "website" && name}
+    id={`link-${itemKey}`}>
+    {console.info({ itemKey, url, name })}
     <div className="flex h-6 flex-shrink-0 items-center justify-center">
-      {linkTypeToIcon(type) ?? <Link45deg {...iconProps} />}
+      {linkTypeToIcon(itemKey) ?? <Link45deg {...iconProps} />}
     </div>
-    {(type === "generic_link" || type === "website") && (
+    {(itemKey === "generic_link" || itemKey === "website") && (
       <div className="whitespace-nowrap text-[13px] leading-6 tracking-[0.26]">
         {name ? name : stripProtocol(url)}
       </div>

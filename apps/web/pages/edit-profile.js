@@ -51,14 +51,29 @@ const EditProfile = () => {
   const mutation = trpc.viewer.updateProfile.useMutation({
     onSuccess: onSuccess,
   });
-  const linksMutation = trpc.viewer.updateLinks.useMutation();
+  const addSocialLinkMutation = trpc.viewer.addSocialLink.useMutation();
+  const updateSocialLinkMutation = trpc.viewer.updateSocialLink.useMutation();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("profile", profile);
     mutation.mutate(profile);
 
-    // linksMutation.mutate(profile?.socialLinks);
+    profile?.socialLinks.map((socialLink) => {
+      let now = new Date();
+      let socialLinkData = {
+        ...socialLink,
+        userId: user?.id,
+        updatedAt: now,
+      };
+      console.log("adding", socialLinkData);
+
+      if (socialLink?.id) {
+        updateSocialLinkMutation.mutate(socialLinkData);
+      } else {
+        addSocialLinkMutation.mutate(socialLinkData);
+      }
+    });
     // console.log({ linksMutation });
     // try {
     //   setFormLoading(true);

@@ -18,6 +18,8 @@ import {
   Wikipedia,
 } from "react-bootstrap-icons";
 
+import { trpc } from "@calcom/trpc/react";
+
 import EmptyState from "./EmptyState";
 import FormBlock from "./FormBlock";
 
@@ -33,33 +35,33 @@ const linkTypes = [
     icon: Twitter,
   },
   {
-    key: "linkedin",
+    key: "LINKEDIN",
     label: "LinkedIn",
     icon: Linkedin,
   },
   {
-    key: "github",
+    key: "GITHUB",
     label: "GitHub",
     icon: Github,
   },
   {
-    key: "stackexchange",
+    key: "STACKEXCHANGE",
     label: "Stack Exchange",
     icon: StackOverflow,
   },
-  { key: "wikipedia", label: "Wikipedia", icon: Wikipedia },
+  { key: "WIKIPEDIA", label: "Wikipedia", icon: Wikipedia },
   {
-    key: "google-scholar",
+    key: "GOOGLESCHOLAR",
     label: "Google scholar",
     // icon: GoogleScholar,
   },
   {
-    key: "youtube",
+    key: "YOUTUBE",
     label: "YouTube",
     icon: Youtube,
   },
   {
-    key: "facebook",
+    key: "FACEBOOK",
     label: "Facebook",
     icon: Facebook,
   },
@@ -69,32 +71,32 @@ const linkTypes = [
     icon: Instagram,
   },
   {
-    key: "medium",
+    key: "MEDIUM",
     label: "Medium",
     icon: Medium,
   },
   {
-    key: "quora",
+    key: "QUORA",
     label: "Quora",
     icon: Quora,
   },
   {
-    key: "reddit",
+    key: "REDDIT",
     label: "Reddit",
     icon: Reddit,
   },
   {
-    key: "twitch",
+    key: "TWITCH",
     label: "Twitch",
     icon: Twitch,
   },
   {
-    key: "telegram",
+    key: "TELEGRAM",
     label: "Telegram",
     icon: Telegram,
   },
   {
-    key: "mastodon",
+    key: "MASTODON",
     label: "Mastodon",
     icon: Mastodon,
   },
@@ -113,6 +115,8 @@ const LinkSection = ({ profile, setProfile }) => {
       e.target.value === "OTHER" ? "" : linkTypes.find((link) => link.key === e.target.value).label;
     setProfile({ ...profile, links: newLinks });
   };
+
+  const removeSocialLinkMutation = trpc.viewer.removeSocialLink.useMutation();
 
   const handleLinkNameChange = (e, i) => {
     const newLinks = [...profile.socialLinks];
@@ -139,10 +143,11 @@ const LinkSection = ({ profile, setProfile }) => {
     setProfile({ ...profile, socialLinks: [...profile.socialLinks, newLink] });
   };
 
-  const removeLink = (i) => {
+  const removeLink = ({ i, id }) => {
+    removeSocialLinkMutation.mutate({ id });
     const newLinks = [...profile.socialLinks];
     newLinks.splice(i, 1);
-    setProfile({ ...profile, links: newLinks });
+    setProfile({ ...profile, socialLinks: newLinks });
   };
 
   if (!profile?.socialLinks) {
@@ -190,7 +195,7 @@ const LinkSection = ({ profile, setProfile }) => {
                     disabled={link.key !== "OTHER"}
                   />
                   <Button type="button" variant="icon">
-                    <X className="h-5 w-5" onClick={() => removeLink(i)} />
+                    <X className="h-5 w-5" onClick={() => removeLink({ i, id: link.id })} />
                   </Button>
                 </div>
               </div>
