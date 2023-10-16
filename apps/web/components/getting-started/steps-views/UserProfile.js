@@ -6,7 +6,7 @@ import { useForm, useFieldArray, Controller } from "react-hook-form";
 import OrganizationAvatar from "@calcom/features/ee/organizations/components/OrganizationAvatar";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { md } from "@calcom/lib/markdownIt";
-import { useTelemetry } from "@calcom/lib/telemetry";
+import { useTelemetry, telemetryEventTypes } from "@calcom/lib/telemetry";
 import turndown from "@calcom/lib/turndownService";
 import { trpc } from "@calcom/trpc/react";
 import { Button, Editor, ImageUploader, Label, showToast, Select, Input } from "@calcom/ui";
@@ -26,11 +26,12 @@ const UserProfile = () => {
     handleSubmit,
     getValues,
     setError,
+    clearErrors,
     formState: { errors },
   } = useForm({
     defaultValues: {
       bio: user?.bio || "",
-      advises: user?.adviceOn || [""],
+      advises: user?.adviceOn ?? [""],
       pricePerHour: user?.pricePerHour || 300,
     },
   });
@@ -226,7 +227,10 @@ const UserProfile = () => {
             size="sm"
             className="h-auto px-2"
             variant="outline"
-            onClick={() => prepend("")}>
+            onClick={() => {
+              prepend("");
+              clearErrors("advises");
+            }}>
             <Plus size={12} className="mr-px" />
             Add
           </Xbutton>
