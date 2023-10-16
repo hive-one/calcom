@@ -33,11 +33,11 @@ import { Container } from "../ui";
 
 const EditProfile = () => {
   const [user] = trpc.viewer.me.useSuspenseQuery();
-  // console.log(user);
   // const router = useRouter();
   const [isLoading, setIsLoading] = useState();
   const [formLoading, setFormLoading] = useState(false);
   const [profile, setProfile] = useState(user);
+  console.log(profile);
 
   const [activeSetting, setActiveSetting] = useState("profile");
   const [avatarFile, setAvatarFile] = useState(null);
@@ -59,10 +59,11 @@ const EditProfile = () => {
   const removeFactMutation = trpc.viewer.removeFact.useMutation();
 
   const addProjectMutation = trpc.viewer.addProject.useMutation();
+  const addWorkExpMutation = trpc.viewer.addExp.useMutation();
+  const addPublicationMutation = trpc.viewer.addPublication.useMutation();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("profile", profile);
     mutation.mutate(profile);
 
     profile?.socialLinks.map((socialLink) => {
@@ -87,7 +88,6 @@ const EditProfile = () => {
         userId: user?.id,
         updatedAt: now,
       };
-      // console.log("adding fact", factsData);
 
       if (fact?.id) {
         updateFactMutation.mutate(factsData);
@@ -103,12 +103,38 @@ const EditProfile = () => {
         userId: user?.id,
         updatedAt: now,
       };
-      console.log("adding project", project);
 
       if (project?.id) {
         // updateFactMutation.mutate(factsData);
       } else {
         addProjectMutation.mutate(projectData);
+      }
+    });
+
+    profile?.workExperiences.map((exp) => {
+      let expData = {
+        ...exp,
+        userId: user?.id,
+      };
+
+      if (exp?.id) {
+        // updateFactMutation.mutate(factsData);
+      } else {
+        addWorkExpMutation.mutate(expData);
+      }
+    });
+
+    profile?.publications.map((pub) => {
+      let pubData = {
+        ...pub,
+        updatedAt: new Date(),
+      };
+      console.log("adding pub", pub);
+
+      if (pub?.id) {
+        // updateFactMutation.mutate(factsData);
+      } else {
+        addPublicationMutation.mutate(pubData);
       }
     });
     // console.log({ linksMutation });
@@ -154,20 +180,20 @@ const EditProfile = () => {
 
   const addExperience = () => {
     const newExperience = {
-      company: "",
+      title: "",
+      description: "",
       url: "",
-      roles: [
-        {
-          title: "",
-          description: "",
-          start_date: "",
-          end_date: "",
-        },
-      ],
+      startDay: "",
+      startMonth: "",
+      startYear: "",
+      endDay: "",
+      endMonth: "",
+      endYear: "",
+      companyId: "",
     };
     setProfile((prevProfile) => ({
       ...prevProfile,
-      experience: [...prevProfile.experience, newExperience],
+      workExperiences: [...prevProfile.workExperiences, newExperience],
     }));
   };
 
@@ -560,7 +586,7 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       trpcState: ssr.dehydrate(),
-      userA: JSON.stringify(user),
+      user: JSON.stringify(user),
     },
   };
 };

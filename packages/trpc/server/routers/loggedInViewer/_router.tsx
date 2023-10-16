@@ -2,6 +2,7 @@ import authedProcedure from "../../procedures/authedProcedure";
 import { router } from "../../trpc";
 import { ZFactAddSchema } from "./addFact.schema";
 import { ZSocialLinkInputSchema } from "./addSocialLink.schema";
+import { ZWorkExperienceAddSchema } from "./addWorkExperience.schema";
 import { ZAppByIdInputSchema } from "./appById.schema";
 import { ZAppCredentialsByTypeInputSchema } from "./appCredentialsByType.schema";
 import { ZAwayInputSchema } from "./away.schema";
@@ -14,6 +15,7 @@ import { ZGetDownloadLinkOfCalVideoRecordingsInputSchema } from "./getDownloadLi
 import { ZIntegrationsInputSchema } from "./integrations.schema";
 import { ZLocationOptionsInputSchema } from "./locationOptions.schema";
 import { ZProjectAddSchema } from "./project.schema";
+import { ZPublicationAddSchema } from "./publication.schema";
 import { ZFactRemoveSchema } from "./removeFact.schema";
 import { ZSocialLinkRemoveSchema } from "./removeSocialLink.schema";
 import { ZRoutingFormOrderInputSchema } from "./routingFormOrder.schema";
@@ -58,6 +60,8 @@ type AppsRouterHandlerCache = {
   updateFact?: typeof import("./updateFact.handler").updateFactHandler;
   removeFact?: typeof import("./removeFact.handler").removeFactHandler;
   addProject?: typeof import("./addProject.handler").addProjectHandler;
+  addWorkExperience?: typeof import("./addWorkExperience.handler").addWorkExperience;
+  addPublication?: typeof import("./addPublication.handler").addPublicationHandler;
 };
 
 const UNSTABLE_HANDLER_CACHE: AppsRouterHandlerCache = {};
@@ -287,6 +291,36 @@ export const loggedInViewerRouter = router({
     }
 
     return UNSTABLE_HANDLER_CACHE.addProject({ ctx, input });
+  }),
+
+  addWorkExperience: authedProcedure.input(ZWorkExperienceAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addWorkExperience) {
+      UNSTABLE_HANDLER_CACHE.addWorkExperience = (
+        await import("./addWorkExperience.handler")
+      ).addWorkExperienceHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addWorkExperience) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addWorkExperience({ ctx, input });
+  }),
+
+  addPublication: authedProcedure.input(ZPublicationAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addPublication) {
+      UNSTABLE_HANDLER_CACHE.addPublication = (
+        await import("./addPublication.handler")
+      ).addPublicationHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addPublication) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addPublication({ ctx, input });
   }),
 
   addFact: authedProcedure.input(ZFactAddSchema).mutation(async ({ ctx, input }) => {

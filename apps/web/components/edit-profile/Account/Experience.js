@@ -9,12 +9,12 @@ import TimelineBlock from "./TimelineBlock";
 const Experience = ({ profile, setProfile, addExperience, removeExperience, removeExperienceRole }) => {
   return (
     <FormBlock title="Experience" description="Your work experience.">
-      {!profile?.experience?.length > 0 && <EmptyState label="Add some roles and get started." />}
+      {!profile?.workExperiences?.length > 0 && <EmptyState label="Add some roles and get started." />}
       <div className="space-y-4 divide-y">
-        {profile?.experience?.length > 0 &&
-          profile.experience.map((company, companyIndex) => (
+        {profile?.workExperiences?.length > 0 &&
+          profile.workExperiences.map((company, companyIndex) => (
             <div key={companyIndex} className="relative space-y-4 pt-4">
-              {profile.experience.length > 1 && (
+              {profile.workExperiences.length > 1 && (
                 <RemoveButton
                   label="Remove company"
                   onClick={() => removeExperience(companyIndex)}
@@ -26,11 +26,11 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                 <Input
                   value={company.company}
                   onChange={(e) => {
-                    const newExperience = [...profile.experience];
+                    const newExperience = [...profile.workExperiences];
                     newExperience[companyIndex].company = e.target.value;
                     setProfile({
                       ...profile,
-                      experience: newExperience,
+                      workExperiences: newExperience,
                     });
                   }}
                 />
@@ -42,11 +42,11 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                   type="url"
                   value={company.url}
                   onChange={(e) => {
-                    const newExperience = [...profile.experience];
+                    const newExperience = [...profile.workExperiences];
                     newExperience[companyIndex].url = e.target.value;
                     setProfile({
                       ...profile,
-                      experience: newExperience,
+                      workExperiences: newExperience,
                     });
                   }}
                 />
@@ -68,11 +68,11 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                         label="Role/Title"
                         value={role.title}
                         onChange={(e) => {
-                          const newExperience = [...profile.experience];
+                          const newExperience = [...profile.workExperiences];
                           newExperience[companyIndex].roles[roleIndex].title = e.target.value;
                           setProfile({
                             ...profile,
-                            experience: newExperience,
+                            workExperiences: newExperience,
                           });
                         }}
                       />
@@ -84,11 +84,11 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                         required
                         value={role.start_date}
                         onChange={(e) => {
-                          const newExperience = [...profile.experience];
+                          const newExperience = [...profile.workExperiences];
                           newExperience[companyIndex].roles[roleIndex].start_date = e.target.value;
                           setProfile({
                             ...profile,
-                            experience: newExperience,
+                            workExperiences: newExperience,
                           });
                         }}
                       />
@@ -101,11 +101,11 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                         value={role.end_date}
                         required
                         onChange={(e) => {
-                          const newExperience = [...profile.experience];
+                          const newExperience = [...profile.workExperiences];
                           newExperience[companyIndex].roles[roleIndex].end_date = e.target.value;
                           setProfile({
                             ...profile,
-                            experience: newExperience,
+                            workExperiences: newExperience,
                           });
                         }}
                         disabled={role.end_date === "Present"}
@@ -116,7 +116,7 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                           className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                           defaultChecked={role.end_date === "Present"}
                           onChange={(e) => {
-                            const newExperience = [...profile.experience];
+                            const newExperience = [...profile.workExperiences];
                             if (e.target.checked) {
                               newExperience[companyIndex].roles[roleIndex].end_date = "Present";
                             } else {
@@ -124,7 +124,7 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                             }
                             setProfile({
                               ...profile,
-                              experience: newExperience,
+                              workExperiences: newExperience,
                             });
                           }}
                         />
@@ -138,7 +138,7 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                 <div className="col-span-full">
                   <Button
                     onClick={() => {
-                      const newExperience = [...profile.experience];
+                      const newExperience = [...profile.workExperiences];
                       newExperience[companyIndex].roles.push({
                         title: "",
                         description: "",
@@ -147,7 +147,7 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                       });
                       setProfile({
                         ...profile,
-                        experience: newExperience,
+                        workExperiences: newExperience,
                       });
                     }}
                     variant="outline"
@@ -160,7 +160,7 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
           ))}
       </div>
       <div className="col-span-full mt-6">
-        <Button onClick={addExperience} variant="outline" size="sm">
+        <Button type="button" onClick={addExperience} variant="outline" size="sm">
           Add experience
         </Button>
       </div>
