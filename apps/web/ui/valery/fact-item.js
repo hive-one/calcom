@@ -3,7 +3,8 @@ import Link from "next/link";
 
 import ExternalLinkIcon from "../../ui/icons/external-link-icon";
 
-const FactItem = ({ title, description, url }) => {
+const FactItem = ({ id, title, description, url }) => {
+  if (!id || !title) return "";
   // Check if there is a link
   const isLink = url !== undefined && url !== null && url !== "";
 

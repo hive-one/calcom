@@ -299,17 +299,17 @@ const ProfilePage = () => {
           {profileData?.facts?.length > 0 && (
             <Section title="Facts">
               <div id="facts" className="grid gap-5 sm:grid-cols-2">
-                {profileData?.facts.map(({ title, description, url }, index) => (
-                  <FactItem key={index} {...{ title, description, url }} />
+                {profileData?.facts.map(({ id, title, description, url }, index) => (
+                  <FactItem key={index} {...{ id, title, description, url }} />
                 ))}
               </div>
             </Section>
           )}
           {/* Advise on */}
-          {profileData?.advice_on?.length ? (
+          {profileData?.adviceOn?.length ? (
             <Section title="Advise On">
               <div id="advice" className="flex flex-wrap gap-2">
-                {profileData?.advice_on?.map((title) => (
+                {profileData?.adviceOn?.map((title) => (
                   <Tooltip
                     show={title?.length > 50}
                     text={<div className="w-[400px] break-all">{title}</div>}

@@ -55,7 +55,7 @@ const FactsSection = ({ profile, setProfile, addFact, removeFact }) => {
           ))}
       </div>
       <div className="col-span-full mt-6">
-        <Button onClick={addFact} size="sm" variant="outline">
+        <Button type="button" onClick={() => addFact()} size="sm" variant="outline">
           Add fact
         </Button>
       </div>
