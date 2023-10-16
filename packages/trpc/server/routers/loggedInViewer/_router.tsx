@@ -13,6 +13,7 @@ import { ZGetCalVideoRecordingsInputSchema } from "./getCalVideoRecordings.schem
 import { ZGetDownloadLinkOfCalVideoRecordingsInputSchema } from "./getDownloadLinkOfCalVideoRecordings.schema";
 import { ZIntegrationsInputSchema } from "./integrations.schema";
 import { ZLocationOptionsInputSchema } from "./locationOptions.schema";
+import { ZProjectAddSchema } from "./project.schema";
 import { ZFactRemoveSchema } from "./removeFact.schema";
 import { ZSocialLinkRemoveSchema } from "./removeSocialLink.schema";
 import { ZRoutingFormOrderInputSchema } from "./routingFormOrder.schema";
@@ -56,6 +57,7 @@ type AppsRouterHandlerCache = {
   addFact?: typeof import("./addFact.handler").addFactHandler;
   updateFact?: typeof import("./updateFact.handler").updateFactHandler;
   removeFact?: typeof import("./removeFact.handler").removeFactHandler;
+  addProject?: typeof import("./addProject.handler").addProjectHandler;
 };
 
 const UNSTABLE_HANDLER_CACHE: AppsRouterHandlerCache = {};
@@ -272,6 +274,19 @@ export const loggedInViewerRouter = router({
     }
 
     return UNSTABLE_HANDLER_CACHE.updateSocialLink({ ctx, input });
+  }),
+
+  addProject: authedProcedure.input(ZProjectAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addProject) {
+      UNSTABLE_HANDLER_CACHE.addProject = (await import("./addProject.handler")).addProjectHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addProject) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addProject({ ctx, input });
   }),
 
   addFact: authedProcedure.input(ZFactAddSchema).mutation(async ({ ctx, input }) => {

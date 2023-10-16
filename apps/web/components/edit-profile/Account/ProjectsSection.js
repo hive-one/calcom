@@ -54,7 +54,7 @@ const ProjectsSection = ({ profile, setProfile, addProject, removeProject }) => 
           ))}
       </div>
       <div className="col-span-full mt-6">
-        <Button onClick={addProject} variant="outline" size="sm">
+        <Button type="button" onClick={addProject} variant="outline" size="sm">
           Add project
         </Button>
       </div>

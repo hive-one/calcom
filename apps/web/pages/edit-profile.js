@@ -58,6 +58,8 @@ const EditProfile = () => {
   const updateFactMutation = trpc.viewer.updateFact.useMutation();
   const removeFactMutation = trpc.viewer.removeFact.useMutation();
 
+  const addProjectMutation = trpc.viewer.addProject.useMutation();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("profile", profile);
@@ -85,12 +87,28 @@ const EditProfile = () => {
         userId: user?.id,
         updatedAt: now,
       };
-      console.log("adding fact", factsData);
+      // console.log("adding fact", factsData);
 
       if (fact?.id) {
         updateFactMutation.mutate(factsData);
       } else {
         addFactMutation.mutate(factsData);
+      }
+    });
+
+    profile?.projects.map((project) => {
+      let now = new Date();
+      let projectData = {
+        ...project,
+        userId: user?.id,
+        updatedAt: now,
+      };
+      console.log("adding project", project);
+
+      if (project?.id) {
+        // updateFactMutation.mutate(factsData);
+      } else {
+        addProjectMutation.mutate(projectData);
       }
     });
     // console.log({ linksMutation });
