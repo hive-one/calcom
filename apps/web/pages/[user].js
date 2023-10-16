@@ -354,10 +354,10 @@ const ProfilePage = () => {
         ) : (
           ""
         )}
-        {profileData?.podcast?.episodes?.length && (
+        {profileData?.podcasts?.length && (
           <Section title="Podcasts">
             <div id="podcasts">
-              <PodcastItem podcast={profileData.podcast} />
+              <PodcastItem podcast={profileData?.podcasts} />
             </div>
           </Section>
         )}

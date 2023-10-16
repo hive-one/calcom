@@ -92,7 +92,7 @@ const PodcastsSection = ({
   addPodcastEpisode,
   removePodcastEpisode,
 }) => {
-  const hasPodcast = profile?.podcast?.episodes;
+  const hasPodcast = profile?.podcasts?.length;
   return (
     <FormBlock title="Podcasts" description="Showcase your star podcasts.">
       {!hasPodcast ? (
@@ -103,11 +103,11 @@ const PodcastsSection = ({
             <Label>Title</Label>
             <Input
               required
-              value={profile.podcast.title}
+              value={profile?.podcasts[0]?.title}
               onChange={(e) =>
                 setProfile({
                   ...profile,
-                  podcast: { ...profile.podcast, title: e.target.value },
+                  podcasts: { ...profile.podcasts, title: e.target.value },
                 })
               }
             />
@@ -117,11 +117,11 @@ const PodcastsSection = ({
             <Label>URL</Label>
             <Input
               required
-              value={profile.podcast.url}
+              value={profile?.podcasts[0]?.url}
               onChange={(e) =>
                 setProfile({
                   ...profile,
-                  podcast: { ...profile.podcast, url: e.target.value },
+                  podcasts: { ...profile.podcasts, url: e.target.value },
                 })
               }
             />
@@ -130,19 +130,19 @@ const PodcastsSection = ({
             <Label>Cover Image URL</Label>
             <Input
               label="Cover image URL"
-              value={profile.podcast.cover_image}
+              value={profile.podcasts[0].cover_image}
               onChange={(e) =>
                 setProfile({
                   ...profile,
-                  podcast: { ...profile.podcast, cover_image: e.target.value },
+                  podcasts: { ...profile.podcasts, cover_image: e.target.value },
                 })
               }
             />
           </div>
-          {profile.podcast?.cover_image ? (
+          {profile.podcasts?.cover_image ? (
             <img
-              src={profile.podcast?.cover_image}
-              alt={profile.podcast?.title}
+              src={profile?.podcasts[0]?.cover_image}
+              alt={profile?.podcasts[0]?.title}
               className="h-16 w-16 rounded-lg object-cover"
             />
           ) : (
@@ -150,8 +150,8 @@ const PodcastsSection = ({
               <Image className="h-8 w-8 text-gray-500" />
             </div>
           )}
-          {profile?.podcast.episodes?.length > 0 &&
-            profile?.podcast.episodes.map((podcast, i) => (
+          {profile?.podcasts.episodes?.length > 0 &&
+            profile?.podcasts.episodes.map((podcast, i) => (
               <div key={i} className="space-y-4 pt-2">
                 <div className="sm:col-span-3">
                   <Label>Episode title</Label>
@@ -196,11 +196,11 @@ const PodcastsSection = ({
       )}
       <div className="col-span-full mt-6 flex items-center gap-x-3">
         {profile?.podcast?.episodes?.length > 0 && (
-          <Button onClick={addPodcastEpisode} variant="outline" size="sm">
+          <Button type="button" onClick={addPodcastEpisode} variant="outline" size="sm">
             Add episode
           </Button>
         )}
-        <Button onClick={hasPodcast ? deletePodcast : addPodcast} variant="outline" size="sm">
+        <Button type="button" onClick={hasPodcast ? deletePodcast : addPodcast} variant="outline" size="sm">
           {hasPodcast ? "Remove podcast" : "Add podcast"}
         </Button>
         <span>or</span>

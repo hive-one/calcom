@@ -61,6 +61,7 @@ const EditProfile = () => {
   const addProjectMutation = trpc.viewer.addProject.useMutation();
   const addWorkExpMutation = trpc.viewer.addExp.useMutation();
   const addPublicationMutation = trpc.viewer.addPublication.useMutation();
+  const addPodcastMutation = trpc.viewer.addPodcast.useMutation();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -137,6 +138,13 @@ const EditProfile = () => {
         addPublicationMutation.mutate(pubData);
       }
     });
+
+    if (profile?.podcast?.id) {
+      // updateFactMutation.mutate(factsData);
+    } else {
+      addPodcastMutation.mutate({ ...profile?.podcast, description: "" });
+    }
+
     // console.log({ linksMutation });
     // try {
     //   setFormLoading(true);

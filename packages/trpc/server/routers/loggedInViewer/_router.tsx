@@ -1,6 +1,8 @@
 import authedProcedure from "../../procedures/authedProcedure";
 import { router } from "../../trpc";
+import { ZBookAddSchema } from "./addBook.schema";
 import { ZFactAddSchema } from "./addFact.schema";
+import { ZPodcastAddSchema } from "./addPodcast.schema";
 import { ZSocialLinkInputSchema } from "./addSocialLink.schema";
 import { ZWorkExperienceAddSchema } from "./addWorkExperience.schema";
 import { ZAppByIdInputSchema } from "./appById.schema";
@@ -60,8 +62,10 @@ type AppsRouterHandlerCache = {
   updateFact?: typeof import("./updateFact.handler").updateFactHandler;
   removeFact?: typeof import("./removeFact.handler").removeFactHandler;
   addProject?: typeof import("./addProject.handler").addProjectHandler;
-  addWorkExperience?: typeof import("./addWorkExperience.handler").addWorkExperience;
+  addWorkExperience?: typeof import("./addWorkExperience.handler").addWorkExperienceHandler;
   addPublication?: typeof import("./addPublication.handler").addPublicationHandler;
+  addBook?: typeof import("./addBook.handler").addBookHandler;
+  addPodcast?: typeof import("./addPodcast.handler").addPodcastHandler;
 };
 
 const UNSTABLE_HANDLER_CACHE: AppsRouterHandlerCache = {};
@@ -321,6 +325,32 @@ export const loggedInViewerRouter = router({
     }
 
     return UNSTABLE_HANDLER_CACHE.addPublication({ ctx, input });
+  }),
+
+  addBook: authedProcedure.input(ZBookAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addBook) {
+      UNSTABLE_HANDLER_CACHE.addBook = (await import("./addBook.handler")).addBookHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addBook) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addBook({ ctx, input });
+  }),
+
+  addPodcast: authedProcedure.input(ZPodcastAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addPodcast) {
+      UNSTABLE_HANDLER_CACHE.addPodcast = (await import("./addPodcast.handler")).addPodcastHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addPodcast) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addPodcast({ ctx, input });
   }),
 
   addFact: authedProcedure.input(ZFactAddSchema).mutation(async ({ ctx, input }) => {
