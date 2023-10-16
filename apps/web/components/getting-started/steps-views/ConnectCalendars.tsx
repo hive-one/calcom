@@ -28,6 +28,8 @@ const ConnectedCalendars = (props: IConnectCalendarsProps) => {
   );
   const disabledNextButton = firstCalendar === undefined;
   const destinationCalendar = queryConnectedCalendars.data?.destinationCalendar;
+  const excludeCalendars = ["lark-calendar"];
+
   return (
     <>
       {/* Already connected calendars  */}
@@ -61,18 +63,22 @@ const ConnectedCalendars = (props: IConnectCalendarsProps) => {
       {firstCalendar === undefined && queryIntegrations.data && queryIntegrations.data.items.length > 0 && (
         <List className="bg-default divide-subtle border-subtle mx-1 divide-y rounded-md border p-0 dark:bg-black sm:mx-0">
           {queryIntegrations.data &&
-            queryIntegrations.data.items.map((item) => (
-              <li key={item.title}>
-                {item.title && item.logo && (
-                  <AppConnectionItem
-                    type={item.type}
-                    title={item.title}
-                    description={item.description}
-                    logo={item.logo}
-                  />
-                )}
-              </li>
-            ))}
+            queryIntegrations.data.items.map((item) =>
+              excludeCalendars?.includes(item?.slug) ? (
+                ""
+              ) : (
+                <li key={item.title}>
+                  {item.title && item.logo && (
+                    <AppConnectionItem
+                      type={item.type}
+                      title={item.title}
+                      description={item.description}
+                      logo={item.logo}
+                    />
+                  )}
+                </li>
+              )
+            )}
         </List>
       )}
 
