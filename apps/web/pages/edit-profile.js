@@ -1,23 +1,20 @@
 import { Button } from "@shadcdn/ui/button";
 import Spinner from "@ui/spinner";
 import clsx from "clsx";
-import { useAuthContext } from "context/authContext";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Linkedin } from "react-bootstrap-icons";
 import toast from "react-hot-toast";
 
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
-import prisma from "@calcom/prisma";
+import { trpc } from "@calcom/trpc/react";
 
-import { defaultProfile } from "@lib/firebase/constants";
-import { addProfile, uploadPhoto, logOut, getProfile } from "@lib/firebase/utils";
+import { logOut } from "@lib/firebase/utils";
 
 import PageWrapper from "@components/PageWrapper";
 import AdviceSection from "@components/edit-profile/Account/AdviceSection";
 import BooksSection from "@components/edit-profile/Account/BooksSection";
-import CalcomSetup from "@components/edit-profile/Account/CalcomSetup";
 import ExperienceSection from "@components/edit-profile/Account/Experience";
 import FactsSection from "@components/edit-profile/Account/FactsSection";
 import LinkedinImporter from "@components/edit-profile/Account/LinkedinImporter";
@@ -34,29 +31,60 @@ import { ssrInit } from "@server/lib/ssr";
 
 import { Container } from "../ui";
 
-const EditProfile = (props) => {
-  console.log("user", JSON.parse(props.user));
+const EditProfile = () => {
+  const [user] = trpc.viewer.me.useSuspenseQuery();
+  // console.log(user);
   // const router = useRouter();
-  const { user } = useAuthContext();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState();
   const [formLoading, setFormLoading] = useState(false);
-  const [profile, setProfile] = useState(defaultProfile);
+  const [profile, setProfile] = useState(user);
 
   const [activeSetting, setActiveSetting] = useState("profile");
   const [avatarFile, setAvatarFile] = useState(null);
+
+  const utils = trpc.useContext();
+  const onSuccess = async () => {
+    toast.success("Profile updated successfully 🎉");
+    await utils.viewer.me.invalidate();
+  };
+
+  const mutation = trpc.viewer.updateProfile.useMutation({
+    onSuccess: onSuccess,
+  });
+  const linksMutation = trpc.viewer.updateLinks.useMutation();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log("profile", profile);
+    mutation.mutate(profile);
+
+    // linksMutation.mutate(profile?.socialLinks);
+    // console.log({ linksMutation });
+    // try {
+    //   setFormLoading(true);
+    //   event.preventDefault();
+    //   const docData = avatarFile ? { ...profile, avatar_url: await uploadPhoto(avatarFile) } : profile;
+    //   await addProfile(docData);
+    //   toast.success("Profile updated successfully 🎉");
+    // } catch (error) {
+    //   toast.error("Something went wrong 😕");
+    // } finally {
+    //   setFormLoading(false);
+    // }
+  };
 
   const addAdviceItem = () => {
     const newAdviceItem = "";
     setProfile((prevProfile) => ({
       ...prevProfile,
-      advice_on: [...prevProfile.advice_on, newAdviceItem],
+      adviceOn: [...prevProfile.adviceOn, newAdviceItem],
     }));
   };
 
   const removeAdviceItem = (index) => {
     setProfile((prevProfile) => ({
       ...prevProfile,
-      advice_on: prevProfile.advice_on.filter((_, i) => i !== index),
+      adviceOn: prevProfile.adviceOn.filter((_, i) => i !== index),
     }));
   };
 
@@ -262,55 +290,12 @@ const EditProfile = (props) => {
     }));
   };
 
-  const handleSubmit = async (event) => {
-    try {
-      setFormLoading(true);
-      event.preventDefault();
-      const docData = avatarFile ? { ...profile, avatar_url: await uploadPhoto(avatarFile) } : profile;
-      await addProfile(docData);
-      toast.success("Profile updated successfully 🎉");
-    } catch (error) {
-      toast.error("Something went wrong 😕");
-    } finally {
-      setFormLoading(false);
-    }
-  };
-
   // const hasBasicDetails = (profile) => {
   //   const hasName = profile.name || profile?.name?.length;
   //   const hasBio = profile?.bio?.content?.length && profile?.bio?.content[0]?.content?.length;
   //   console.info({ hasName, hasBio });
   //   return hasName && hasBio;
   // };
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      if (user?.email && user?.uid) {
-        const userId = user.uid;
-        const fetchedProfile = await getProfile(userId);
-        setProfile(fetchedProfile);
-        console.info(fetchedProfile);
-
-        // if (!hasBasicDetails(fetchedProfile)) {
-        //   router.push("/onboarding/basic-details");
-        //   return;
-        // }
-
-        // if (!fetchedProfile?.advice_on?.length) {
-        //   router.push("/onboarding/advices");
-        //   return;
-        // }
-      } else if (user?.uid && !user?.email) {
-        setProfile(defaultProfile);
-        // router.push("/onboarding/basic-details");
-      } else {
-        // router.push("/auth/login");
-      }
-      setIsLoading(false);
-    };
-
-    fetchProfile();
-  }, [user]);
 
   const SETTINGS = [
     {
@@ -319,15 +304,6 @@ const EditProfile = (props) => {
       content: (
         <>
           <ProfileSection profile={profile} setProfile={setProfile} setAvatarFile={setAvatarFile} />
-        </>
-      ),
-    },
-    {
-      label: "Calendar",
-      value: "calendar",
-      content: (
-        <>
-          <CalcomSetup profile={profile} setProfile={setProfile} setAvatarFile={setAvatarFile} />
         </>
       ),
     },
@@ -344,7 +320,7 @@ const EditProfile = (props) => {
       ),
     },
     {
-      label: "Advice",
+      label: "Advise",
       value: "advices",
       content: (
         <AdviceSection
@@ -525,16 +501,13 @@ export const getServerSideProps = async (context) => {
   });
 
   if (!user) {
-    return { redirect: { permanent: false, destination: "/auth/login" } };
+    throw new Error("User from session not found");
   }
-
-  // if (!user.completedOnboarding) {
-  //   return { redirect: { permanent: false, destination: "/event-types" } };
-  // }
 
   return {
     props: {
-      user: JSON.stringify(user),
+      trpcState: ssr.dehydrate(),
+      userA: JSON.stringify(user),
     },
   };
 };

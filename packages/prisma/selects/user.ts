@@ -23,6 +23,7 @@ export const availabilityUserSelect = Prisma.validator<Prisma.UserSelect>()({
   pricePerHour: true,
   priceCurrency: true,
   adviceOn: true,
+  socialLinks: true,
 });
 
 export const baseUserSelect = Prisma.validator<Prisma.UserSelect>()({

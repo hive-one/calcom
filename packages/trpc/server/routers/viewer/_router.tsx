@@ -52,5 +52,15 @@ export const viewerRouter = mergeRouters(
     users: userAdminRouter,
     googleWorkspace: googleWorkspaceRouter,
     admin: adminRouter,
+    // updateLinks: procedure.input(z.array(z.object({key: z.string(), url: z.string(), name: z.string()}))).mutation(({input, ctx}) => {
+    //   return ctx.prisma.user.update({
+    //       where: {
+    //         id: ctx.user.id,
+    //       },
+    //       data: {
+    //         socialLinks: { input },
+    //       },
+    //     });
+    //   })
   })
 );
