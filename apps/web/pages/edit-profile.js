@@ -54,6 +54,10 @@ const EditProfile = () => {
   const addSocialLinkMutation = trpc.viewer.addSocialLink.useMutation();
   const updateSocialLinkMutation = trpc.viewer.updateSocialLink.useMutation();
 
+  const addFactMutation = trpc.viewer.addFact.useMutation();
+  const updateFactMutation = trpc.viewer.updateFact.useMutation();
+  const removeFactMutation = trpc.viewer.removeFact.useMutation();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("profile", profile);
@@ -66,12 +70,27 @@ const EditProfile = () => {
         userId: user?.id,
         updatedAt: now,
       };
-      console.log("adding", socialLinkData);
 
       if (socialLink?.id) {
         updateSocialLinkMutation.mutate(socialLinkData);
       } else {
         addSocialLinkMutation.mutate(socialLinkData);
+      }
+    });
+
+    profile?.facts.map((fact) => {
+      let now = new Date();
+      let factsData = {
+        ...fact,
+        userId: user?.id,
+        updatedAt: now,
+      };
+      console.log("adding fact", factsData);
+
+      if (fact?.id) {
+        updateFactMutation.mutate(factsData);
+      } else {
+        addFactMutation.mutate(factsData);
       }
     });
     // console.log({ linksMutation });
@@ -179,7 +198,8 @@ const EditProfile = () => {
     }));
   };
 
-  const removeFact = (index) => {
+  const removeFact = ({ index, id }) => {
+    removeFactMutation.mutate({ id });
     setProfile((prevProfile) => ({
       ...prevProfile,
       facts: prevProfile.facts.filter((_, i) => i !== index),
@@ -329,7 +349,7 @@ const EditProfile = () => {
     },
     {
       label: "Facts",
-      value: "facks",
+      value: "facts",
       content: (
         <FactsSection profile={profile} setProfile={setProfile} addFact={addFact} removeFact={removeFact} />
       ),

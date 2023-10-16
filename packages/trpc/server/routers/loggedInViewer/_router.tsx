@@ -1,5 +1,6 @@
 import authedProcedure from "../../procedures/authedProcedure";
 import { router } from "../../trpc";
+import { ZFactAddSchema } from "./addFact.schema";
 import { ZSocialLinkInputSchema } from "./addSocialLink.schema";
 import { ZAppByIdInputSchema } from "./appById.schema";
 import { ZAppCredentialsByTypeInputSchema } from "./appCredentialsByType.schema";
@@ -12,10 +13,12 @@ import { ZGetCalVideoRecordingsInputSchema } from "./getCalVideoRecordings.schem
 import { ZGetDownloadLinkOfCalVideoRecordingsInputSchema } from "./getDownloadLinkOfCalVideoRecordings.schema";
 import { ZIntegrationsInputSchema } from "./integrations.schema";
 import { ZLocationOptionsInputSchema } from "./locationOptions.schema";
+import { ZFactRemoveSchema } from "./removeFact.schema";
 import { ZSocialLinkRemoveSchema } from "./removeSocialLink.schema";
 import { ZRoutingFormOrderInputSchema } from "./routingFormOrder.schema";
 import { ZSetDestinationCalendarInputSchema } from "./setDestinationCalendar.schema";
 import { ZSubmitFeedbackInputSchema } from "./submitFeedback.schema";
+import { ZFactUpdateSchema } from "./updateFact.schema";
 import { ZUpdateProfileInputSchema } from "./updateProfile.schema";
 import { ZSocialLinkUpdateSchema } from "./updateSocialLink.schema";
 import { ZUpdateUserDefaultConferencingAppInputSchema } from "./updateUserDefaultConferencingApp.schema";
@@ -50,6 +53,9 @@ type AppsRouterHandlerCache = {
   addSocialLink?: typeof import("./addSocialLink.handler").addSocialLinkHandler;
   removeSocialLink?: typeof import("./removeSocialLink.handler").removeSocialLinkHandler;
   updateSocialLink?: typeof import("./updateSocialLink.handler").updateSocialLinkHandler;
+  addFact?: typeof import("./addFact.handler").addFactHandler;
+  updateFact?: typeof import("./updateFact.handler").updateFactHandler;
+  removeFact?: typeof import("./removeFact.handler").removeFactHandler;
 };
 
 const UNSTABLE_HANDLER_CACHE: AppsRouterHandlerCache = {};
@@ -266,6 +272,45 @@ export const loggedInViewerRouter = router({
     }
 
     return UNSTABLE_HANDLER_CACHE.updateSocialLink({ ctx, input });
+  }),
+
+  addFact: authedProcedure.input(ZFactAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addFact) {
+      UNSTABLE_HANDLER_CACHE.addFact = (await import("./addFact.handler")).addFactHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addFact) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addFact({ ctx, input });
+  }),
+
+  updateFact: authedProcedure.input(ZFactUpdateSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.updateFact) {
+      UNSTABLE_HANDLER_CACHE.updateFact = (await import("./updateFact.handler")).updateFactHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.updateFact) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.updateFact({ ctx, input });
+  }),
+
+  removeFact: authedProcedure.input(ZFactRemoveSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.removeFact) {
+      UNSTABLE_HANDLER_CACHE.removeFact = (await import("./removeFact.handler")).removeFactHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.removeFact) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.removeFact({ ctx, input });
   }),
 
   eventTypeOrder: authedProcedure.input(ZEventTypeOrderInputSchema).mutation(async ({ ctx, input }) => {
