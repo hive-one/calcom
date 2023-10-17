@@ -1,13 +1,13 @@
 import { prisma } from "@calcom/prisma";
 
-import type { TBookUpdateSchema } from "./updateBook.schema";
+import type { TBookUpdateSchema } from "./book.schema";
 
 type UpdateBook = {
   input: TBookUpdateSchema;
 };
 
 export const updateBookHandler = async ({ input }: UpdateBook) => {
-  const updateBookRes = await prisma.book.update({
+  const res = await prisma.book.update({
     where: {
       isbn: input.isbn,
     },
@@ -17,5 +17,5 @@ export const updateBookHandler = async ({ input }: UpdateBook) => {
     },
   });
 
-  return { ...updateBookRes };
+  return { ...res };
 };

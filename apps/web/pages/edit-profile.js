@@ -66,8 +66,15 @@ const EditProfile = () => {
   const addPublicationMutation = trpc.viewer.addPublication.useMutation();
   const updatePublicationMutation = trpc.viewer.updatePublication.useMutation();
   const removePublicationMutation = trpc.viewer.removePublication.useMutation();
+
+  const addBookMutation = trpc.viewer.addBook.useMutation();
+  const updateBookMutation = trpc.viewer.updateBook.useMutation();
+  const removeBookMutation = trpc.viewer.removeBook.useMutation();
+
   const addPodcastMutation = trpc.viewer.addPodcast.useMutation();
   const addVideoMutation = trpc.viewer.addVideo.useMutation();
+  const updateVideoMutation = trpc.viewer.updateVideo.useMutation();
+  const removeVideoMutation = trpc.viewer.removeVideo.useMutation();
 
   useEffect(() => {
     setProfile(user);
@@ -126,19 +133,19 @@ const EditProfile = () => {
       }
     });
 
-    // profile?.videos.map((vid) => {
-    //   let vidData = {
-    //     ...vid,
-    //     userId: user?.id,
-    //     updatedAt: new Date(),
-    //   };
+    profile?.videos.map((vid) => {
+      let vidData = {
+        ...vid,
+        userId: user?.id,
+        updatedAt: new Date(),
+      };
 
-    //   if (vid?.id) {
-    //     // updateFactMutation.mutate(factsData);
-    //   } else {
-    //     addVideoMutation.mutate(vidData);
-    //   }
-    // });
+      if (vid?.id) {
+        updateVideoMutation.mutate(vidData);
+      } else {
+        addVideoMutation.mutate(vidData);
+      }
+    });
 
     // profile?.workExperiences.map((exp) => {
     //   console.log({ exp });
@@ -191,6 +198,19 @@ const EditProfile = () => {
         updatePublicationMutation.mutate(pubData);
       } else {
         addPublicationMutation.mutate(pubData);
+      }
+    });
+
+    profile?.books.map((book) => {
+      let bookData = {
+        ...book,
+        updatedAt: new Date(),
+      };
+
+      if (book?.isbn) {
+        updateBookMutation.mutate(bookData);
+      } else {
+        addBookMutation.mutate(bookData);
       }
     });
 
@@ -272,13 +292,18 @@ const EditProfile = () => {
     };
     setProfile((prevProfile) => ({
       ...prevProfile,
-      mediaAppearances: [...prevProfile.mediaAppearances, newAppearance],
+      mediaAppearences: [...prevProfile.mediaAppearences, newAppearance],
     }));
   };
 
   const addBook = () => {
     const newBook = {
       isbn: "",
+      title: "",
+      url: "",
+      description: "",
+      converImage: "",
+      updatedAt: new Date(),
     };
     setProfile((prevProfile) => ({
       ...prevProfile,
@@ -379,14 +404,16 @@ const EditProfile = () => {
     }));
   };
 
-  const removeVideo = (index) => {
+  const removeVideo = ({ index, id }) => {
+    removeVideoMutation.mutate({ id });
     setProfile((prevProfile) => ({
       ...prevProfile,
       videos: prevProfile.videos.filter((_, i) => i !== index),
     }));
   };
 
-  const removeBook = (index) => {
+  const removeBook = ({ index, id }) => {
+    removeBookMutation.mutate({ id });
     setProfile((prevProfile) => ({
       ...prevProfile,
       books: prevProfile.books.filter((_, i) => i !== index),

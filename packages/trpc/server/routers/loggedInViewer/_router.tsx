@@ -1,6 +1,5 @@
 import authedProcedure from "../../procedures/authedProcedure";
 import { router } from "../../trpc";
-import { ZBookAddSchema } from "./addBook.schema";
 import { ZCompanyAddSchema } from "./addCompany.schema";
 import { ZFactAddSchema } from "./addFact.schema";
 import { ZPodcastAddSchema } from "./addPodcast.schema";
@@ -9,6 +8,7 @@ import { ZWorkExperienceAddSchema } from "./addWorkExperience.schema";
 import { ZAppByIdInputSchema } from "./appById.schema";
 import { ZAppCredentialsByTypeInputSchema } from "./appCredentialsByType.schema";
 import { ZAwayInputSchema } from "./away.schema";
+import { ZBookAddSchema, ZBookUpdateSchema, ZBookRemoveSchema } from "./book.schema";
 import { ZConnectedCalendarsInputSchema } from "./connectedCalendars.schema";
 import { ZDeleteCredentialInputSchema } from "./deleteCredential.schema";
 import { ZDeleteMeInputSchema } from "./deleteMe.schema";
@@ -32,7 +32,7 @@ import { ZFactUpdateSchema } from "./updateFact.schema";
 import { ZUpdateProfileInputSchema } from "./updateProfile.schema";
 import { ZSocialLinkUpdateSchema } from "./updateSocialLink.schema";
 import { ZUpdateUserDefaultConferencingAppInputSchema } from "./updateUserDefaultConferencingApp.schema";
-import { ZVideoAddSchema } from "./video.schema";
+import { ZVideoAddSchema, ZVideoUpdateSchema, ZVideoRemoveSchema } from "./video.schema";
 import { ZWorkflowOrderInputSchema } from "./workflowOrder.schema";
 
 type AppsRouterHandlerCache = {
@@ -76,8 +76,12 @@ type AppsRouterHandlerCache = {
   updatePublication?: typeof import("./updatePublication.handler").updatePublicationHandler;
   removePublication?: typeof import("./removePublication.handler").removePublicationHandler;
   addBook?: typeof import("./addBook.handler").addBookHandler;
+  updateBook?: typeof import("./updateBook.handler").updateBookHandler;
+  removeBook?: typeof import("./removeBook.handler").removeBookHandler;
   addPodcast?: typeof import("./addPodcast.handler").addPodcastHandler;
   addVideo?: typeof import("./addVideo.handler").addVideoHandler;
+  updateVideo?: typeof import("./updateVideo.handler").updateVideoHandler;
+  removeVideo?: typeof import("./removeVideo.handler").removeVideoHandler;
 };
 
 const UNSTABLE_HANDLER_CACHE: AppsRouterHandlerCache = {};
@@ -423,6 +427,32 @@ export const loggedInViewerRouter = router({
     return UNSTABLE_HANDLER_CACHE.addBook({ ctx, input });
   }),
 
+  updateBook: authedProcedure.input(ZBookUpdateSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.updateBook) {
+      UNSTABLE_HANDLER_CACHE.updateBook = (await import("./updateBook.handler")).updateBookHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.updateBook) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.updateBook({ ctx, input });
+  }),
+
+  removeBook: authedProcedure.input(ZBookRemoveSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.removeBook) {
+      UNSTABLE_HANDLER_CACHE.removeBook = (await import("./removeBook.handler")).removeBookHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.removeBook) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.removeBook({ ctx, input });
+  }),
+
   addPodcast: authedProcedure.input(ZPodcastAddSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.addPodcast) {
       UNSTABLE_HANDLER_CACHE.addPodcast = (await import("./addPodcast.handler")).addPodcastHandler;
@@ -447,6 +477,32 @@ export const loggedInViewerRouter = router({
     }
 
     return UNSTABLE_HANDLER_CACHE.addVideo({ ctx, input });
+  }),
+
+  updateVideo: authedProcedure.input(ZVideoUpdateSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.updateVideo) {
+      UNSTABLE_HANDLER_CACHE.updateVideo = (await import("./updateVideo.handler")).updateVideoHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.updateVideo) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.updateVideo({ ctx, input });
+  }),
+
+  removeVideo: authedProcedure.input(ZVideoRemoveSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.removeVideo) {
+      UNSTABLE_HANDLER_CACHE.removeVideo = (await import("./removeVideo.handler")).removeVideoHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.removeVideo) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.removeVideo({ ctx, input });
   }),
 
   addFact: authedProcedure.input(ZFactAddSchema).mutation(async ({ input }) => {

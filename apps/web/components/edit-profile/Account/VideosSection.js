@@ -56,7 +56,7 @@ const VideosSection = ({ profile, setProfile, addVideo, removeVideo }) => {
                 />
               </div>
               <div className="col-span-full flex items-center justify-end">
-                <RemoveButton label="Remove" onClick={() => removeVideo(i)} />
+                <RemoveButton label="Remove" onClick={() => removeVideo({ index: i, id: video.id })} />
               </div>
             </div>
           ))}

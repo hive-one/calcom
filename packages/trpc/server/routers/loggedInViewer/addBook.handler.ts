@@ -3,7 +3,7 @@ import type { GetServerSidePropsContext, NextApiResponse } from "next";
 import { prisma } from "@calcom/prisma";
 import type { TrpcSessionUser } from "@calcom/trpc/server/trpc";
 
-import type { TBookAddSchema } from "./addBook.schema";
+import type { TBookAddSchema } from "./book.schema";
 
 type AddBook = {
   ctx: {
