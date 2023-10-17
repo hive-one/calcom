@@ -61,6 +61,8 @@ const EditProfile = () => {
   const addProjectMutation = trpc.viewer.addProject.useMutation();
   const addWorkExpMutation = trpc.viewer.addExp.useMutation();
   const addPublicationMutation = trpc.viewer.addPublication.useMutation();
+  const addPodcastMutation = trpc.viewer.addPodcast.useMutation();
+  const addVideoMutation = trpc.viewer.addVideo.useMutation();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -111,6 +113,20 @@ const EditProfile = () => {
       }
     });
 
+    profile?.videos.map((vid) => {
+      let vidData = {
+        ...vid,
+        userId: user?.id,
+        updatedAt: new Date(),
+      };
+
+      if (vid?.id) {
+        // updateFactMutation.mutate(factsData);
+      } else {
+        addVideoMutation.mutate(vidData);
+      }
+    });
+
     profile?.workExperiences.map((exp) => {
       let expData = {
         ...exp,
@@ -137,6 +153,13 @@ const EditProfile = () => {
         addPublicationMutation.mutate(pubData);
       }
     });
+
+    if (profile?.podcast?.id) {
+      // updateFactMutation.mutate(factsData);
+    } else {
+      addPodcastMutation.mutate({ ...profile?.podcast, description: "" });
+    }
+
     // console.log({ linksMutation });
     // try {
     //   setFormLoading(true);

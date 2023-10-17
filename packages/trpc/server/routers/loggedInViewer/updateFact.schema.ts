@@ -4,7 +4,7 @@ export const ZFactUpdateSchema = z.object({
   id: z.number().int(),
   title: z.string(),
   url: z.string(),
-  description: z.string().optional(),
+  description: z.string() || undefined,
   updatedAt: z.date(),
   userId: z.number().int(),
 });

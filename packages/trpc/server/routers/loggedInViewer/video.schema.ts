@@ -1,11 +1,10 @@
 import { z } from "zod";
 
-export const ZFactAddSchema = z.object({
+export const ZVideoAddSchema = z.object({
   title: z.string(),
   url: z.string(),
   description: z.string() || undefined,
   updatedAt: z.date(),
-  userId: z.number().int(),
 });
 
-export type TFactAddSchema = z.infer<typeof ZFactAddSchema>;
+export type TVideoAddSchema = z.infer<typeof ZVideoAddSchema>;
