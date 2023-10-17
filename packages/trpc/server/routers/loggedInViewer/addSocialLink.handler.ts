@@ -15,8 +15,6 @@ type AddSocialLink = {
 
 export const addSocialLinkHandler = async ({ ctx, input }: AddSocialLink) => {
   const { user } = ctx;
-  console.log("handler", user);
-  console.log("post input", input);
 
   const addSocialLinkRes = await prisma.socialLink.create({
     data: input,

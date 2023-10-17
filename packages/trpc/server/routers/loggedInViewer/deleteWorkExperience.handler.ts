@@ -15,8 +15,6 @@ type RemoveWorkExperience = {
 
 export const removeWorkExperienceHandler = async ({ ctx, input }: RemoveWorkExperience) => {
   const { user } = ctx;
-  console.log("handler", user);
-  console.log("post input", input);
 
   const removeWorkExperienceRes = await prisma.workExperience.delete({
     where: {

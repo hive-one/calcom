@@ -15,8 +15,6 @@ type AddPodcast = {
 
 export const addPodcastHandler = async ({ ctx, input }: AddPodcast) => {
   const { user } = ctx;
-  console.log("handler", user);
-  console.log("post input", input);
 
   const addPodcast = await prisma.user.update({
     where: {

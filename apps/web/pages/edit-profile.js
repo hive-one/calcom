@@ -60,7 +60,9 @@ const EditProfile = () => {
   const updateProjectMutation = trpc.viewer.updateProject.useMutation();
   const removeProjectMutation = trpc.viewer.removeProject.useMutation();
 
-  const addWorkExpMutation = trpc.viewer.addExp.useMutation();
+  const addWorkExpMutation = trpc.viewer.addWorkExperience.useMutation();
+  const addCompanyMutation = trpc.viewer.addCompany.useMutation();
+
   const addPublicationMutation = trpc.viewer.addPublication.useMutation();
   const addPodcastMutation = trpc.viewer.addPodcast.useMutation();
   const addVideoMutation = trpc.viewer.addVideo.useMutation();
@@ -113,7 +115,7 @@ const EditProfile = () => {
         updatedAt: now,
       };
 
-      console.info("adding pro", projectData);
+      // console.info("adding pro", projectData);
 
       if (project?.id) {
         updateProjectMutation.mutate(projectData);
@@ -136,18 +138,46 @@ const EditProfile = () => {
     //   }
     // });
 
-    // profile?.workExperiences.map((exp) => {
-    //   let expData = {
-    //     ...exp,
-    //     userId: user?.id,
-    //   };
+    profile?.workExperiences.map((exp) => {
+      console.log({ exp });
+      let workExpData,
+        companyData = {
+          name: exp.company,
+          url: exp.url,
+          linkedInId: "",
+        };
+      const addCompanyRes = addCompanyMutation.mutate(companyData);
+      console.log("addCompanyRes", addCompanyRes);
 
-    //   if (exp?.id) {
-    //     // updateFactMutation.mutate(factsData);
-    //   } else {
-    //     addWorkExpMutation.mutate(expData);
-    //   }
-    // });
+      if (exp?.roles?.length) {
+        exp?.roles.map((role) => {
+          const addWorkExpRes = addWorkExpMutation.mutate({
+            title: role.title,
+            startDay: parseInt(role.startDay),
+            startMonth: parseInt(role.startMonth),
+            startYear: parseInt(role.startYear),
+            endDay: parseInt(role.endDay),
+            endMonth: parseInt(role.endMonth),
+            endYear: parseInt(role.endYear),
+            description: role.description,
+            updatedAt: new Date(),
+            userId: user?.id,
+          });
+
+          console.info("addWorkExpRes", addWorkExpRes);
+        });
+      }
+      // let expData = {
+      //   ...exp,
+      //   userId: user?.id,
+      // };
+
+      // if (exp?.id) {
+      //   // updateFactMutation.mutate(factsData);
+      // } else {
+      //   addWorkExpMutation.mutate(expData);
+      // }
+    });
 
     // profile?.publications.map((pub) => {
     //   let pubData = {
@@ -217,8 +247,12 @@ const EditProfile = () => {
         {
           title: "",
           description: "",
-          start_date: "",
-          end_date: "",
+          startDay: "",
+          startMonth: "",
+          startYear: "",
+          endDay: "",
+          endMonth: "",
+          endYear: "",
         },
       ],
     };

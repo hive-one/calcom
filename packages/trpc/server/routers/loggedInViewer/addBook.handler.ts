@@ -15,8 +15,6 @@ type AddBook = {
 
 export const addBookHandler = async ({ ctx, input }: AddBook) => {
   const { user } = ctx;
-  console.log("handler", user);
-  console.log("post input", input);
 
   const addBook = await prisma.user.update({
     where: {

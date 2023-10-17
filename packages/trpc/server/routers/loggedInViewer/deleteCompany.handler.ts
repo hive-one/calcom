@@ -15,8 +15,6 @@ type RemoveCompany = {
 
 export const removeCompanyHandler = async ({ ctx, input }: RemoveCompany) => {
   const { user } = ctx;
-  console.log("handler", user);
-  console.log("post input", input);
 
   const removeCompanyRes = await prisma.company.delete({
     where: {

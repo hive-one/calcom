@@ -15,8 +15,6 @@ type AddWorkExperience = {
 
 export const addWorkExperienceHandler = async ({ ctx, input }: AddWorkExperience) => {
   const { user } = ctx;
-  console.log("handler", user);
-  console.log("post input", input);
 
   const addWorkExperience = await prisma.workExperience.create({
     data: {

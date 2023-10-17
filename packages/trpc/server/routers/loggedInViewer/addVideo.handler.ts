@@ -15,8 +15,6 @@ type AddVideo = {
 
 export const addVideoHandler = async ({ ctx, input }: AddVideo) => {
   const { user } = ctx;
-  console.log("handler", user);
-  console.log("post input", input);
 
   const addVideo = await prisma.user.update({
     where: {

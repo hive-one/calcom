@@ -15,8 +15,6 @@ type RemoveFact = {
 
 export const removeFactHandler = async ({ ctx, input }: RemoveFact) => {
   const { user } = ctx;
-  console.log("handler", user);
-  console.log("post input", input);
 
   const removeFactRes = await prisma.fact.delete({
     where: {

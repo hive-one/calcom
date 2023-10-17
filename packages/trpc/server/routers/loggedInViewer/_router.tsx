@@ -1,6 +1,7 @@
 import authedProcedure from "../../procedures/authedProcedure";
 import { router } from "../../trpc";
 import { ZBookAddSchema } from "./addBook.schema";
+import { ZCompanyAddSchema } from "./addCompany.schema";
 import { ZFactAddSchema } from "./addFact.schema";
 import { ZPodcastAddSchema } from "./addPodcast.schema";
 import { ZSocialLinkInputSchema } from "./addSocialLink.schema";
@@ -66,6 +67,7 @@ type AppsRouterHandlerCache = {
   updateProject?: typeof import("./updateProject.handler").updateProjectHandler;
   removeProject?: typeof import("./removeProject.handler").removeProjectHandler;
   addWorkExperience?: typeof import("./addWorkExperience.handler").addWorkExperienceHandler;
+  addCompany?: typeof import("./addCompany.handler").addCompanyHandler;
   addPublication?: typeof import("./addPublication.handler").addPublicationHandler;
   addBook?: typeof import("./addBook.handler").addBookHandler;
   addPodcast?: typeof import("./addPodcast.handler").addPodcastHandler;
@@ -340,6 +342,21 @@ export const loggedInViewerRouter = router({
     }
 
     return UNSTABLE_HANDLER_CACHE.addWorkExperience({ ctx, input });
+  }),
+
+  addCompany: authedProcedure.input(ZCompanyAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addCompany) {
+      UNSTABLE_HANDLER_CACHE.addCompany = (await import("./addCompany.handler")).addCompanyHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addCompany) {
+      throw new Error("Failed to load handler");
+    }
+
+    const res = await UNSTABLE_HANDLER_CACHE.addCompany({ ctx, input });
+    console.log("res", res);
+    return res;
   }),
 
   addPublication: authedProcedure.input(ZPublicationAddSchema).mutation(async ({ ctx, input }) => {

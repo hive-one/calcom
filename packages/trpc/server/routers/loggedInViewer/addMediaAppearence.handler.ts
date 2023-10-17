@@ -15,8 +15,6 @@ type AddMediaAppearence = {
 
 export const addMediaAppearenceHandler = async ({ ctx, input }: AddMediaAppearence) => {
   const { user } = ctx;
-  console.log("handler", user);
-  console.log("post input", input);
 
   const addMediaAppearence = await prisma.user.update({
     where: {

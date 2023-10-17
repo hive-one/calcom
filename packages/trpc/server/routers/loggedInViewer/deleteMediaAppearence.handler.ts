@@ -15,8 +15,6 @@ type RemoveMediaAppearence = {
 
 export const removeMediaAppearenceHandler = async ({ ctx, input }: RemoveMediaAppearence) => {
   const { user } = ctx;
-  console.log("handler", user);
-  console.log("post input", input);
 
   const removeMediaAppearenceRes = await prisma.mediaAppearence.delete({
     where: {

@@ -15,8 +15,6 @@ type RemovePodcast = {
 
 export const removePodcastHandler = async ({ ctx, input }: RemovePodcast) => {
   const { user } = ctx;
-  console.log("handler", user);
-  console.log("post input", input);
 
   const removePodcastRes = await prisma.podcast.delete({
     where: {

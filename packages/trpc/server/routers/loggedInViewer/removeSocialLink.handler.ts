@@ -15,8 +15,6 @@ type RemoveSocialLink = {
 
 export const removeSocialLinkHandler = async ({ ctx, input }: RemoveSocialLink) => {
   const { user } = ctx;
-  console.log("handler", user);
-  console.log("post input", input);
 
   const removeSocialLinkRes = await prisma.socialLink.delete({
     where: {

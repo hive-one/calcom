@@ -15,8 +15,6 @@ type AddProject = {
 
 export const addProjectHandler = async ({ ctx, input }: AddProject) => {
   const { user } = ctx;
-  console.log("handler", user);
-  console.log("post input", input);
 
   const addProject = await prisma.user.update({
     where: {

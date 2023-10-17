@@ -15,8 +15,6 @@ type UpdateSocialLink = {
 
 export const updateSocialLinkHandler = async ({ ctx, input }: UpdateSocialLink) => {
   const { user } = ctx;
-  console.log("handler", user);
-  console.log("post input", input);
 
   const updateSocialLinkRes = await prisma.socialLink.update({
     where: {

@@ -15,8 +15,6 @@ type AddPublication = {
 
 export const addPublicationHandler = async ({ ctx, input }: AddPublication) => {
   const { user } = ctx;
-  console.log("handler", user);
-  console.log("post input", input);
 
   const addPublication = await prisma.user.update({
     where: {

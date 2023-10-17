@@ -80,12 +80,18 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                     <div className="sm:col-span-3">
                       <Label>Start Date</Label>
                       <Input
-                        type="month"
+                        type="date"
                         required
                         value={role.start_date}
                         onChange={(e) => {
+                          console.log("start", e.target.value);
                           const newExperience = [...profile.workExperiences];
-                          newExperience[companyIndex].roles[roleIndex].start_date = e.target.value;
+                          newExperience[companyIndex].roles[roleIndex].startDay =
+                            e.target.value.split("-")[0];
+                          newExperience[companyIndex].roles[roleIndex].startMonth =
+                            e.target.value.split("-")[1];
+                          newExperience[companyIndex].roles[roleIndex].startYear =
+                            e.target.value.split("-")[2];
                           setProfile({
                             ...profile,
                             workExperiences: newExperience,
@@ -97,12 +103,15 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                       <Label>End Date</Label>
                       <Input
                         label="End Date"
-                        type={role.end_date === "Present" ? "text" : "month"}
+                        type="date"
                         value={role.end_date}
                         required
                         onChange={(e) => {
                           const newExperience = [...profile.workExperiences];
-                          newExperience[companyIndex].roles[roleIndex].end_date = e.target.value;
+                          newExperience[companyIndex].roles[roleIndex].endDay = e.target.value.split("-")[0];
+                          newExperience[companyIndex].roles[roleIndex].endMonth =
+                            e.target.value.split("-")[1];
+                          newExperience[companyIndex].roles[roleIndex].endYear = e.target.value.split("-")[2];
                           setProfile({
                             ...profile,
                             workExperiences: newExperience,
