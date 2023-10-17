@@ -18,7 +18,11 @@ import { ZGetDownloadLinkOfCalVideoRecordingsInputSchema } from "./getDownloadLi
 import { ZIntegrationsInputSchema } from "./integrations.schema";
 import { ZLocationOptionsInputSchema } from "./locationOptions.schema";
 import { ZProjectAddSchema, ZProjectUpdateSchema, ZProjectRemoveSchema } from "./project.schema";
-import { ZPublicationAddSchema } from "./publication.schema";
+import {
+  ZPublicationAddSchema,
+  ZPublicationUpdateSchema,
+  ZPublicationRemoveSchema,
+} from "./publication.schema";
 import { ZFactRemoveSchema } from "./removeFact.schema";
 import { ZSocialLinkRemoveSchema } from "./removeSocialLink.schema";
 import { ZRoutingFormOrderInputSchema } from "./routingFormOrder.schema";
@@ -69,6 +73,8 @@ type AppsRouterHandlerCache = {
   addWorkExperience?: typeof import("./addWorkExperience.handler").addWorkExperienceHandler;
   addCompany?: typeof import("./addCompany.handler").addCompanyHandler;
   addPublication?: typeof import("./addPublication.handler").addPublicationHandler;
+  updatePublication?: typeof import("./updatePublication.handler").updatePublicationHandler;
+  removePublication?: typeof import("./removePublication.handler").removePublicationHandler;
   addBook?: typeof import("./addBook.handler").addBookHandler;
   addPodcast?: typeof import("./addPodcast.handler").addPodcastHandler;
   addVideo?: typeof import("./addVideo.handler").addVideoHandler;
@@ -372,6 +378,36 @@ export const loggedInViewerRouter = router({
     }
 
     return UNSTABLE_HANDLER_CACHE.addPublication({ ctx, input });
+  }),
+
+  updatePublication: authedProcedure.input(ZPublicationUpdateSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.updatePublication) {
+      UNSTABLE_HANDLER_CACHE.updatePublication = (
+        await import("./updatePublication.handler")
+      ).updatePublicationHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.updatePublication) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.updatePublication({ ctx, input });
+  }),
+
+  removePublication: authedProcedure.input(ZPublicationRemoveSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.removePublication) {
+      UNSTABLE_HANDLER_CACHE.removePublication = (
+        await import("./removePublication.handler")
+      ).removePublicationHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.removePublication) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.removePublication({ ctx, input });
   }),
 
   addBook: authedProcedure.input(ZBookAddSchema).mutation(async ({ ctx, input }) => {

@@ -64,6 +64,8 @@ const EditProfile = () => {
   const addCompanyMutation = trpc.viewer.addCompany.useMutation();
 
   const addPublicationMutation = trpc.viewer.addPublication.useMutation();
+  const updatePublicationMutation = trpc.viewer.updatePublication.useMutation();
+  const removePublicationMutation = trpc.viewer.removePublication.useMutation();
   const addPodcastMutation = trpc.viewer.addPodcast.useMutation();
   const addVideoMutation = trpc.viewer.addVideo.useMutation();
 
@@ -138,59 +140,59 @@ const EditProfile = () => {
     //   }
     // });
 
-    profile?.workExperiences.map((exp) => {
-      console.log({ exp });
-      let workExpData,
-        companyData = {
-          name: exp.company,
-          url: exp.url,
-          linkedInId: "",
-        };
-      const addCompanyRes = addCompanyMutation.mutate(companyData);
-      console.log("addCompanyRes", addCompanyRes);
+    // profile?.workExperiences.map((exp) => {
+    //   console.log({ exp });
+    //   let workExpData,
+    //     companyData = {
+    //       name: exp.company,
+    //       url: exp.url,
+    //       linkedInId: "",
+    //     };
+    //   const addCompanyRes = addCompanyMutation.mutate(companyData);
+    //   console.log("addCompanyRes", addCompanyRes);
 
-      if (exp?.roles?.length) {
-        exp?.roles.map((role) => {
-          const addWorkExpRes = addWorkExpMutation.mutate({
-            title: role.title,
-            startDay: parseInt(role.startDay),
-            startMonth: parseInt(role.startMonth),
-            startYear: parseInt(role.startYear),
-            endDay: parseInt(role.endDay),
-            endMonth: parseInt(role.endMonth),
-            endYear: parseInt(role.endYear),
-            description: role.description,
-            updatedAt: new Date(),
-            userId: user?.id,
-          });
+    //   if (exp?.roles?.length) {
+    //     exp?.roles.map((role) => {
+    //       const addWorkExpRes = addWorkExpMutation.mutate({
+    //         title: role.title,
+    //         startDay: parseInt(role.startDay),
+    //         startMonth: parseInt(role.startMonth),
+    //         startYear: parseInt(role.startYear),
+    //         endDay: parseInt(role.endDay),
+    //         endMonth: parseInt(role.endMonth),
+    //         endYear: parseInt(role.endYear),
+    //         description: role.description,
+    //         updatedAt: new Date(),
+    //         userId: user?.id,
+    //       });
 
-          console.info("addWorkExpRes", addWorkExpRes);
-        });
-      }
-      // let expData = {
-      //   ...exp,
-      //   userId: user?.id,
-      // };
-
-      // if (exp?.id) {
-      //   // updateFactMutation.mutate(factsData);
-      // } else {
-      //   addWorkExpMutation.mutate(expData);
-      // }
-    });
-
-    // profile?.publications.map((pub) => {
-    //   let pubData = {
-    //     ...pub,
-    //     updatedAt: new Date(),
-    //   };
-
-    //   if (pub?.id) {
-    //     // updateFactMutation.mutate(factsData);
-    //   } else {
-    //     addPublicationMutation.mutate(pubData);
+    //       console.info("addWorkExpRes", addWorkExpRes);
+    //     });
     //   }
+    // let expData = {
+    //   ...exp,
+    //   userId: user?.id,
+    // };
+
+    // if (exp?.id) {
+    //   // updateFactMutation.mutate(factsData);
+    // } else {
+    //   addWorkExpMutation.mutate(expData);
+    // }
     // });
+
+    profile?.publications.map((pub) => {
+      let pubData = {
+        ...pub,
+        updatedAt: new Date(),
+      };
+
+      if (pub?.id) {
+        updatePublicationMutation.mutate(pubData);
+      } else {
+        addPublicationMutation.mutate(pubData);
+      }
+    });
 
     // if (profile?.podcasts?.length && profile?.podcasts[0]?.id) {
     //   // updateFactMutation.mutate(factsData);
@@ -368,7 +370,9 @@ const EditProfile = () => {
     });
   };
 
-  const removePublication = (index) => {
+  const removePublication = ({ index, id }) => {
+    console.log("remove pub", id);
+    removePublicationMutation.mutate({ id });
     setProfile((prevProfile) => ({
       ...prevProfile,
       publications: prevProfile.publications.filter((_, i) => i !== index),

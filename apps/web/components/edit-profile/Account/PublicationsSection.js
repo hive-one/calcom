@@ -51,7 +51,10 @@ const PublicationsSection = ({ profile, setProfile, addPublication, removePublic
                 />
               </div>
               <div className="col-span-full flex items-center justify-end">
-                <RemoveButton label="Remove" onClick={() => removePublication(i)} />
+                <RemoveButton
+                  label="Remove"
+                  onClick={() => removePublication({ index: i, id: publication.id })}
+                />
               </div>
             </div>
           ))}
