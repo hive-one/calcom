@@ -127,11 +127,11 @@ const LinkSection = ({ profile, setProfile }) => {
   const handleLinkUrlChange = (e, i) => {
     const newLinks = [...profile.socialLinks];
     const url = e.target.value;
-    const linkType = linkTypes.find((link) => url.includes(link.key));
+    const linkType = linkTypes.find((link) => url.includes(link.key.toLowerCase()));
     newLinks[i].url = url;
     newLinks[i].key = linkType ? linkType.key : "OTHER";
     newLinks[i].name = linkType ? linkType.label : "";
-    setProfile({ ...profile, links: newLinks });
+    setProfile({ ...profile, socialLinks: newLinks });
   };
 
   const addLink = () => {

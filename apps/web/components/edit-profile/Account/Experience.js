@@ -52,7 +52,7 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                 />
               </div>
 
-              {company.roles.map((role, roleIndex) => (
+              {company?.roles?.map((role, roleIndex) => (
                 <div key={roleIndex} className="relative">
                   {company.roles.length > 1 && (
                     <RemoveButton

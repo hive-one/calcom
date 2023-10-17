@@ -5,7 +5,6 @@ export const ZProjectAddSchema = z.object({
   url: z.string(),
   description: z.string() || undefined,
   updatedAt: z.date(),
-  userId: z.number().int(),
 });
 
 export const ZProjectUpdateSchema = z.object({

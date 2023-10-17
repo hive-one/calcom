@@ -3,7 +3,7 @@ import Spinner from "@ui/spinner";
 import clsx from "clsx";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Linkedin } from "react-bootstrap-icons";
 import toast from "react-hot-toast";
 
@@ -37,7 +37,6 @@ const EditProfile = () => {
   const [isLoading, setIsLoading] = useState();
   const [formLoading, setFormLoading] = useState(false);
   const [profile, setProfile] = useState(user);
-  console.log(profile);
 
   const [activeSetting, setActiveSetting] = useState("profile");
   const [avatarFile, setAvatarFile] = useState(null);
@@ -57,16 +56,23 @@ const EditProfile = () => {
   const addFactMutation = trpc.viewer.addFact.useMutation();
   const updateFactMutation = trpc.viewer.updateFact.useMutation();
   const removeFactMutation = trpc.viewer.removeFact.useMutation();
-
   const addProjectMutation = trpc.viewer.addProject.useMutation();
+  const updateProjectMutation = trpc.viewer.updateProject.useMutation();
+  const removeProjectMutation = trpc.viewer.removeProject.useMutation();
+
   const addWorkExpMutation = trpc.viewer.addExp.useMutation();
   const addPublicationMutation = trpc.viewer.addPublication.useMutation();
   const addPodcastMutation = trpc.viewer.addPodcast.useMutation();
   const addVideoMutation = trpc.viewer.addVideo.useMutation();
 
+  useEffect(() => {
+    setProfile(user);
+  }, [user]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    mutation.mutate(profile);
+    // mutation.mutate(profile);
+    console.log("profile", profile);
 
     profile?.socialLinks.map((socialLink) => {
       let now = new Date();
@@ -98,67 +104,69 @@ const EditProfile = () => {
       }
     });
 
+    toast.success(`Update profile successfully`);
+
     profile?.projects.map((project) => {
       let now = new Date();
       let projectData = {
         ...project,
-        userId: user?.id,
         updatedAt: now,
       };
 
+      console.info("adding pro", projectData);
+
       if (project?.id) {
-        // updateFactMutation.mutate(factsData);
+        updateProjectMutation.mutate(projectData);
       } else {
         addProjectMutation.mutate(projectData);
       }
     });
 
-    profile?.videos.map((vid) => {
-      let vidData = {
-        ...vid,
-        userId: user?.id,
-        updatedAt: new Date(),
-      };
+    // profile?.videos.map((vid) => {
+    //   let vidData = {
+    //     ...vid,
+    //     userId: user?.id,
+    //     updatedAt: new Date(),
+    //   };
 
-      if (vid?.id) {
-        // updateFactMutation.mutate(factsData);
-      } else {
-        addVideoMutation.mutate(vidData);
-      }
-    });
+    //   if (vid?.id) {
+    //     // updateFactMutation.mutate(factsData);
+    //   } else {
+    //     addVideoMutation.mutate(vidData);
+    //   }
+    // });
 
-    profile?.workExperiences.map((exp) => {
-      let expData = {
-        ...exp,
-        userId: user?.id,
-      };
+    // profile?.workExperiences.map((exp) => {
+    //   let expData = {
+    //     ...exp,
+    //     userId: user?.id,
+    //   };
 
-      if (exp?.id) {
-        // updateFactMutation.mutate(factsData);
-      } else {
-        addWorkExpMutation.mutate(expData);
-      }
-    });
+    //   if (exp?.id) {
+    //     // updateFactMutation.mutate(factsData);
+    //   } else {
+    //     addWorkExpMutation.mutate(expData);
+    //   }
+    // });
 
-    profile?.publications.map((pub) => {
-      let pubData = {
-        ...pub,
-        updatedAt: new Date(),
-      };
-      console.log("adding pub", pub);
+    // profile?.publications.map((pub) => {
+    //   let pubData = {
+    //     ...pub,
+    //     updatedAt: new Date(),
+    //   };
 
-      if (pub?.id) {
-        // updateFactMutation.mutate(factsData);
-      } else {
-        addPublicationMutation.mutate(pubData);
-      }
-    });
+    //   if (pub?.id) {
+    //     // updateFactMutation.mutate(factsData);
+    //   } else {
+    //     addPublicationMutation.mutate(pubData);
+    //   }
+    // });
 
-    if (profile?.podcast?.id) {
-      // updateFactMutation.mutate(factsData);
-    } else {
-      addPodcastMutation.mutate({ ...profile?.podcast, description: "" });
-    }
+    // if (profile?.podcasts?.length && profile?.podcasts[0]?.id) {
+    //   // updateFactMutation.mutate(factsData);
+    // } else {
+    //   addPodcastMutation.mutate({ ...profile?.podcasts[0], description: "" });
+    // }
 
     // console.log({ linksMutation });
     // try {
@@ -203,16 +211,16 @@ const EditProfile = () => {
 
   const addExperience = () => {
     const newExperience = {
-      title: "",
-      description: "",
+      company: "",
       url: "",
-      startDay: "",
-      startMonth: "",
-      startYear: "",
-      endDay: "",
-      endMonth: "",
-      endYear: "",
-      companyId: "",
+      roles: [
+        {
+          title: "",
+          description: "",
+          start_date: "",
+          end_date: "",
+        },
+      ],
     };
     setProfile((prevProfile) => ({
       ...prevProfile,
@@ -224,10 +232,11 @@ const EditProfile = () => {
     const newAppearance = {
       title: "",
       url: "",
+      description: "",
     };
     setProfile((prevProfile) => ({
       ...prevProfile,
-      appearances: [...prevProfile.appearances, newAppearance],
+      mediaAppearances: [...prevProfile.mediaAppearances, newAppearance],
     }));
   };
 
@@ -276,7 +285,7 @@ const EditProfile = () => {
   const addPodcast = () => {
     setProfile({
       ...profile,
-      podcast: {
+      podcasts: {
         title: "",
         url: "",
         cover_image: "",
@@ -293,17 +302,17 @@ const EditProfile = () => {
   const deletePodcast = () => {
     setProfile({
       ...profile,
-      podcast: null,
+      podcasts: null,
     });
   };
 
   const addPodcastEpisode = () => {
     setProfile({
       ...profile,
-      podcast: {
-        ...profile.podcast,
+      podcasts: {
+        ...profile.podcasts,
         episodes: [
-          ...profile.podcast.episodes,
+          ...profile.podcasts.episodes,
           {
             title: "",
             url: "",
@@ -314,12 +323,12 @@ const EditProfile = () => {
   };
 
   const removePodcastEpisode = (index) => {
-    const newEpisodes = [...profile.podcast.episodes];
+    const newEpisodes = [...profile.podcasts.episodes];
     newEpisodes.splice(index, 1);
     setProfile({
       ...profile,
-      podcast: {
-        ...profile.podcast,
+      podcasts: {
+        ...profile.podcasts,
         episodes: newEpisodes,
       },
     });
@@ -346,7 +355,8 @@ const EditProfile = () => {
     }));
   };
 
-  const removeProject = (index) => {
+  const removeProject = ({ index, id }) => {
+    removeProjectMutation.mutate({ id });
     setProfile((prevProfile) => ({
       ...prevProfile,
       projects: prevProfile.projects.filter((_, i) => i !== index),
@@ -356,14 +366,14 @@ const EditProfile = () => {
   const removePodcastAppearance = (index) => {
     setProfile((prevProfile) => ({
       ...prevProfile,
-      appearances: prevProfile.appearances.filter((_, i) => i !== index),
+      mediaAppearances: prevProfile.mediaAppearances.filter((_, i) => i !== index),
     }));
   };
 
   const removeExperience = (index) => {
     setProfile((prevProfile) => ({
       ...prevProfile,
-      experience: prevProfile.experience.filter((_, i) => i !== index),
+      workExperiences: prevProfile.workExperiences.filter((_, i) => i !== index),
     }));
   };
 

@@ -48,7 +48,7 @@ const ProjectsSection = ({ profile, setProfile, addProject, removeProject }) => 
                 />
               </div>
               <div className="col-span-full flex items-center justify-end">
-                <RemoveButton label="Remove" onClick={() => removeProject(i)} />
+                <RemoveButton label="Remove" onClick={() => removeProject({ index: i, id: project?.id })} />
               </div>
             </div>
           ))}
