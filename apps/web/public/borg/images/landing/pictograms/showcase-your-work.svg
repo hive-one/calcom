@@ -1,0 +1,73 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="11" y="35" width="58" height="39" fill="black"/>
+<rect x="11.5" y="33.5" width="57" height="38" fill="white" stroke="black"/>
+<rect x="14.5" y="36.5" width="51" height="32" fill="white" stroke="black"/>
+<path d="M36 43L46.1924 52.1924L36 61.3848L36 43Z" fill="black"/>
+<path d="M85.4715 68.4872L85.3668 68.4355H85.25H75.5L75.5 14C75.5 12.067 77.067 10.5 79 10.5L115.5 10.5L115.5 73.5H95.6168L85.4715 68.4872Z" fill="white" stroke="black"/>
+<mask id="path-6-inside-1_1150_63394" fill="white">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M80.5 74C77.4624 74 75 71.5376 75 68.5C75 65.4624 77.4624 63 80.5 63H116V63.1533C113.587 63.7357 111.795 65.9085 111.795 68.5C111.795 71.0915 113.587 73.2643 116 73.8467V74H80.5Z"/>
+</mask>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M80.5 74C77.4624 74 75 71.5376 75 68.5C75 65.4624 77.4624 63 80.5 63H116V63.1533C113.587 63.7357 111.795 65.9085 111.795 68.5C111.795 71.0915 113.587 73.2643 116 73.8467V74H80.5Z" fill="white"/>
+<path d="M75 68.5H74V68.5L75 68.5ZM116 63H117V62H116V63ZM116 63.1533L116.234 64.1254L117 63.9407V63.1533H116ZM116 73.8467H117V73.0593L116.234 72.8746L116 73.8467ZM116 74V75H117V74H116ZM74 68.5C74 72.0899 76.9101 75 80.5 75V73C78.0147 73 76 70.9853 76 68.5L74 68.5ZM80.5 62C76.9102 62 74 64.9102 74 68.5H76C76 66.0147 78.0147 64 80.5 64V62ZM116 62H80.5V64H116V62ZM115 63V63.1533H117V63H115ZM112.795 68.5C112.795 66.381 114.26 64.6019 116.234 64.1254L115.765 62.1813C112.914 62.8694 110.795 65.436 110.795 68.5H112.795ZM116.234 72.8746C114.26 72.3981 112.795 70.619 112.795 68.5H110.795C110.795 71.564 112.914 74.1306 115.765 74.8187L116.234 72.8746ZM115 73.8467V74H117V73.8467H115ZM80.5 75H116V73H80.5V75Z" fill="black" mask="url(#path-6-inside-1_1150_63394)"/>
+<mask id="mask0_1150_63394" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="75" y="63" width="41" height="11">
+<mask id="path-8-inside-2_1150_63394" fill="white">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M80.5 63C77.4624 63 75 65.4624 75 68.5C75 71.5376 77.4624 74 80.5 74H116V73.8467C113.587 73.2646 111.795 71.0916 111.795 68.5C111.795 65.9084 113.587 63.7354 116 63.1533V63H80.5Z"/>
+</mask>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M80.5 63C77.4624 63 75 65.4624 75 68.5C75 71.5376 77.4624 74 80.5 74H116V73.8467C113.587 73.2646 111.795 71.0916 111.795 68.5C111.795 65.9084 113.587 63.7354 116 63.1533V63H80.5Z" fill="white"/>
+<path d="M116 74V75H117V74H116ZM116 73.8467H117V73.0593L116.235 72.8746L116 73.8467ZM116 63.1533L116.235 64.1254L117 63.9407V63.1533H116ZM116 63H117V62H116V63ZM76 68.5C76 66.0147 78.0147 64 80.5 64V62C76.9101 62 74 64.9102 74 68.5H76ZM80.5 73C78.0147 73 76 70.9853 76 68.5H74C74 72.0899 76.9102 75 80.5 75V73ZM116 73H80.5V75H116V73ZM115 73.8467V74H117V73.8467H115ZM116.235 72.8746C114.26 72.3983 112.795 70.6191 112.795 68.5H110.795C110.795 71.5641 112.914 74.1308 115.765 74.8188L116.235 72.8746ZM112.795 68.5C112.795 66.3809 114.26 64.6017 116.235 64.1254L115.765 62.1812C112.914 62.8692 110.795 65.4359 110.795 68.5H112.795ZM115 63V63.1533H117V63H115ZM80.5 64H116V62H80.5V64Z" fill="black" mask="url(#path-8-inside-2_1150_63394)"/>
+</mask>
+<g mask="url(#mask0_1150_63394)">
+<rect x="76" y="67" width="40" height="1" fill="black"/>
+<rect x="76" y="65" width="40" height="1" fill="black"/>
+<path d="M76 69H116V70H76V69Z" fill="black"/>
+<rect x="76" y="71" width="40" height="1" fill="black"/>
+</g>
+<rect x="80" y="10" width="1" height="53" fill="black"/>
+<circle cx="97" cy="23" r="1" fill="black"/>
+<circle cx="97" cy="23" r="2.5" stroke="black"/>
+<rect x="113" y="63" width="3" height="1" fill="black"/>
+<rect x="86" y="29" width="1" height="3" fill="black"/>
+<rect x="89" y="29" width="1" height="3" fill="black"/>
+<rect x="92" y="29" width="1" height="3" fill="black"/>
+<rect x="92" y="34" width="1" height="3" fill="black"/>
+<rect x="95" y="29" width="1" height="3" fill="black"/>
+<rect x="95" y="34" width="1" height="3" fill="black"/>
+<rect x="98" y="29" width="1" height="3" fill="black"/>
+<rect x="98" y="34" width="1" height="3" fill="black"/>
+<rect x="101" y="29" width="1" height="3" fill="black"/>
+<rect x="101" y="34" width="1" height="3" fill="black"/>
+<rect x="104" y="29" width="1" height="3" fill="black"/>
+<rect x="107" y="29" width="1" height="3" fill="black"/>
+<circle cx="40" cy="82" r="3.5" fill="white" stroke="black"/>
+<rect x="46" y="78" width="1" height="8" fill="black"/>
+<rect x="49" y="78" width="1" height="8" fill="black"/>
+<circle cx="56" cy="82" r="3.5" fill="white" stroke="black"/>
+<circle cx="66" cy="82" r="3.5" fill="white" stroke="black"/>
+<circle cx="76" cy="82" r="3.5" fill="white" stroke="black"/>
+<rect x="82" y="78" width="1" height="8" fill="black"/>
+<rect x="85" y="78" width="1" height="8" fill="black"/>
+<circle cx="40" cy="92" r="3.5" fill="white" stroke="black"/>
+<rect x="46" y="88" width="1" height="8" fill="black"/>
+<rect x="49" y="88" width="1" height="8" fill="black"/>
+<circle cx="56" cy="92" r="3.5" fill="white" stroke="black"/>
+<rect x="62" y="88" width="1" height="8" fill="black"/>
+<rect x="65" y="88" width="1" height="8" fill="black"/>
+<rect x="68" y="88" width="1" height="8" fill="black"/>
+<rect x="71" y="88" width="1" height="8" fill="black"/>
+<circle cx="40" cy="102" r="3.5" fill="white" stroke="black"/>
+<rect x="46" y="98" width="1" height="8" fill="black"/>
+<rect x="49" y="98" width="1" height="8" fill="black"/>
+<circle cx="56" cy="102" r="3.5" fill="white" stroke="black"/>
+<circle cx="66" cy="102" r="3.5" fill="white" stroke="black"/>
+<rect x="72" y="98" width="1" height="8" fill="black"/>
+<circle cx="79" cy="102" r="3.5" fill="white" stroke="black"/>
+<circle cx="89" cy="102" r="3.5" fill="white" stroke="black"/>
+<circle cx="40" cy="112" r="3.5" fill="white" stroke="black"/>
+<rect x="46" y="108" width="1" height="8" fill="black"/>
+<rect x="49" y="108" width="1" height="8" fill="black"/>
+<circle cx="56" cy="112" r="3.5" fill="white" stroke="black"/>
+<circle cx="66" cy="112" r="3.5" fill="white" stroke="black"/>
+<rect x="72" y="108" width="1" height="8" fill="black"/>
+<circle cx="79" cy="112" r="3.5" fill="white" stroke="black"/>
+<rect x="85" y="108" width="1" height="8" fill="black"/>
+</svg>
