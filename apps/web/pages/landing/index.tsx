@@ -2,7 +2,8 @@ import { Button } from "@shadcdn/ui";
 import { cx } from "class-variance-authority";
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
-import { Twitter, Envelope } from "react-bootstrap-icons";
+import { useEffect, useState } from "react";
+import { Envelope, Twitter } from "react-bootstrap-icons";
 
 import { HeadSeo } from "@calcom/ui";
 
@@ -54,7 +55,7 @@ const ProfileSection = ({
 
 const FeatureSection = ({ children, title, description }) => {
   return (
-    <div className="mx-[5%] flex w-[90%] max-w-7xl flex-col items-center text-center">
+    <div className="flex w-full max-w-7xl flex-col items-center px-[5%] text-center">
       <hgroup className="mb-[72px] max-w-md">
         <h2 className="text-landing-3xl mb-2 font-extrabold leading-[52px]">{title}</h2>
         <p className="text-landing-lg leading-8">{description}</p>
@@ -93,6 +94,26 @@ const PriceItem = ({ price, description, details, hilightPrice = false }) => {
 };
 
 const LandingPage = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // If the user scrolls, we set the isScrolled state to true
+  // It is used to change the background of the header.
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!isScrolled && window.scrollY > 0) {
+        setIsScrolled(true);
+      } else if (isScrolled && window.scrollY === 0) {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isScrolled]);
+
   return (
     <>
       <HeadSeo
@@ -100,8 +121,20 @@ const LandingPage = () => {
         description="A Better Professional Profile Platform. AI-powered profile that earns you money."
       />
       <div className="flex w-full flex-col items-center bg-white font-sans">
-        <header className="fixed flex w-full max-w-7xl items-start justify-between px-[5%] pt-6">
-          <Image src="/borg/borg-id-logo.svg" width={88} height={30} className="mt-0.5" />{" "}
+        {/* Header */}
+        <header
+          className="fixed flex w-full max-w-7xl items-start justify-between px-[5%] pb-6 pt-6"
+          style={
+            isScrolled
+              ? {
+                  background: "rgba(255,255,255,0.92)",
+                  maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 35%, 50%, rgba(0,0,0,0))",
+                  WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 35%, 50%, rgba(0,0,0,0))",
+                  backdropFilter: "blur(5px)",
+                }
+              : {}
+          }>
+          <Image src="/borg/borg-id-logo.svg" width={88} height={30} className="mt-0.5" alt="Borg.id logo" />{" "}
           <Button className="">Log In</Button>
         </header>
         <main className="flex w-full flex-col items-center">
