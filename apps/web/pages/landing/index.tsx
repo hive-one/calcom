@@ -100,8 +100,9 @@ const LandingPage = () => {
         description="A Better Professional Profile Platform. AI-powered profile that earns you money."
       />
       <div className="flex w-full flex-col items-center bg-white font-sans">
-        <header className="fixed flex w-full max-w-7xl justify-between px-[5%] pt-5">
-          <Image src="/borg/borg-id-logo.svg" width={88} height={30} className="" /> <Button>Log In</Button>
+        <header className="fixed flex w-full max-w-7xl items-start justify-between px-[5%] pt-6">
+          <Image src="/borg/borg-id-logo.svg" width={88} height={30} className="mt-0.5" />{" "}
+          <Button className="">Log In</Button>
         </header>
         <main className="flex w-full flex-col items-center">
           {/* Hero */}
@@ -253,7 +254,7 @@ const LandingPage = () => {
           <div className="flex w-full flex-col items-center gap-[72px] bg-gray-100 px-[5%] pb-[122px] pt-[88px] text-center">
             <div className="flex max-w-7xl flex-col items-center gap-10">
               <h2 className="text-landing-2xl font-extrabold leading-[52px]">Pricing</h2>
-              <div className="flex w-[65.2%] gap-8">
+              <div className="max-w-80 flex flex-col gap-8 md:max-w-screen-md md:flex-row">
                 <PriceItem
                   price="Free"
                   description="To create profile"
@@ -263,7 +264,7 @@ const LandingPage = () => {
                 <PriceItem price="10%" description="on direct bookings" />
                 <PriceItem
                   price="30%"
-                  description="on bookings generated through our sales & marketing channels"
+                  description="on bookings generated through our sales & marketing channels"
                 />
               </div>
               {/* <div className="flex gap-12">
