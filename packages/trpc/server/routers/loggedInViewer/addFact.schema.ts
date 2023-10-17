@@ -3,7 +3,7 @@ import { z } from "zod";
 export const ZFactAddSchema = z.object({
   title: z.string(),
   url: z.string(),
-  description: z.string().optional(),
+  description: z.string() || undefined,
   updatedAt: z.date(),
   userId: z.number().int(),
 });

@@ -3,7 +3,7 @@ import { z } from "zod";
 export const ZProjectAddSchema = z.object({
   title: z.string(),
   url: z.string(),
-  description: z.string().optional(),
+  description: z.string() || undefined,
   updatedAt: z.date(),
   userId: z.number().int(),
 });
@@ -12,7 +12,7 @@ export const ZProjectUpdateSchema = z.object({
   id: z.number().int(),
   title: z.string(),
   url: z.string(),
-  description: z.string().optional(),
+  description: z.string() || undefined,
   updatedAt: z.date(),
   userId: z.number().int(),
 });

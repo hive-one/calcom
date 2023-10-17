@@ -53,6 +53,7 @@ const user: User & { credentials: CredentialPayload[] } = {
   adviceOn: ["Crypto", "Stocks", "Options"],
   pricePerHour: 200,
   priceCurrency: "usd",
+  socialLinks: [],
 };
 
 const customInputs: CustomInputSchema[] = [];

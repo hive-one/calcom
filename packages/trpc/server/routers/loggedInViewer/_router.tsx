@@ -378,10 +378,10 @@ export const loggedInViewerRouter = router({
       throw new Error("Failed to load handler");
     }
 
-    return UNSTABLE_HANDLER_CACHE.addFact({ ctx, input });
+    return UNSTABLE_HANDLER_CACHE.addFact({ input });
   }),
 
-  updateFact: authedProcedure.input(ZFactUpdateSchema).mutation(async ({ ctx, input }) => {
+  updateFact: authedProcedure.input(ZFactUpdateSchema).mutation(async ({ input }) => {
     if (!UNSTABLE_HANDLER_CACHE.updateFact) {
       UNSTABLE_HANDLER_CACHE.updateFact = (await import("./updateFact.handler")).updateFactHandler;
     }
@@ -391,7 +391,7 @@ export const loggedInViewerRouter = router({
       throw new Error("Failed to load handler");
     }
 
-    return UNSTABLE_HANDLER_CACHE.updateFact({ ctx, input });
+    return UNSTABLE_HANDLER_CACHE.updateFact({ input });
   }),
 
   removeFact: authedProcedure.input(ZFactRemoveSchema).mutation(async ({ ctx, input }) => {
