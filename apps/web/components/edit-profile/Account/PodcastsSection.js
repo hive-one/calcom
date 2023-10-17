@@ -159,11 +159,11 @@ const PodcastsSection = ({
                     required
                     value={podcast.title}
                     onChange={(e) => {
-                      const newEpisode = [...profile.podcast.episodes];
+                      const newEpisode = [...profile.podcasts.episodes];
                       newEpisode[i].title = e.target.value;
                       setProfile({
                         ...profile,
-                        podcast: { ...profile.podcast, episodes: newEpisode },
+                        podcasts: { ...profile.podcasts, episodes: newEpisode },
                       });
                     }}
                   />
@@ -176,16 +176,16 @@ const PodcastsSection = ({
                     type="url"
                     value={podcast.url}
                     onChange={(e) => {
-                      const newEpisode = [...profile.podcast.episodes];
+                      const newEpisode = [...profile.podcasts.episodes];
                       newEpisode[i].url = e.target.value;
                       setProfile({
                         ...profile,
-                        podcast: { ...profile.podcast, episodes: newEpisode },
+                        podcasts: { ...profile.podcasts, episodes: newEpisode },
                       });
                     }}
                   />
                 </div>
-                {profile?.podcast?.episodes?.length > 1 && (
+                {profile?.podcasts?.episodes?.length > 1 && (
                   <div className="col-span-full flex items-center justify-end">
                     <RemoveButton label="Remove episode" onClick={() => removePodcastEpisode(i)} />
                   </div>
@@ -195,7 +195,7 @@ const PodcastsSection = ({
         </div>
       )}
       <div className="col-span-full mt-6 flex items-center gap-x-3">
-        {profile?.podcast?.episodes?.length > 0 && (
+        {profile?.podcasts?.episodes?.length > 0 && (
           <Button type="button" onClick={addPodcastEpisode} variant="outline" size="sm">
             Add episode
           </Button>

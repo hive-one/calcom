@@ -62,6 +62,7 @@ const EditProfile = () => {
   const addWorkExpMutation = trpc.viewer.addExp.useMutation();
   const addPublicationMutation = trpc.viewer.addPublication.useMutation();
   const addPodcastMutation = trpc.viewer.addPodcast.useMutation();
+  const addVideoMutation = trpc.viewer.addVideo.useMutation();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -109,6 +110,20 @@ const EditProfile = () => {
         // updateFactMutation.mutate(factsData);
       } else {
         addProjectMutation.mutate(projectData);
+      }
+    });
+
+    profile?.videos.map((vid) => {
+      let vidData = {
+        ...vid,
+        userId: user?.id,
+        updatedAt: new Date(),
+      };
+
+      if (vid?.id) {
+        // updateFactMutation.mutate(factsData);
+      } else {
+        addVideoMutation.mutate(vidData);
       }
     });
 

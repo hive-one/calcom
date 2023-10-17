@@ -62,7 +62,7 @@ const VideosSection = ({ profile, setProfile, addVideo, removeVideo }) => {
           ))}
       </div>
       <div className="col-span-full mt-6">
-        <Button onClick={() => addVideo("videos")} variant="outline" size="sm">
+        <Button type="button" onClick={() => addVideo("videos")} variant="outline" size="sm">
           Add section
         </Button>
       </div>
