@@ -376,12 +376,12 @@ enum BookingStatus {
 }
 
 model Booking {
-  id                    Int                  @id @default(autoincrement())
-  uid                   String               @unique
-  user                  User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                    Int                   @id @default(autoincrement())
+  uid                   String                @unique
+  user                  User?                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                Int?
   references            BookingReference[]
-  eventType             EventType?           @relation(fields: [eventTypeId], references: [id])
+  eventType             EventType?            @relation(fields: [eventTypeId], references: [id])
   eventTypeId           Int?
   title                 String
   description           String?
@@ -392,12 +392,12 @@ model Booking {
   endTime               DateTime
   attendees             Attendee[]
   location              String?
-  createdAt             DateTime             @default(now())
+  createdAt             DateTime              @default(now())
   updatedAt             DateTime?
-  status                BookingStatus        @default(ACCEPTED)
-  paid                  Boolean              @default(false)
+  status                BookingStatus         @default(ACCEPTED)
+  paid                  Boolean               @default(false)
   payment               Payment[]
-  destinationCalendar   DestinationCalendar? @relation(fields: [destinationCalendarId], references: [id])
+  destinationCalendar   DestinationCalendar?  @relation(fields: [destinationCalendarId], references: [id])
   destinationCalendarId Int?
   cancellationReason    String?
   rejectionReason       String?
@@ -412,9 +412,11 @@ model Booking {
   seatsReferences       BookingSeat[]
   /// @zod.custom(imports.bookingMetadataSchema)
   metadata              Json?
-  isRecorded            Boolean              @default(false)
+  isRecorded            Boolean               @default(false)
   customerId            Int?
-  customer              Customer?            @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customer              Customer?             @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  SuccesfulPayments     SuccesfulPayments[]
+  StripePaymentIntent   StripePaymentIntent[]
 
   @@index([eventTypeId])
   @@index([userId])
@@ -435,6 +437,23 @@ model Customer {
   bookings           Booking[]
 
   @@unique([email])
+}
+
+model SuccesfulPayments {
+  id               Int     @id @default(autoincrement())
+  stripeCustomerId String
+  stripeSessionId  String
+  bookingId        Int
+  booking          Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model StripePaymentIntent {
+  id               Int     @id @default(autoincrement())
+  stripeCustomerId String
+  stripeSessionId  String
+  bookingId        Int
+  booking          Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  stripePayload    Json
 }
 
 model Schedule {

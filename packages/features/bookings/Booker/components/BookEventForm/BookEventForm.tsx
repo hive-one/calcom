@@ -299,7 +299,7 @@ export const BookEventFormChild = ({
   }
 
   const generateCheckoutLink = async (data: CheckoutPayload): Promise<string> => {
-    const response = await post<CheckoutPayload, ApiResponse>("/api/create-checkout-link", data);
+    const response = await post<CheckoutPayload, ApiResponse>("/api/stripe/create-checkout-link", data);
     const { url } = response;
     return url;
   };
