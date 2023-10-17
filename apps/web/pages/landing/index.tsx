@@ -55,18 +55,18 @@ const ProfileSection = ({
 const FeatureSection = ({ children, title, description }) => {
   return (
     <div className="mx-[5%] flex w-[90%] max-w-7xl flex-col items-center text-center">
-      <hgroup className="mb-[72px] max-w-[48%]">
+      <hgroup className="mb-[72px] max-w-md">
         <h2 className="text-landing-3xl mb-2 font-extrabold leading-[52px]">{title}</h2>
         <p className="text-landing-lg leading-8">{description}</p>
       </hgroup>
-      <div className="flex gap-12">{children}</div>
+      <div className="flex flex-col gap-12 md:flex-row">{children}</div>
     </div>
   );
 };
 
 const Feature = ({ pictogramURL, title, description }) => {
   return (
-    <div className="flex flex-1 flex-col items-center text-center">
+    <div className="flex max-w-sm flex-1 flex-col items-center text-center">
       <Image src={pictogramURL} width={128} height={128} className="mb-3" />
       <h3 className="text-landing-lg mb-1 font-bold leading-7">{title}</h3>
       <p className="text-landing-base leading-7">{description}</p>
@@ -106,7 +106,7 @@ const LandingPage = () => {
         <main className="flex w-full flex-col items-center">
           {/* Hero */}
           <div
-            className="flex h-[745px] w-full flex-col items-center bg-[url(/borg/images/landing/cellular-automata-bg.png)] bg-left-top"
+            className="flex h-[735px] w-full flex-col items-center bg-[url(/borg/images/landing/cellular-automata-bg.png)] bg-left-top"
             style={{ imageRendering: "pixelated" }}>
             <hgroup className="mt-[164px] max-w-xl text-center">
               <h1 className="text-landing-4xl mb-2 font-extrabold leading-[60px]">
@@ -129,7 +129,7 @@ const LandingPage = () => {
           </div>
 
           {/* Content */}
-          <div className="-mt-24 mb-[216px] flex max-w-7xl flex-col items-center gap-[248px]">
+          <div className="-mt-24 mb-[216px] flex max-w-7xl flex-col items-center gap-[200px] md:gap-[248px]">
             {/* Profile */}
             <div className="flex w-full flex-col items-center">
               <div
