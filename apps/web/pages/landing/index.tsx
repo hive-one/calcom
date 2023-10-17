@@ -229,14 +229,14 @@ const LandingPage = () => {
                     height="232"
                   />
                 </div>
-                <div>
-                  <Image
-                    src="/borg/images/landing/profile/08-profile-publications.png"
-                    alt="Profile About"
-                    width="408"
-                    height="291"
-                  />
-                </div>
+                <ProfileSection
+                  imageUrl="/borg/images/landing/profile/08-profile-publications.png"
+                  imageWidth={408}
+                  imageHeight={291}
+                  captionTitle="Showcase your publications"
+                  captionDescription="You can link your papers, articles or blog posts that you are proud of."
+                  last={true}
+                />
               </div>
             </div>
 
