@@ -1000,11 +1000,12 @@ model SocialLink {
   name      String
   key       SocialLinkType
   url       String
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  createdAt DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime       @updatedAt @db.Timestamptz(3)
   userId    Int
   user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([url, userId])
   @@index([userId])
 }
 
@@ -1012,13 +1013,14 @@ model Fact {
   id          Int      @id @default(autoincrement())
   title       String
   url         String
-  description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  description String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([title, userId])
   @@index([userId])
 }
 
@@ -1026,39 +1028,44 @@ model Project {
   id          Int      @id @default(autoincrement())
   title       String
   url         String
-  description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  description String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([title, userId])
   @@index([userId])
 }
 
 model Company {
   id         Int      @id @default(autoincrement())
   name       String
-  linkedInId String
-  url        String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  linkedInId String?
+  url        String?
+  createdAt  DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt  DateTime @updatedAt @db.Timestamptz(3)
 
   workExperience WorkExperience[]
+
+  @@unique([name])
+  @@unique([linkedInId])
 }
 
 model WorkExperience {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  startDay    Int?
-  startMonth  Int?
-  startYear   Int
-  endDay      Int?
-  endMonth    Int?
-  endYear     Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  title         String
+  description   String?
+  startDay      Int?
+  startMonth    Int?
+  startYear     Int
+  isCurrentRole Boolean  @default(false)
+  endDay        Int?
+  endMonth      Int?
+  endYear       Int?
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(3)
 
   companyId Int
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
@@ -1074,23 +1081,24 @@ model Publication {
   id          Int      @id @default(autoincrement())
   title       String
   url         String
-  description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  description String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
   author User[]
 
-  @@unique([title, url])
+  @@unique([title])
+  @@unique([url])
 }
 
 model Book {
   isbn        String   @id
   title       String
   url         String
-  description String
-  converImage String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  description String?
+  converImage String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
   authors User[]
 }
@@ -1099,12 +1107,16 @@ model Podcast {
   id          Int      @id @default(autoincrement())
   title       String
   url         String
-  description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  description String?
+  converImage String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
   hosts            User[]
   mediaAppearences MediaAppearence[]
+
+  @@unique([title])
+  @@unique([url])
 }
 
 model Video {
@@ -1112,11 +1124,13 @@ model Video {
   title       String
   url         String
   description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
   hosts            User[]
   mediaAppearences MediaAppearence[]
+
+  @@unique([url])
 }
 
 model MediaAppearence {
@@ -1125,8 +1139,8 @@ model MediaAppearence {
   url         String
   description String
   mediaType   String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
   podcastId Int?
   podcast   Podcast? @relation(fields: [podcastId], references: [id], onDelete: Cascade)
@@ -1136,6 +1150,7 @@ model MediaAppearence {
 
   guests User[]
 
+  @@unique([url])
   @@index([podcastId])
   @@index([videoId])
 }

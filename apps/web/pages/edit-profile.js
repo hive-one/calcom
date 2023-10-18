@@ -172,6 +172,7 @@ const EditProfile = () => {
             endYear: parseInt(role.endYear),
             description: role.description,
             updatedAt: new Date(),
+            companyId: addCompanyRes?.data?.id,
             userId: user?.id,
           });
 

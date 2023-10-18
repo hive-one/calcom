@@ -127,9 +127,9 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                           onChange={(e) => {
                             const newExperience = [...profile.workExperiences];
                             if (e.target.checked) {
-                              newExperience[companyIndex].roles[roleIndex].end_date = "Present";
+                              newExperience[companyIndex].roles[roleIndex].isCurrentRole = true;
                             } else {
-                              newExperience[companyIndex].roles[roleIndex].end_date = "";
+                              newExperience[companyIndex].roles[roleIndex].isCurrentRole = false;
                             }
                             setProfile({
                               ...profile,

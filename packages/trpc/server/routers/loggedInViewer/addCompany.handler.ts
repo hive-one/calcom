@@ -16,14 +16,14 @@ type AddCompany = {
 export const addCompanyHandler = async ({ ctx, input }: AddCompany) => {
   const { user } = ctx;
 
-  const res = await prisma.company.create({
+  const company = await prisma.company.create({
     data: {
       ...input,
       updatedAt: new Date(),
     },
   });
 
-  console.log("res in handler", res);
+  console.log("company in handler", company);
 
-  return { ...res };
+  return { ...company };
 };
