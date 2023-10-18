@@ -13,21 +13,21 @@ const PodcastAppearancesSection = ({
 }) => {
   return (
     <FormBlock title="Podcasts appearences" description="Add links to podcasts where you have appeared.">
-      {!profile?.mediaAppearances?.length > 0 && <EmptyState label="To add a appearence click below" />}
+      {!profile?.mediaAppearences?.length > 0 && <EmptyState label="To add a appearence click below" />}
       <div className="space-y-4 divide-y">
-        {profile?.mediaAppearances?.length > 0 &&
-          profile.mediaAppearances.map((appearance, i) => (
+        {profile?.mediaAppearences?.length > 0 &&
+          profile.mediaAppearences.map((appearance, i) => (
             <div key={i} className="space-y-4 pt-4">
               <div className="col-span-full">
                 <Label>Title</Label>
                 <Input
                   value={appearance.title}
                   onChange={(e) => {
-                    const newAppearances = [...profile.mediaAppearances];
+                    const newAppearances = [...profile.mediaAppearences];
                     newAppearances[i].title = e.target.value;
                     setProfile({
                       ...profile,
-                      mediaAppearances: newAppearances,
+                      mediaAppearences: newAppearances,
                     });
                   }}
                 />
@@ -38,17 +38,20 @@ const PodcastAppearancesSection = ({
                   type="url"
                   value={appearance.url}
                   onChange={(e) => {
-                    const newAppearances = [...profile.mediaAppearances];
+                    const newAppearances = [...profile.mediaAppearences];
                     newAppearances[i].url = e.target.value;
                     setProfile({
                       ...profile,
-                      mediaAppearances: newAppearances,
+                      mediaAppearences: newAppearances,
                     });
                   }}
                 />
               </div>
               <div className="col-span-full flex items-center justify-end">
-                <RemoveButton label="Remove" onClick={() => removePodcastAppearance(i)} />
+                <RemoveButton
+                  label="Remove"
+                  onClick={() => removePodcastAppearance({ index: i, id: appearance.id })}
+                />
               </div>
             </div>
           ))}

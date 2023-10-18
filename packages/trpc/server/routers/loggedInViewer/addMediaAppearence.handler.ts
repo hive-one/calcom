@@ -3,7 +3,7 @@ import type { GetServerSidePropsContext, NextApiResponse } from "next";
 import { prisma } from "@calcom/prisma";
 import type { TrpcSessionUser } from "@calcom/trpc/server/trpc";
 
-import type { TMediaAppearenceAddSchema } from "./addMediaAppearence.schema";
+import type { TMediaAppearenceAddSchema } from "./mediaAppearence.schema";
 
 type AddMediaAppearence = {
   ctx: {

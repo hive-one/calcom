@@ -1,6 +1,6 @@
 import { prisma } from "@calcom/prisma";
 
-import type { TMediaAppearenceUpdateSchema } from "./updateMediaAppearence.schema";
+import type { TMediaAppearenceUpdateSchema } from "./mediaAppearence.schema";
 
 type UpdateMediaAppearence = {
   input: TMediaAppearenceUpdateSchema;

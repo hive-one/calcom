@@ -17,6 +17,11 @@ import { ZGetCalVideoRecordingsInputSchema } from "./getCalVideoRecordings.schem
 import { ZGetDownloadLinkOfCalVideoRecordingsInputSchema } from "./getDownloadLinkOfCalVideoRecordings.schema";
 import { ZIntegrationsInputSchema } from "./integrations.schema";
 import { ZLocationOptionsInputSchema } from "./locationOptions.schema";
+import {
+  ZMediaAppearenceAddSchema,
+  ZMediaAppearenceRemoveSchema,
+  ZMediaAppearenceUpdateSchema,
+} from "./mediaAppearence.schema";
 import { ZProjectAddSchema, ZProjectUpdateSchema, ZProjectRemoveSchema } from "./project.schema";
 import {
   ZPublicationAddSchema,
@@ -82,6 +87,9 @@ type AppsRouterHandlerCache = {
   addVideo?: typeof import("./addVideo.handler").addVideoHandler;
   updateVideo?: typeof import("./updateVideo.handler").updateVideoHandler;
   removeVideo?: typeof import("./removeVideo.handler").removeVideoHandler;
+  addMediaAppearence?: typeof import("./addMediaAppearence.handler").addMediaAppearenceHandler;
+  updateMediaAppearence?: typeof import("./updateMediaAppearence.handler").updateMediaAppearenceHandler;
+  removeMediaAppearence?: typeof import("./removeMediaAppearence.handler").removeMediaAppearenceHandler;
 };
 
 const UNSTABLE_HANDLER_CACHE: AppsRouterHandlerCache = {};
@@ -505,6 +513,55 @@ export const loggedInViewerRouter = router({
     return UNSTABLE_HANDLER_CACHE.removeVideo({ ctx, input });
   }),
 
+  addMediaAppearence: authedProcedure.input(ZMediaAppearenceAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addMediaAppearence) {
+      UNSTABLE_HANDLER_CACHE.addMediaAppearence = (
+        await import("./addMediaAppearence.handler")
+      ).addMediaAppearenceHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addMediaAppearence) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addMediaAppearence({ ctx, input });
+  }),
+
+  updateMediaAppearence: authedProcedure
+    .input(ZMediaAppearenceUpdateSchema)
+    .mutation(async ({ ctx, input }) => {
+      if (!UNSTABLE_HANDLER_CACHE.updateMediaAppearence) {
+        UNSTABLE_HANDLER_CACHE.updateMediaAppearence = (
+          await import("./updateMediaAppearence.handler")
+        ).updateMediaAppearenceHandler;
+      }
+
+      // Unreachable code but required for type safety
+      if (!UNSTABLE_HANDLER_CACHE.updateMediaAppearence) {
+        throw new Error("Failed to load handler");
+      }
+
+      return UNSTABLE_HANDLER_CACHE.updateMediaAppearence({ input });
+    }),
+
+  removeMediaAppearence: authedProcedure
+    .input(ZMediaAppearenceRemoveSchema)
+    .mutation(async ({ ctx, input }) => {
+      if (!UNSTABLE_HANDLER_CACHE.removeMediaAppearence) {
+        UNSTABLE_HANDLER_CACHE.removeMediaAppearence = (
+          await import("./removeMediaAppearence.handler")
+        ).removeMediaAppearenceHandler;
+      }
+
+      // Unreachable code but required for type safety
+      if (!UNSTABLE_HANDLER_CACHE.removeMediaAppearence) {
+        throw new Error("Failed to load handler");
+      }
+
+      return UNSTABLE_HANDLER_CACHE.removeMediaAppearence({ input });
+    }),
+
   addFact: authedProcedure.input(ZFactAddSchema).mutation(async ({ input }) => {
     if (!UNSTABLE_HANDLER_CACHE.addFact) {
       UNSTABLE_HANDLER_CACHE.addFact = (await import("./addFact.handler")).addFactHandler;
@@ -516,7 +573,6 @@ export const loggedInViewerRouter = router({
     }
 
     const res = await UNSTABLE_HANDLER_CACHE.addFact({ input });
-    console.log("fakt res", res);
 
     return res;
   }),

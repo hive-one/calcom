@@ -5,11 +5,10 @@ import React from "react";
 import EmptyState from "./EmptyState";
 import FormBlock from "./FormBlock";
 
-const BooksSection = ({ user, profile, setProfile, addBook, removeBook }) => {
+const BooksSection = ({ profile, setProfile, addBook, removeBook }) => {
   return (
     <FormBlock title="Books Published" description="Add details about books you've published">
       {!profile?.books?.length > 0 && <EmptyState label="Add details about books you've published" />}
-      {console.log("book", profile.books)}
       <div className="space-y-4 divide-y">
         {profile?.books?.length > 0 &&
           profile?.books?.map((book, i) => (
@@ -30,10 +29,7 @@ const BooksSection = ({ user, profile, setProfile, addBook, removeBook }) => {
                 />
               </div>
               <div className="col-span-full flex items-center justify-end">
-                <RemoveButton
-                  label="Remove"
-                  onClick={() => removeBook({ index: i, isbn: book.isbn, oldIsbn: book.oldIsbn })}
-                />
+                <RemoveButton label="Remove" onClick={() => removeBook({ index: i, isbn: book.isbn })} />
               </div>
             </div>
           ))}

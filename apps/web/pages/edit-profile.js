@@ -76,6 +76,10 @@ const EditProfile = () => {
   const updateVideoMutation = trpc.viewer.updateVideo.useMutation();
   const removeVideoMutation = trpc.viewer.removeVideo.useMutation();
 
+  const addMediaAppearenceMutation = trpc.viewer.addMediaAppearence.useMutation();
+  const updateMediaAppearenceMutation = trpc.viewer.updateMediaAppearence.useMutation();
+  const removeMediaAppearenceMutation = trpc.viewer.removeMediaAppearence.useMutation();
+
   useEffect(() => {
     setProfile(user);
   }, [user]);
@@ -200,7 +204,7 @@ const EditProfile = () => {
       }
     });
 
-    profile?.books.map((book, i) => {
+    profile?.books.map((book) => {
       let bookData = {
         ...book,
         updatedAt: new Date(),
@@ -214,11 +218,20 @@ const EditProfile = () => {
       }
     });
 
-    // if (profile?.podcasts?.length && profile?.podcasts[0]?.id) {
-    //   // updateFactMutation.mutate(factsData);
-    // } else {
-    //   addPodcastMutation.mutate({ ...profile?.podcasts[0], description: "" });
-    // }
+    profile?.mediaAppearences?.map((app) => {
+      const appData = {
+        ...app,
+        description: "",
+        mediaType: "",
+        podcastId: null,
+        videoId: null,
+      };
+      if (app?.id) {
+        updateMediaAppearenceMutation.mutate(appData);
+      } else {
+        addMediaAppearenceMutation.mutate(appData);
+      }
+    });
 
     // console.log({ linksMutation });
     // try {
@@ -411,8 +424,8 @@ const EditProfile = () => {
     }));
   };
 
-  const removeBook = ({ index, isbn, oldIsbn }) => {
-    removeBookMutation.mutate({ isbn, oldIsbn });
+  const removeBook = ({ index, isbn }) => {
+    removeBookMutation.mutate({ isbn });
     setProfile((prevProfile) => ({
       ...prevProfile,
       books: prevProfile.books.filter((_, i) => i !== index),
@@ -427,10 +440,11 @@ const EditProfile = () => {
     }));
   };
 
-  const removePodcastAppearance = (index) => {
+  const removePodcastAppearance = ({ index, id }) => {
+    removeMediaAppearenceMutation.mutate({ id });
     setProfile((prevProfile) => ({
       ...prevProfile,
-      mediaAppearances: prevProfile.mediaAppearances.filter((_, i) => i !== index),
+      mediaAppearences: prevProfile.mediaAppearences.filter((_, i) => i !== index),
     }));
   };
 
