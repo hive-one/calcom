@@ -11,6 +11,7 @@ export const ZBookRemoveSchema = z.object({
   isbn: z.string(),
 });
 export const ZBookUpdateSchema = z.object({
+  oldIsbn: z.string(),
   isbn: z.string(),
   title: z.string(),
   url: z.string(),

@@ -16,7 +16,7 @@ type Removebook = {
 export const removeBookHandler = async ({ ctx, input }: Removebook) => {
   const res = await prisma.book.delete({
     where: {
-      id: input.id,
+      isbn: input.isbn,
     },
   });
 

@@ -83,7 +83,7 @@ const EditProfile = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     // mutation.mutate(profile);
-    console.log("profile", profile);
+    console.log({ user, profile });
 
     profile?.socialLinks.map((socialLink) => {
       let now = new Date();
@@ -149,12 +149,11 @@ const EditProfile = () => {
 
     // profile?.workExperiences.map((exp) => {
     //   console.log({ exp });
-    //   let workExpData,
-    //     companyData = {
-    //       name: exp.company,
-    //       url: exp.url,
-    //       linkedInId: "",
-    //     };
+    //   let companyData = {
+    //     name: exp.company,
+    //     url: exp.url,
+    //     linkedInId: "",
+    //   };
     //   const addCompanyRes = addCompanyMutation.mutate(companyData);
     //   console.log("addCompanyRes", addCompanyRes);
 
@@ -176,16 +175,16 @@ const EditProfile = () => {
     //       console.info("addWorkExpRes", addWorkExpRes);
     //     });
     //   }
-    // let expData = {
-    //   ...exp,
-    //   userId: user?.id,
-    // };
+    //   let expData = {
+    //     ...exp,
+    //     userId: user?.id,
+    //   };
 
-    // if (exp?.id) {
-    //   // updateFactMutation.mutate(factsData);
-    // } else {
-    //   addWorkExpMutation.mutate(expData);
-    // }
+    //   if (exp?.id) {
+    //     // updateFactMutation.mutate(factsData);
+    //   } else {
+    //     addWorkExpMutation.mutate(expData);
+    //   }
     // });
 
     profile?.publications.map((pub) => {
@@ -201,14 +200,15 @@ const EditProfile = () => {
       }
     });
 
-    profile?.books.map((book) => {
+    profile?.books.map((book, i) => {
       let bookData = {
         ...book,
         updatedAt: new Date(),
       };
 
-      if (book?.isbn) {
-        updateBookMutation.mutate(bookData);
+      if (book?.createdAt) {
+        removeBookMutation.mutate({ isbn: book.isbn });
+        addBookMutation.mutate(bookData);
       } else {
         addBookMutation.mutate(bookData);
       }
@@ -396,7 +396,6 @@ const EditProfile = () => {
   };
 
   const removePublication = ({ index, id }) => {
-    console.log("remove pub", id);
     removePublicationMutation.mutate({ id });
     setProfile((prevProfile) => ({
       ...prevProfile,
@@ -412,8 +411,8 @@ const EditProfile = () => {
     }));
   };
 
-  const removeBook = ({ index, id }) => {
-    removeBookMutation.mutate({ id });
+  const removeBook = ({ index, isbn, oldIsbn }) => {
+    removeBookMutation.mutate({ isbn, oldIsbn });
     setProfile((prevProfile) => ({
       ...prevProfile,
       books: prevProfile.books.filter((_, i) => i !== index),
@@ -575,7 +574,13 @@ const EditProfile = () => {
       label: "Books Published",
       value: "books-published",
       content: (
-        <BooksSection profile={profile} setProfile={setProfile} addBook={addBook} removeBook={removeBook} />
+        <BooksSection
+          user={user}
+          profile={profile}
+          setProfile={setProfile}
+          addBook={addBook}
+          removeBook={removeBook}
+        />
       ),
     },
     {

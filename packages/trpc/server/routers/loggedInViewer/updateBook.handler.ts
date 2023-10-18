@@ -7,9 +7,10 @@ type UpdateBook = {
 };
 
 export const updateBookHandler = async ({ input }: UpdateBook) => {
+  console.log("update book", input);
   const res = await prisma.book.update({
     where: {
-      isbn: input.isbn,
+      isbn: input.oldIsbn,
     },
     data: {
       ...input,

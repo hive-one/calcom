@@ -323,7 +323,7 @@ export const loggedInViewerRouter = router({
       throw new Error("Failed to load handler");
     }
 
-    return UNSTABLE_HANDLER_CACHE.updateProject({ ctx, input });
+    return UNSTABLE_HANDLER_CACHE.updateProject({ input });
   }),
 
   removeProject: authedProcedure.input(ZProjectRemoveSchema).mutation(async ({ input }) => {
@@ -437,7 +437,7 @@ export const loggedInViewerRouter = router({
       throw new Error("Failed to load handler");
     }
 
-    return UNSTABLE_HANDLER_CACHE.updateBook({ ctx, input });
+    return UNSTABLE_HANDLER_CACHE.updateBook({ input });
   }),
 
   removeBook: authedProcedure.input(ZBookRemoveSchema).mutation(async ({ ctx, input }) => {
@@ -489,7 +489,7 @@ export const loggedInViewerRouter = router({
       throw new Error("Failed to load handler");
     }
 
-    return UNSTABLE_HANDLER_CACHE.updateVideo({ ctx, input });
+    return UNSTABLE_HANDLER_CACHE.updateVideo({ input });
   }),
 
   removeVideo: authedProcedure.input(ZVideoRemoveSchema).mutation(async ({ ctx, input }) => {
