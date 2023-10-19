@@ -13,7 +13,8 @@ const Publication = ({ title, description, links, url }) => (
     </div>
     {description && (
       <div className="" style={{ wordBreak: "break-word" }}>
-        {description}
+        {description?.slice(0, 150)}
+        {description?.length > 150 ? "..." : ""}
       </div>
     )}
     <div className="flex flex-row items-center justify-between gap-4 self-start">
