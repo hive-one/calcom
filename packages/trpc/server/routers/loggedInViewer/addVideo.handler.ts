@@ -3,7 +3,7 @@ import type { GetServerSidePropsContext, NextApiResponse } from "next";
 import { prisma } from "@calcom/prisma";
 import type { TrpcSessionUser } from "@calcom/trpc/server/trpc";
 
-import type { TVideoAddSchema } from "./addVideo.schema";
+import type { TVideoAddSchema } from "./video.schema";
 
 type AddVideo = {
   ctx: {

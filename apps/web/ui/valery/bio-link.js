@@ -114,7 +114,6 @@ const iconProps = {
 };
 
 const linkTypeToIcon = (key) => {
-  console.log("asdasd", key);
   const IconComponent = linkTypes.find((link) => link.key.toLowerCase() === key?.toLowerCase())?.icon;
   return IconComponent ? <IconComponent {...iconProps} /> : null;
 };
@@ -127,7 +126,6 @@ const BioLink = ({ itemKey, url, name }) => (
     className="group flex flex-row items-center gap-1 text-gray-600 decoration-gray-300 underline-offset-4 hover:text-gray-700 hover:underline"
     title={itemKey !== "other" && itemKey !== "website" && name}
     id={`link-${itemKey}`}>
-    {console.info({ itemKey, url, name })}
     <div className="flex h-6 flex-shrink-0 items-center justify-center">
       {linkTypeToIcon(itemKey) ?? <Link45deg {...iconProps} />}
     </div>

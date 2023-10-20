@@ -11,19 +11,15 @@ import ProjectItem from "@ui/valery/project-item";
 import Publication from "@ui/valery/publication-item";
 import VideoItem from "@ui/valery/video-item";
 import { cva } from "class-variance-authority";
-// import { createCheckoutSession } from "lib/stripe";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
 import { CalendarPlus } from "react-bootstrap-icons";
-import { titleCase } from "title-case";
 
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
-import { trpc } from "@calcom/trpc/react";
+import { getUsernameList } from "@calcom/lib/defaultEvents";
 import { Tooltip } from "@calcom/ui";
 
 import PageWrapper from "@components/PageWrapper";
-
-import { ssrInit } from "@server/lib/ssr";
 
 const Section = ({ title, tileLayout = false, children }) => {
   const childrenLayoutClasses = cva([], {
@@ -82,13 +78,18 @@ const LinksSection = ({ links }) => {
   );
 };
 
-const ProfilePage = () => {
-  const [user] = trpc.viewer.me.useSuspenseQuery();
-  const profileData = user;
-  console.log({ profileData });
+const ProfilePage = ({ user, userEvents, userSession }) => {
+  const profileData = JSON.parse(user);
+  const eventTypes = JSON.parse(userEvents);
+  const session = userSession ? JSON.parse(userSession) : null;
+
+  console.log({ profileData, eventTypes, session });
+  const bookCallLink = `/${profileData?.username}/${
+    eventTypes?.filter((item) => item.length === 30)[0]?.slug
+  }`;
 
   const userPhoto = () => {
-    if (profileData.avatar_url) return profileData.avatar_url;
+    if (profileData.avatar) return profileData?.avatar;
     if (profileData.name) return `https://api.dicebear.com/6.x/initials/svg?seed=${profileData.name}`;
     return `https://api.dicebear.com/7.x/shapes/svg?seed=${profileData.uid}`;
   };
@@ -98,7 +99,7 @@ const ProfilePage = () => {
       ? profileData.bio.content[0].content.map((item) => item?.text ?? "").join("")
       : "";
 
-  const isLoggedInUser = profileData?.uid === user?.uid;
+  const isLoggedInUser = profileData?.id === session?.user?.id;
 
   return (
     <div className="flex flex-col items-center bg-white leading-6 text-gray-900">
@@ -140,11 +141,11 @@ const ProfilePage = () => {
             <div className="font-bold" id="name">
               {profileData?.name}
             </div>
-            {profileData?.role && (
+            {/* {profileData?.role && (
               <div className="text-sm leading-6" id="role">
                 {titleCase(profileData?.role)}
               </div>
-            )}
+            )} */}
             {profileData?.company && (
               <div className="flex flex-row items-start gap-1.5 text-sm leading-6">
                 <div className="w-3 shrink-0 text-gray-400">at</div>
@@ -157,98 +158,16 @@ const ProfilePage = () => {
           <div
             id="call-charges"
             className="flex flex-col items-center gap-1.5 self-center justify-self-end leading-6 sm:self-center">
-            {user?.uid ? (
-              // <Tooltip
-              //   side="bottom"
-              //   open={!profileData?.calendar?.calcom_event_url}
-              //   content={
-              //     !profileData?.calendar?.calcom_event_url
-              //       ? "This user doesn't have a call booking link yet"
-              //       : ""
-              //   }
-              // >
-              <Button
-                className="flex h-10 flex-row items-center justify-center gap-2 rounded-lg bg-gray-900 px-6 text-white hover:bg-gray-800 active:bg-gray-950"
-                disabled={!profileData?.calendar?.calcom_event_url}
-                // onClick={() => {
-                //   NProgress.set(0.4);
-                //   try {
-                //     createCheckoutSession({
-                //       bookedByUid: user?.uid,
-                //       bookingByName: user?.displayName ?? null,
-                //       bookedByEmail: user?.email,
-                //       bookingWithUid: profileData?.uid,
-                //       bookingWithName: profileData?.name,
-                //       bookingWithEmail: profileData?.email,
-                //       bookingLink:
-                //         profileData?.calendar?.calcom_event_url ??
-                //         profileData?.calendar_link,
-                //       chargeAmount: profileData?.call_charges,
-                //       calUserId: profileData?.calendar?.calcom_user_id,
-                //     });
-                //   } catch (e) {
-                //     console.log(
-                //       "Error redirecting to Stripe payment page: ",
-                //       e
-                //     );
-                //     NProgress.done();
-                //   }
-                // }}
-              >
+            <Button
+              className="flex h-10 flex-row items-center justify-center gap-2 rounded-lg bg-gray-900 px-6 text-white hover:bg-gray-800 active:bg-gray-950"
+              asChild>
+              <Link href={bookCallLink}>
                 <CalendarPlus size={16} />
                 <div className="whitespace-nowrap ">Book a Call →</div>
-              </Button>
-            ) : (
-              // </Tooltip>
-              <Button
-                className="flex h-10 flex-row items-center justify-center gap-2 rounded-lg bg-gray-900 px-6 text-white hover:bg-gray-800 active:bg-gray-950"
-                disabled={!profileData?.calendar?.calcom_event_url}
-                // onClick={() => {
-                //   NProgress.set(0.4);
-                //   try {
-                //     const auth = getAuth();
-                //     signInAnonymously(auth)
-                //       .then(async (data) => {
-                //         const { user } = data;
-                //         if (user?.uid) {
-                //           try {
-                //             createCheckoutSession({
-                //               bookedByUid: user?.uid,
-                //               bookingByName: user?.displayName ?? null,
-                //               bookedByEmail: user?.email,
-                //               bookingWithUid: profileData?.uid,
-                //               bookingWithName: profileData?.name,
-                //               bookingWithEmail: profileData?.email,
-                //               bookingLink:
-                //                 profileData?.calendar?.calcom_event_url ??
-                //                 profileData?.calendar_link,
-                //               chargeAmount: profileData?.call_charges,
-                //               calUserId: profileData?.calendar?.calcom_user_id,
-                //             });
-                //           } catch (e) {
-                //             console.log(
-                //               "Error redirecting to Stripe payment page: ",
-                //               e
-                //             );
-                //             NProgress.done();
-                //           }
-                //         }
-                //       })
-                //       .catch((error) => {
-                //         toast.error(error.message);
-                //         console.log("error", error);
-                //       });
-                //   } catch (e) {
-                //     console.error(e);
-                //   }
-                // }}
-              >
-                <CalendarPlus size={16} />
-                <div className="whitespace-nowrap ">Book a Call →</div>
-              </Button>
-            )}
+              </Link>
+            </Button>
 
-            <div className="text-[15px] text-gray-900">${profileData?.call_charges}/hr</div>
+            <div className="text-[15px] text-gray-900">${profileData?.pricePerHour}/hr</div>
           </div>
         </div>
         {/* Links */}
@@ -417,16 +336,47 @@ const ProfilePage = () => {
 
 export const getServerSideProps = async (context) => {
   const { req, res } = context;
-
   const session = await getServerSession({ req, res });
+  const usernameList = getUsernameList(context.query.user);
 
-  const ssr = await ssrInit(context);
-
-  await ssr.viewer.me.prefetch();
-
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findFirst({
     where: {
-      id: session.user.id,
+      username: usernameList[0],
+    },
+    include: {
+      publications: true,
+      projects: true,
+      podcasts: true,
+      videos: true,
+      workExperiences: true,
+      books: true,
+      socialLinks: true,
+      facts: true,
+      mediaAppearences: true,
+    },
+  });
+
+  const userEvents = await prisma.eventType.findMany({
+    where: {
+      AND: [
+        {
+          teamId: null,
+        },
+        {
+          OR: [
+            {
+              userId: user?.id,
+            },
+            {
+              users: {
+                some: {
+                  id: user?.id,
+                },
+              },
+            },
+          ],
+        },
+      ],
     },
   });
 
@@ -436,8 +386,9 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
-      trpcState: ssr.dehydrate(),
-      userA: JSON.stringify(user),
+      user: JSON.stringify(user),
+      userEvents: JSON.stringify(userEvents ?? []),
+      userSession: session ? JSON.stringify(session) : null,
     },
   };
 };
