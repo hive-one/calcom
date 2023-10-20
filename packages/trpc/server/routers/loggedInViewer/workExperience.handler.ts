@@ -22,8 +22,19 @@ export const addWorkExperienceHandler = async ({ ctx, input }: AddWorkExperience
 
   const addWorkExperience = await prisma.workExperience.create({
     data: {
-      ...input,
+      ...input.workExperience,
       updatedAt: new Date(),
+      company: {
+        connectOrCreate: {
+          where: {
+            name: input.company.name,
+          },
+          create: {
+            ...input.company,
+            updatedAt: new Date(),
+          },
+        },
+      },
     },
   });
 
