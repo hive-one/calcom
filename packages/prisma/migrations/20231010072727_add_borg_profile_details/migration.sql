@@ -116,6 +116,19 @@ CREATE TABLE "Podcast" (
 );
 
 -- CreateTable
+CREATE TABLE "PodcastEpisode" (
+    "id" SERIAL NOT NULL,
+    "title" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
+    "description" TEXT,
+    "converImage" TEXT,
+    "createdAt" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(3) NOT NULL,
+
+    CONSTRAINT "PodcastEpisode_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Video" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
@@ -137,6 +150,7 @@ CREATE TABLE "MediaAppearence" (
     "createdAt" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(3) NOT NULL,
     "podcastId" INTEGER,
+    "podcastEpisodeId" INTEGER,
     "videoId" INTEGER,
 
     CONSTRAINT "MediaAppearence_pkey" PRIMARY KEY ("id")
@@ -162,6 +176,12 @@ CREATE TABLE "_BookToUser" (
 
 -- CreateTable
 CREATE TABLE "_PodcastToUser" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_PodcastEpisodeToUser" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
@@ -215,6 +235,12 @@ CREATE UNIQUE INDEX "Podcast_title_key" ON "Podcast"("title");
 CREATE UNIQUE INDEX "Podcast_url_key" ON "Podcast"("url");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "PodcastEpisode_title_key" ON "PodcastEpisode"("title");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "PodcastEpisode_url_key" ON "PodcastEpisode"("url");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Video_url_key" ON "Video"("url");
 
 -- CreateIndex
@@ -251,6 +277,12 @@ CREATE UNIQUE INDEX "_PodcastToUser_AB_unique" ON "_PodcastToUser"("A", "B");
 CREATE INDEX "_PodcastToUser_B_index" ON "_PodcastToUser"("B");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "_PodcastEpisodeToUser_AB_unique" ON "_PodcastEpisodeToUser"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_PodcastEpisodeToUser_B_index" ON "_PodcastEpisodeToUser"("B");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_MediaAppearenceToUser_AB_unique" ON "_MediaAppearenceToUser"("A", "B");
 
 -- CreateIndex
@@ -273,6 +305,9 @@ ALTER TABLE "WorkExperience" ADD CONSTRAINT "WorkExperience_userId_fkey" FOREIGN
 
 -- AddForeignKey
 ALTER TABLE "MediaAppearence" ADD CONSTRAINT "MediaAppearence_podcastId_fkey" FOREIGN KEY ("podcastId") REFERENCES "Podcast"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MediaAppearence" ADD CONSTRAINT "MediaAppearence_podcastEpisodeId_fkey" FOREIGN KEY ("podcastEpisodeId") REFERENCES "PodcastEpisode"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MediaAppearence" ADD CONSTRAINT "MediaAppearence_videoId_fkey" FOREIGN KEY ("videoId") REFERENCES "Video"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -300,6 +335,12 @@ ALTER TABLE "_PodcastToUser" ADD CONSTRAINT "_PodcastToUser_A_fkey" FOREIGN KEY 
 
 -- AddForeignKey
 ALTER TABLE "_PodcastToUser" ADD CONSTRAINT "_PodcastToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_PodcastEpisodeToUser" ADD CONSTRAINT "_PodcastEpisodeToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "PodcastEpisode"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_PodcastEpisodeToUser" ADD CONSTRAINT "_PodcastEpisodeToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_MediaAppearenceToUser" ADD CONSTRAINT "_MediaAppearenceToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "MediaAppearence"("id") ON DELETE CASCADE ON UPDATE CASCADE;

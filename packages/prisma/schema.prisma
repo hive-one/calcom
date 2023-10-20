@@ -261,6 +261,7 @@ model User {
   publications     Publication[]
   books            Book[]
   podcasts         Podcast[]
+  podcastepisodes  PodcastEpisode[]
   videos           Video[]
   mediaAppearences MediaAppearence[]
 
@@ -1119,6 +1120,22 @@ model Podcast {
   @@unique([url])
 }
 
+model PodcastEpisode {
+  id          Int      @id @default(autoincrement())
+  title       String
+  url         String
+  description String?
+  converImage String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+
+  hosts            User[]
+  mediaAppearences MediaAppearence[]
+
+  @@unique([title])
+  @@unique([url])
+}
+
 model Video {
   id          Int      @id @default(autoincrement())
   title       String
@@ -1144,6 +1161,9 @@ model MediaAppearence {
 
   podcastId Int?
   podcast   Podcast? @relation(fields: [podcastId], references: [id], onDelete: Cascade)
+
+  podcastEpisodeId Int?
+  podcastEpisode   PodcastEpisode? @relation(fields: [podcastEpisodeId], references: [id], onDelete: Cascade)
 
   videoId Int?
   video   Video? @relation(fields: [videoId], references: [id], onDelete: Cascade)
