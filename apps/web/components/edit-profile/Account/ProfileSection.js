@@ -1,11 +1,15 @@
 import { Input } from "@shadcdn/ui/input";
 import { Label } from "@shadcdn/ui/label";
-import PhotoUpload from "@ui/fayaz/PhotoUpload";
 import Tiptap from "@ui/tiptap";
+
+import OrganizationAvatar from "@calcom/features/ee/organizations/components/OrganizationAvatar";
+import { useLocale } from "@calcom/lib/hooks/useLocale";
+import { ImageUploader } from "@calcom/ui";
 
 import FormBlock from "./FormBlock";
 
-const ProfileSection = ({ profile, setProfile, setAvatarFile }) => {
+const ProfileSection = ({ profile, setProfile, updateAvatar, setAvatarFile, avatarRef }) => {
+  const { t } = useLocale();
   return (
     <FormBlock title="Profile" description="This information will be linked to your account.">
       <div className="space-y-5">
@@ -30,12 +34,55 @@ const ProfileSection = ({ profile, setProfile, setAvatarFile }) => {
             />
           </div>
         </div>
-        <PhotoUpload
+        <input
+          ref={avatarRef}
+          type="hidden"
+          name="avatar"
+          id="avatar"
+          placeholder="URL"
+          className="border-default focus:ring-empthasis mt-1 block w-full rounded-sm border px-3 py-2 text-sm focus:border-gray-800 focus:outline-none"
+          defaultValue={profile?.avatar}
+        />
+
+        <div className="flex items-center gap-5 py-5">
+          {profile && (
+            <OrganizationAvatar
+              alt={profile.username || "user avatar"}
+              size="lg"
+              imageSrc={profile?.avatar}
+              organizationSlug={profile.organization?.slug}
+            />
+          )}
+          <ImageUploader
+            target="avatar"
+            id="avatar-upload"
+            buttonMsg={t("add_profile_photo")}
+            handleAvatarChange={(newAvatar) => {
+              setProfile((prev) => ({ ...prev, avatar: newAvatar }));
+              console.log({ newAvatar });
+              if (avatarRef.current) {
+                avatarRef.current.value = newAvatar;
+              }
+              const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+                window.HTMLInputElement.prototype,
+                "value"
+              )?.set;
+              nativeInputValueSetter?.call(avatarRef.current, newAvatar);
+              const ev2 = new Event("input", { bubbles: true });
+              avatarRef.current?.dispatchEvent(ev2);
+              updateAvatar(ev2);
+              setProfile((prev) => ({ ...prev, avatar: newAvatar }));
+            }}
+            imageSrc={profile?.avatar}
+          />
+        </div>
+
+        {/* <PhotoUpload
           avatarUrl={profile.avatar_url}
           onPhotoChange={(file) => {
             setAvatarFile(file);
           }}
-        />
+        /> */}
         <div className="sm:col-span-3">
           <Label>Company/Institute</Label>
           <Input

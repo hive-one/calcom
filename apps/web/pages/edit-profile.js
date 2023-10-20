@@ -3,7 +3,7 @@ import Spinner from "@ui/spinner";
 import clsx from "clsx";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Linkedin } from "react-bootstrap-icons";
 import toast from "react-hot-toast";
 
@@ -37,7 +37,7 @@ const EditProfile = () => {
   const [isLoading, setIsLoading] = useState();
   const [formLoading, setFormLoading] = useState(false);
   const [profile, setProfile] = useState(user);
-
+  const avatarRef = useRef(null);
   const [activeSetting, setActiveSetting] = useState("profile");
   const [avatarFile, setAvatarFile] = useState(null);
 
@@ -83,10 +83,21 @@ const EditProfile = () => {
     setProfile(user);
   }, [user]);
 
+  async function updateAvatar(event) {
+    event.preventDefault();
+    const enteredAvatar = avatarRef.current?.value;
+    mutation.mutate({
+      avatar: enteredAvatar,
+    });
+    toast.success("Avatar updated successfully 🎉");
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // mutation.mutate(profile);
-    console.log({ user, profile });
+
+    delete profile.avatar;
+    console.log({ profile });
+    mutation.mutate(profile);
 
     profile?.socialLinks.map((socialLink) => {
       let now = new Date();
@@ -127,8 +138,6 @@ const EditProfile = () => {
         updatedAt: now,
       };
 
-      // console.info("adding pro", projectData);
-
       if (project?.id) {
         updateProjectMutation.mutate(projectData);
       } else {
@@ -151,14 +160,12 @@ const EditProfile = () => {
     });
 
     profile?.workExperiences.map((exp) => {
-      console.log({ exp });
       let companyData = {
         name: exp.company,
         url: exp.url,
         linkedInId: "",
       };
       const addCompanyRes = addCompanyMutation.mutate(companyData);
-      console.log("addCompanyRes", addCompanyRes);
 
       if (exp?.roles?.length) {
         exp?.roles.map((role) => {
@@ -174,8 +181,6 @@ const EditProfile = () => {
             updatedAt: new Date(),
             userId: user?.id,
           });
-
-          console.info("addWorkExpRes", addWorkExpRes);
         });
       }
       let expData = {
@@ -232,7 +237,6 @@ const EditProfile = () => {
       }
     });
 
-    // console.log({ linksMutation });
     // try {
     //   setFormLoading(true);
     //   event.preventDefault();
@@ -492,7 +496,13 @@ const EditProfile = () => {
       value: "profile",
       content: (
         <>
-          <ProfileSection profile={profile} setProfile={setProfile} setAvatarFile={setAvatarFile} />
+          <ProfileSection
+            updateAvatar={updateAvatar}
+            avatarRef={avatarRef}
+            profile={profile}
+            setProfile={setProfile}
+            setAvatarFile={setAvatarFile}
+          />
         </>
       ),
     },
@@ -681,7 +691,7 @@ export const getServerSideProps = async (context) => {
 
   const session = await getServerSession({ req, res });
 
-  if (!session?.user?.id) {
+  if (!session?.user) {
     return { redirect: { permanent: false, destination: "/auth/login" } };
   }
 

@@ -84,11 +84,13 @@ const LinksSection = ({ links }) => {
 
 const ProfilePage = () => {
   const [user] = trpc.viewer.me.useSuspenseQuery();
+  const { data: eventTypes } = trpc.viewer.eventTypes.list.useQuery();
   const profileData = user;
   console.log({ profileData });
+  const bookCallLink = `/${user?.username}/${eventTypes?.filter((item) => item.length === 30)[0]?.slug}`;
 
   const userPhoto = () => {
-    if (profileData.avatar_url) return profileData.avatar_url;
+    if (profileData.avatar) return profileData?.avatar;
     if (profileData.name) return `https://api.dicebear.com/6.x/initials/svg?seed=${profileData.name}`;
     return `https://api.dicebear.com/7.x/shapes/svg?seed=${profileData.uid}`;
   };
@@ -157,98 +159,16 @@ const ProfilePage = () => {
           <div
             id="call-charges"
             className="flex flex-col items-center gap-1.5 self-center justify-self-end leading-6 sm:self-center">
-            {user?.uid ? (
-              // <Tooltip
-              //   side="bottom"
-              //   open={!profileData?.calendar?.calcom_event_url}
-              //   content={
-              //     !profileData?.calendar?.calcom_event_url
-              //       ? "This user doesn't have a call booking link yet"
-              //       : ""
-              //   }
-              // >
-              <Button
-                className="flex h-10 flex-row items-center justify-center gap-2 rounded-lg bg-gray-900 px-6 text-white hover:bg-gray-800 active:bg-gray-950"
-                disabled={!profileData?.calendar?.calcom_event_url}
-                // onClick={() => {
-                //   NProgress.set(0.4);
-                //   try {
-                //     createCheckoutSession({
-                //       bookedByUid: user?.uid,
-                //       bookingByName: user?.displayName ?? null,
-                //       bookedByEmail: user?.email,
-                //       bookingWithUid: profileData?.uid,
-                //       bookingWithName: profileData?.name,
-                //       bookingWithEmail: profileData?.email,
-                //       bookingLink:
-                //         profileData?.calendar?.calcom_event_url ??
-                //         profileData?.calendar_link,
-                //       chargeAmount: profileData?.call_charges,
-                //       calUserId: profileData?.calendar?.calcom_user_id,
-                //     });
-                //   } catch (e) {
-                //     console.log(
-                //       "Error redirecting to Stripe payment page: ",
-                //       e
-                //     );
-                //     NProgress.done();
-                //   }
-                // }}
-              >
+            <Button
+              className="flex h-10 flex-row items-center justify-center gap-2 rounded-lg bg-gray-900 px-6 text-white hover:bg-gray-800 active:bg-gray-950"
+              asChild>
+              <Link href={bookCallLink}>
                 <CalendarPlus size={16} />
                 <div className="whitespace-nowrap ">Book a Call →</div>
-              </Button>
-            ) : (
-              // </Tooltip>
-              <Button
-                className="flex h-10 flex-row items-center justify-center gap-2 rounded-lg bg-gray-900 px-6 text-white hover:bg-gray-800 active:bg-gray-950"
-                disabled={!profileData?.calendar?.calcom_event_url}
-                // onClick={() => {
-                //   NProgress.set(0.4);
-                //   try {
-                //     const auth = getAuth();
-                //     signInAnonymously(auth)
-                //       .then(async (data) => {
-                //         const { user } = data;
-                //         if (user?.uid) {
-                //           try {
-                //             createCheckoutSession({
-                //               bookedByUid: user?.uid,
-                //               bookingByName: user?.displayName ?? null,
-                //               bookedByEmail: user?.email,
-                //               bookingWithUid: profileData?.uid,
-                //               bookingWithName: profileData?.name,
-                //               bookingWithEmail: profileData?.email,
-                //               bookingLink:
-                //                 profileData?.calendar?.calcom_event_url ??
-                //                 profileData?.calendar_link,
-                //               chargeAmount: profileData?.call_charges,
-                //               calUserId: profileData?.calendar?.calcom_user_id,
-                //             });
-                //           } catch (e) {
-                //             console.log(
-                //               "Error redirecting to Stripe payment page: ",
-                //               e
-                //             );
-                //             NProgress.done();
-                //           }
-                //         }
-                //       })
-                //       .catch((error) => {
-                //         toast.error(error.message);
-                //         console.log("error", error);
-                //       });
-                //   } catch (e) {
-                //     console.error(e);
-                //   }
-                // }}
-              >
-                <CalendarPlus size={16} />
-                <div className="whitespace-nowrap ">Book a Call →</div>
-              </Button>
-            )}
+              </Link>
+            </Button>
 
-            <div className="text-[15px] text-gray-900">${profileData?.call_charges}/hr</div>
+            <div className="text-[15px] text-gray-900">${profileData?.pricePerHour}/hr</div>
           </div>
         </div>
         {/* Links */}

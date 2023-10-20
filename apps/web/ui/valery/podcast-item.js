@@ -1,7 +1,6 @@
 import { Microphone } from "@phosphor-icons/react";
 
 const PodcastItem = ({ podcast }) => {
-  console.log({ podcast });
   return (
     <div>
       <p className="font-semibold">HOST</p>
