@@ -71,7 +71,7 @@ export async function getUserFromSession(ctx: TRPCContextInner, session: Maybe<S
       books: true,
       podcasts: true,
       videos: true,
-      mediaAppearences: true,
+      mediaAppearances: true,
       organization: {
         select: {
           id: true,

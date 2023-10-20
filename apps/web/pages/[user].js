@@ -352,7 +352,7 @@ export const getServerSideProps = async (context) => {
       books: true,
       socialLinks: true,
       facts: true,
-      mediaAppearences: true,
+      mediaAppearances: true,
     },
   });
 

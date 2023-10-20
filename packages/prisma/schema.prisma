@@ -1114,7 +1114,7 @@ model Podcast {
   updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
   hosts            User[]
-  mediaAppearences MediaAppearance[]
+  mediaAppearances MediaAppearance[]
 
   @@unique([title])
   @@unique([url])
@@ -1130,7 +1130,7 @@ model PodcastEpisode {
   updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
   hosts            User[]
-  mediaAppearences MediaAppearance[]
+  mediaAppearances MediaAppearance[]
 
   @@unique([title])
   @@unique([url])
@@ -1145,7 +1145,7 @@ model Video {
   updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
   hosts            User[]
-  mediaAppearences MediaAppearance[]
+  mediaAppearances MediaAppearance[]
 
   @@unique([url])
 }

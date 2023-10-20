@@ -223,7 +223,7 @@ const EditProfile = () => {
       }
     });
 
-    profile?.mediaAppearences?.map((app) => {
+    profile?.mediaAppearances?.map((app) => {
       const appData = {
         ...app,
         description: "",
@@ -309,7 +309,7 @@ const EditProfile = () => {
     };
     setProfile((prevProfile) => ({
       ...prevProfile,
-      mediaAppearences: [...prevProfile.mediaAppearences, newAppearance],
+      mediaAppearances: [...prevProfile.mediaAppearances, newAppearance],
     }));
   };
 
@@ -448,7 +448,7 @@ const EditProfile = () => {
     removeMediaAppearenceMutation.mutate({ id });
     setProfile((prevProfile) => ({
       ...prevProfile,
-      mediaAppearences: prevProfile.mediaAppearences.filter((_, i) => i !== index),
+      mediaAppearances: prevProfile.mediaAppearances.filter((_, i) => i !== index),
     }));
   };
 
