@@ -11,19 +11,15 @@ import ProjectItem from "@ui/valery/project-item";
 import Publication from "@ui/valery/publication-item";
 import VideoItem from "@ui/valery/video-item";
 import { cva } from "class-variance-authority";
-// import { createCheckoutSession } from "lib/stripe";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
 import { CalendarPlus } from "react-bootstrap-icons";
-import { titleCase } from "title-case";
 
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
-import { trpc } from "@calcom/trpc/react";
+import { getUsernameList } from "@calcom/lib/defaultEvents";
 import { Tooltip } from "@calcom/ui";
 
 import PageWrapper from "@components/PageWrapper";
-
-import { ssrInit } from "@server/lib/ssr";
 
 const Section = ({ title, tileLayout = false, children }) => {
   const childrenLayoutClasses = cva([], {
@@ -82,12 +78,15 @@ const LinksSection = ({ links }) => {
   );
 };
 
-const ProfilePage = () => {
-  const [user] = trpc.viewer.me.useSuspenseQuery();
-  const { data: eventTypes } = trpc.viewer.eventTypes.list.useQuery();
-  const profileData = user;
-  console.log({ profileData });
-  const bookCallLink = `/${user?.username}/${eventTypes?.filter((item) => item.length === 30)[0]?.slug}`;
+const ProfilePage = ({ user, userEvents, userSession }) => {
+  const profileData = JSON.parse(user);
+  const eventTypes = JSON.parse(userEvents);
+  const session = userSession ? JSON.parse(userSession) : null;
+
+  console.log({ profileData, eventTypes, session });
+  const bookCallLink = `/${profileData?.username}/${
+    eventTypes?.filter((item) => item.length === 30)[0]?.slug
+  }`;
 
   const userPhoto = () => {
     if (profileData.avatar) return profileData?.avatar;
@@ -100,7 +99,7 @@ const ProfilePage = () => {
       ? profileData.bio.content[0].content.map((item) => item?.text ?? "").join("")
       : "";
 
-  const isLoggedInUser = profileData?.uid === user?.uid;
+  const isLoggedInUser = profileData?.id === session?.user?.id;
 
   return (
     <div className="flex flex-col items-center bg-white leading-6 text-gray-900">
@@ -142,11 +141,11 @@ const ProfilePage = () => {
             <div className="font-bold" id="name">
               {profileData?.name}
             </div>
-            {profileData?.role && (
+            {/* {profileData?.role && (
               <div className="text-sm leading-6" id="role">
                 {titleCase(profileData?.role)}
               </div>
-            )}
+            )} */}
             {profileData?.company && (
               <div className="flex flex-row items-start gap-1.5 text-sm leading-6">
                 <div className="w-3 shrink-0 text-gray-400">at</div>
@@ -337,16 +336,47 @@ const ProfilePage = () => {
 
 export const getServerSideProps = async (context) => {
   const { req, res } = context;
-
   const session = await getServerSession({ req, res });
+  const usernameList = getUsernameList(context.query.user);
 
-  const ssr = await ssrInit(context);
-
-  await ssr.viewer.me.prefetch();
-
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findFirst({
     where: {
-      id: session.user.id,
+      username: usernameList[0],
+    },
+    include: {
+      publications: true,
+      projects: true,
+      podcasts: true,
+      videos: true,
+      workExperiences: true,
+      books: true,
+      socialLinks: true,
+      facts: true,
+      mediaAppearences: true,
+    },
+  });
+
+  const userEvents = await prisma.eventType.findMany({
+    where: {
+      AND: [
+        {
+          teamId: null,
+        },
+        {
+          OR: [
+            {
+              userId: user?.id,
+            },
+            {
+              users: {
+                some: {
+                  id: user?.id,
+                },
+              },
+            },
+          ],
+        },
+      ],
     },
   });
 
@@ -356,8 +386,9 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
-      trpcState: ssr.dehydrate(),
-      userA: JSON.stringify(user),
+      user: JSON.stringify(user),
+      userEvents: JSON.stringify(userEvents ?? []),
+      userSession: session ? JSON.stringify(session) : null,
     },
   };
 };
