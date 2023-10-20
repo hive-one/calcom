@@ -1,43 +1,43 @@
 import authedProcedure from "../../procedures/authedProcedure";
 import { router } from "../../trpc";
-import { ZCompanyAddSchema } from "./addCompany.schema";
-import { ZFactAddSchema } from "./addFact.schema";
-import { ZPodcastAddSchema } from "./addPodcast.schema";
-import { ZSocialLinkInputSchema } from "./addSocialLink.schema";
-import { ZWorkExperienceAddSchema } from "./addWorkExperience.schema";
 import { ZAppByIdInputSchema } from "./appById.schema";
 import { ZAppCredentialsByTypeInputSchema } from "./appCredentialsByType.schema";
 import { ZAwayInputSchema } from "./away.schema";
 import { ZBookAddSchema, ZBookUpdateSchema, ZBookRemoveSchema } from "./book.schema";
+import { ZCompanyAddSchema } from "./company.schema";
 import { ZConnectedCalendarsInputSchema } from "./connectedCalendars.schema";
 import { ZDeleteCredentialInputSchema } from "./deleteCredential.schema";
 import { ZDeleteMeInputSchema } from "./deleteMe.schema";
 import { ZEventTypeOrderInputSchema } from "./eventTypeOrder.schema";
+import { ZFactAddSchema, ZFactRemoveSchema, ZFactUpdateSchema } from "./fact.schema";
 import { ZGetCalVideoRecordingsInputSchema } from "./getCalVideoRecordings.schema";
 import { ZGetDownloadLinkOfCalVideoRecordingsInputSchema } from "./getDownloadLinkOfCalVideoRecordings.schema";
 import { ZIntegrationsInputSchema } from "./integrations.schema";
 import { ZLocationOptionsInputSchema } from "./locationOptions.schema";
 import {
-  ZMediaAppearenceAddSchema,
-  ZMediaAppearenceRemoveSchema,
-  ZMediaAppearenceUpdateSchema,
-} from "./mediaAppearence.schema";
+  ZMediaAppearanceAddSchema,
+  ZMediaAppearanceRemoveSchema,
+  ZMediaAppearanceUpdateSchema,
+} from "./mediaAppearance.schema";
+import { ZPodcastAddSchema } from "./podcast.schema";
 import { ZProjectAddSchema, ZProjectUpdateSchema, ZProjectRemoveSchema } from "./project.schema";
 import {
   ZPublicationAddSchema,
   ZPublicationUpdateSchema,
   ZPublicationRemoveSchema,
 } from "./publication.schema";
-import { ZFactRemoveSchema } from "./removeFact.schema";
-import { ZSocialLinkRemoveSchema } from "./removeSocialLink.schema";
 import { ZRoutingFormOrderInputSchema } from "./routingFormOrder.schema";
 import { ZSetDestinationCalendarInputSchema } from "./setDestinationCalendar.schema";
+import {
+  ZSocialLinkInputSchema,
+  ZSocialLinkRemoveSchema,
+  ZSocialLinkUpdateSchema,
+} from "./socialLink.schema";
 import { ZSubmitFeedbackInputSchema } from "./submitFeedback.schema";
-import { ZFactUpdateSchema } from "./updateFact.schema";
 import { ZUpdateProfileInputSchema } from "./updateProfile.schema";
-import { ZSocialLinkUpdateSchema } from "./updateSocialLink.schema";
 import { ZUpdateUserDefaultConferencingAppInputSchema } from "./updateUserDefaultConferencingApp.schema";
 import { ZVideoAddSchema, ZVideoUpdateSchema, ZVideoRemoveSchema } from "./video.schema";
+import { ZWorkExperienceAddSchema } from "./workExperience.schema";
 import { ZWorkflowOrderInputSchema } from "./workflowOrder.schema";
 
 type AppsRouterHandlerCache = {
@@ -66,30 +66,30 @@ type AppsRouterHandlerCache = {
   getUsersDefaultConferencingApp?: typeof import("./getUsersDefaultConferencingApp.handler").getUsersDefaultConferencingAppHandler;
   updateUserDefaultConferencingApp?: typeof import("./updateUserDefaultConferencingApp.handler").updateUserDefaultConferencingAppHandler;
   teamsAndUserProfilesQuery?: typeof import("./teamsAndUserProfilesQuery.handler").teamsAndUserProfilesQuery;
-  addSocialLink?: typeof import("./addSocialLink.handler").addSocialLinkHandler;
-  removeSocialLink?: typeof import("./removeSocialLink.handler").removeSocialLinkHandler;
-  updateSocialLink?: typeof import("./updateSocialLink.handler").updateSocialLinkHandler;
-  addFact?: typeof import("./addFact.handler").addFactHandler;
-  updateFact?: typeof import("./updateFact.handler").updateFactHandler;
-  removeFact?: typeof import("./removeFact.handler").removeFactHandler;
-  addProject?: typeof import("./addProject.handler").addProjectHandler;
-  updateProject?: typeof import("./updateProject.handler").updateProjectHandler;
-  removeProject?: typeof import("./removeProject.handler").removeProjectHandler;
-  addWorkExperience?: typeof import("./addWorkExperience.handler").addWorkExperienceHandler;
-  addCompany?: typeof import("./addCompany.handler").addCompanyHandler;
-  addPublication?: typeof import("./addPublication.handler").addPublicationHandler;
-  updatePublication?: typeof import("./updatePublication.handler").updatePublicationHandler;
-  removePublication?: typeof import("./removePublication.handler").removePublicationHandler;
-  addBook?: typeof import("./addBook.handler").addBookHandler;
-  updateBook?: typeof import("./updateBook.handler").updateBookHandler;
-  removeBook?: typeof import("./removeBook.handler").removeBookHandler;
-  addPodcast?: typeof import("./addPodcast.handler").addPodcastHandler;
-  addVideo?: typeof import("./addVideo.handler").addVideoHandler;
-  updateVideo?: typeof import("./updateVideo.handler").updateVideoHandler;
-  removeVideo?: typeof import("./removeVideo.handler").removeVideoHandler;
-  addMediaAppearence?: typeof import("./addMediaAppearence.handler").addMediaAppearenceHandler;
-  updateMediaAppearence?: typeof import("./updateMediaAppearence.handler").updateMediaAppearenceHandler;
-  removeMediaAppearence?: typeof import("./removeMediaAppearence.handler").removeMediaAppearenceHandler;
+  addSocialLink?: typeof import("./socialLink.handler").addSocialLinkHandler;
+  removeSocialLink?: typeof import("./socialLink.handler").removeSocialLinkHandler;
+  updateSocialLink?: typeof import("./socialLink.handler").updateSocialLinkHandler;
+  addFact?: typeof import("./fact.handler").addFactHandler;
+  updateFact?: typeof import("./fact.handler").updateFactHandler;
+  removeFact?: typeof import("./fact.handler").removeFactHandler;
+  addProject?: typeof import("./project.handler").addProjectHandler;
+  updateProject?: typeof import("./project.handler").updateProjectHandler;
+  removeProject?: typeof import("./project.handler").removeProjectHandler;
+  addWorkExperience?: typeof import("./workExperience.handler").addWorkExperienceHandler;
+  addCompany?: typeof import("./company.handler").addCompanyHandler;
+  addPublication?: typeof import("./publication.handler").addPublicationHandler;
+  updatePublication?: typeof import("./publication.handler").updatePublicationHandler;
+  removePublication?: typeof import("./publication.handler").removePublicationHandler;
+  addBook?: typeof import("./book.handler").addBookHandler;
+  updateBook?: typeof import("./book.handler").updateBookHandler;
+  removeBook?: typeof import("./book.handler").removeBookHandler;
+  addPodcast?: typeof import("./podcast.handler").addPodcastHandler;
+  addVideo?: typeof import("./video.handler").addVideoHandler;
+  updateVideo?: typeof import("./video.handler").updateVideoHandler;
+  removeVideo?: typeof import("./video.handler").removeVideoHandler;
+  addMediaAppearance?: typeof import("./mediaAppearance.handler").addMediaAppearanceHandler;
+  updateMediaAppearance?: typeof import("./mediaAppearance.handler").updateMediaAppearanceHandler;
+  removeMediaAppearance?: typeof import("./mediaAppearance.handler").removeMediaAppearanceHandler;
 };
 
 const UNSTABLE_HANDLER_CACHE: AppsRouterHandlerCache = {};
@@ -267,7 +267,7 @@ export const loggedInViewerRouter = router({
 
   addSocialLink: authedProcedure.input(ZSocialLinkInputSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.addSocialLink) {
-      UNSTABLE_HANDLER_CACHE.addSocialLink = (await import("./addSocialLink.handler")).addSocialLinkHandler;
+      UNSTABLE_HANDLER_CACHE.addSocialLink = (await import("./socialLink.handler")).addSocialLinkHandler;
     }
 
     // Unreachable code but required for type safety
@@ -281,7 +281,7 @@ export const loggedInViewerRouter = router({
   removeSocialLink: authedProcedure.input(ZSocialLinkRemoveSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.removeSocialLink) {
       UNSTABLE_HANDLER_CACHE.removeSocialLink = (
-        await import("./removeSocialLink.handler")
+        await import("./socialLink.handler")
       ).removeSocialLinkHandler;
     }
 
@@ -296,7 +296,7 @@ export const loggedInViewerRouter = router({
   updateSocialLink: authedProcedure.input(ZSocialLinkUpdateSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.updateSocialLink) {
       UNSTABLE_HANDLER_CACHE.updateSocialLink = (
-        await import("./updateSocialLink.handler")
+        await import("./socialLink.handler")
       ).updateSocialLinkHandler;
     }
 
@@ -310,7 +310,7 @@ export const loggedInViewerRouter = router({
 
   addProject: authedProcedure.input(ZProjectAddSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.addProject) {
-      UNSTABLE_HANDLER_CACHE.addProject = (await import("./addProject.handler")).addProjectHandler;
+      UNSTABLE_HANDLER_CACHE.addProject = (await import("./project.handler")).addProjectHandler;
     }
 
     // Unreachable code but required for type safety
@@ -323,7 +323,7 @@ export const loggedInViewerRouter = router({
 
   updateProject: authedProcedure.input(ZProjectUpdateSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.updateProject) {
-      UNSTABLE_HANDLER_CACHE.updateProject = (await import("./updateProject.handler")).updateProjectHandler;
+      UNSTABLE_HANDLER_CACHE.updateProject = (await import("./project.handler")).updateProjectHandler;
     }
 
     // Unreachable code but required for type safety
@@ -336,7 +336,7 @@ export const loggedInViewerRouter = router({
 
   removeProject: authedProcedure.input(ZProjectRemoveSchema).mutation(async ({ input }) => {
     if (!UNSTABLE_HANDLER_CACHE.removeProject) {
-      UNSTABLE_HANDLER_CACHE.removeProject = (await import("./removeProject.handler")).removeProjectHandler;
+      UNSTABLE_HANDLER_CACHE.removeProject = (await import("./project.handler")).removeProjectHandler;
     }
 
     // Unreachable code but required for type safety
@@ -350,7 +350,7 @@ export const loggedInViewerRouter = router({
   addWorkExperience: authedProcedure.input(ZWorkExperienceAddSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.addWorkExperience) {
       UNSTABLE_HANDLER_CACHE.addWorkExperience = (
-        await import("./addWorkExperience.handler")
+        await import("./workExperience.handler")
       ).addWorkExperienceHandler;
     }
 
@@ -364,7 +364,7 @@ export const loggedInViewerRouter = router({
 
   addCompany: authedProcedure.input(ZCompanyAddSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.addCompany) {
-      UNSTABLE_HANDLER_CACHE.addCompany = (await import("./addCompany.handler")).addCompanyHandler;
+      UNSTABLE_HANDLER_CACHE.addCompany = (await import("./company.handler")).addCompanyHandler;
     }
 
     // Unreachable code but required for type safety
@@ -379,9 +379,7 @@ export const loggedInViewerRouter = router({
 
   addPublication: authedProcedure.input(ZPublicationAddSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.addPublication) {
-      UNSTABLE_HANDLER_CACHE.addPublication = (
-        await import("./addPublication.handler")
-      ).addPublicationHandler;
+      UNSTABLE_HANDLER_CACHE.addPublication = (await import("./publication.handler")).addPublicationHandler;
     }
 
     // Unreachable code but required for type safety
@@ -395,7 +393,7 @@ export const loggedInViewerRouter = router({
   updatePublication: authedProcedure.input(ZPublicationUpdateSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.updatePublication) {
       UNSTABLE_HANDLER_CACHE.updatePublication = (
-        await import("./updatePublication.handler")
+        await import("./publication.handler")
       ).updatePublicationHandler;
     }
 
@@ -410,7 +408,7 @@ export const loggedInViewerRouter = router({
   removePublication: authedProcedure.input(ZPublicationRemoveSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.removePublication) {
       UNSTABLE_HANDLER_CACHE.removePublication = (
-        await import("./removePublication.handler")
+        await import("./publication.handler")
       ).removePublicationHandler;
     }
 
@@ -424,7 +422,7 @@ export const loggedInViewerRouter = router({
 
   addBook: authedProcedure.input(ZBookAddSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.addBook) {
-      UNSTABLE_HANDLER_CACHE.addBook = (await import("./addBook.handler")).addBookHandler;
+      UNSTABLE_HANDLER_CACHE.addBook = (await import("./book.handler")).addBookHandler;
     }
 
     // Unreachable code but required for type safety
@@ -437,7 +435,7 @@ export const loggedInViewerRouter = router({
 
   updateBook: authedProcedure.input(ZBookUpdateSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.updateBook) {
-      UNSTABLE_HANDLER_CACHE.updateBook = (await import("./updateBook.handler")).updateBookHandler;
+      UNSTABLE_HANDLER_CACHE.updateBook = (await import("./book.handler")).updateBookHandler;
     }
 
     // Unreachable code but required for type safety
@@ -450,7 +448,7 @@ export const loggedInViewerRouter = router({
 
   removeBook: authedProcedure.input(ZBookRemoveSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.removeBook) {
-      UNSTABLE_HANDLER_CACHE.removeBook = (await import("./removeBook.handler")).removeBookHandler;
+      UNSTABLE_HANDLER_CACHE.removeBook = (await import("./book.handler")).removeBookHandler;
     }
 
     // Unreachable code but required for type safety
@@ -463,7 +461,7 @@ export const loggedInViewerRouter = router({
 
   addPodcast: authedProcedure.input(ZPodcastAddSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.addPodcast) {
-      UNSTABLE_HANDLER_CACHE.addPodcast = (await import("./addPodcast.handler")).addPodcastHandler;
+      UNSTABLE_HANDLER_CACHE.addPodcast = (await import("./podcast.handler")).addPodcastHandler;
     }
 
     // Unreachable code but required for type safety
@@ -476,7 +474,7 @@ export const loggedInViewerRouter = router({
 
   addVideo: authedProcedure.input(ZVideoAddSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.addVideo) {
-      UNSTABLE_HANDLER_CACHE.addVideo = (await import("./addVideo.handler")).addVideoHandler;
+      UNSTABLE_HANDLER_CACHE.addVideo = (await import("./video.handler")).addVideoHandler;
     }
 
     // Unreachable code but required for type safety
@@ -489,7 +487,7 @@ export const loggedInViewerRouter = router({
 
   updateVideo: authedProcedure.input(ZVideoUpdateSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.updateVideo) {
-      UNSTABLE_HANDLER_CACHE.updateVideo = (await import("./updateVideo.handler")).updateVideoHandler;
+      UNSTABLE_HANDLER_CACHE.updateVideo = (await import("./video.handler")).updateVideoHandler;
     }
 
     // Unreachable code but required for type safety
@@ -502,7 +500,7 @@ export const loggedInViewerRouter = router({
 
   removeVideo: authedProcedure.input(ZVideoRemoveSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.removeVideo) {
-      UNSTABLE_HANDLER_CACHE.removeVideo = (await import("./removeVideo.handler")).removeVideoHandler;
+      UNSTABLE_HANDLER_CACHE.removeVideo = (await import("./video.handler")).removeVideoHandler;
     }
 
     // Unreachable code but required for type safety
@@ -513,58 +511,58 @@ export const loggedInViewerRouter = router({
     return UNSTABLE_HANDLER_CACHE.removeVideo({ ctx, input });
   }),
 
-  addMediaAppearence: authedProcedure.input(ZMediaAppearenceAddSchema).mutation(async ({ ctx, input }) => {
-    if (!UNSTABLE_HANDLER_CACHE.addMediaAppearence) {
-      UNSTABLE_HANDLER_CACHE.addMediaAppearence = (
-        await import("./addMediaAppearence.handler")
-      ).addMediaAppearenceHandler;
+  addMediaAppearance: authedProcedure.input(ZMediaAppearanceAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addMediaAppearance) {
+      UNSTABLE_HANDLER_CACHE.addMediaAppearance = (
+        await import("./mediaAppearance.handler")
+      ).addMediaAppearanceHandler;
     }
 
     // Unreachable code but required for type safety
-    if (!UNSTABLE_HANDLER_CACHE.addMediaAppearence) {
+    if (!UNSTABLE_HANDLER_CACHE.addMediaAppearance) {
       throw new Error("Failed to load handler");
     }
 
-    return UNSTABLE_HANDLER_CACHE.addMediaAppearence({ ctx, input });
+    return UNSTABLE_HANDLER_CACHE.addMediaAppearance({ ctx, input });
   }),
 
-  updateMediaAppearence: authedProcedure
-    .input(ZMediaAppearenceUpdateSchema)
+  updateMediaAppearance: authedProcedure
+    .input(ZMediaAppearanceUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      if (!UNSTABLE_HANDLER_CACHE.updateMediaAppearence) {
-        UNSTABLE_HANDLER_CACHE.updateMediaAppearence = (
-          await import("./updateMediaAppearence.handler")
-        ).updateMediaAppearenceHandler;
+      if (!UNSTABLE_HANDLER_CACHE.updateMediaAppearance) {
+        UNSTABLE_HANDLER_CACHE.updateMediaAppearance = (
+          await import("./mediaAppearance.handler")
+        ).updateMediaAppearanceHandler;
       }
 
       // Unreachable code but required for type safety
-      if (!UNSTABLE_HANDLER_CACHE.updateMediaAppearence) {
+      if (!UNSTABLE_HANDLER_CACHE.updateMediaAppearance) {
         throw new Error("Failed to load handler");
       }
 
-      return UNSTABLE_HANDLER_CACHE.updateMediaAppearence({ input });
+      return UNSTABLE_HANDLER_CACHE.updateMediaAppearance({ input });
     }),
 
-  removeMediaAppearence: authedProcedure
-    .input(ZMediaAppearenceRemoveSchema)
+  removeMediaAppearance: authedProcedure
+    .input(ZMediaAppearanceRemoveSchema)
     .mutation(async ({ ctx, input }) => {
-      if (!UNSTABLE_HANDLER_CACHE.removeMediaAppearence) {
-        UNSTABLE_HANDLER_CACHE.removeMediaAppearence = (
-          await import("./removeMediaAppearence.handler")
-        ).removeMediaAppearenceHandler;
+      if (!UNSTABLE_HANDLER_CACHE.removeMediaAppearance) {
+        UNSTABLE_HANDLER_CACHE.removeMediaAppearance = (
+          await import("./mediaAppearance.handler")
+        ).removeMediaAppearanceHandler;
       }
 
       // Unreachable code but required for type safety
-      if (!UNSTABLE_HANDLER_CACHE.removeMediaAppearence) {
+      if (!UNSTABLE_HANDLER_CACHE.removeMediaAppearance) {
         throw new Error("Failed to load handler");
       }
 
-      return UNSTABLE_HANDLER_CACHE.removeMediaAppearence({ input });
+      return UNSTABLE_HANDLER_CACHE.removeMediaAppearance({ input });
     }),
 
   addFact: authedProcedure.input(ZFactAddSchema).mutation(async ({ input }) => {
     if (!UNSTABLE_HANDLER_CACHE.addFact) {
-      UNSTABLE_HANDLER_CACHE.addFact = (await import("./addFact.handler")).addFactHandler;
+      UNSTABLE_HANDLER_CACHE.addFact = (await import("./fact.handler")).addFactHandler;
     }
 
     // Unreachable code but required for type safety
@@ -579,7 +577,7 @@ export const loggedInViewerRouter = router({
 
   updateFact: authedProcedure.input(ZFactUpdateSchema).mutation(async ({ input }) => {
     if (!UNSTABLE_HANDLER_CACHE.updateFact) {
-      UNSTABLE_HANDLER_CACHE.updateFact = (await import("./updateFact.handler")).updateFactHandler;
+      UNSTABLE_HANDLER_CACHE.updateFact = (await import("./fact.handler")).updateFactHandler;
     }
 
     // Unreachable code but required for type safety
@@ -592,7 +590,7 @@ export const loggedInViewerRouter = router({
 
   removeFact: authedProcedure.input(ZFactRemoveSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.removeFact) {
-      UNSTABLE_HANDLER_CACHE.removeFact = (await import("./removeFact.handler")).removeFactHandler;
+      UNSTABLE_HANDLER_CACHE.removeFact = (await import("./fact.handler")).removeFactHandler;
     }
 
     // Unreachable code but required for type safety

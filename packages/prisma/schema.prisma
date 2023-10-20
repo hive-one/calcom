@@ -263,7 +263,7 @@ model User {
   podcasts         Podcast[]
   podcastepisodes  PodcastEpisode[]
   videos           Video[]
-  mediaAppearences MediaAppearence[]
+  mediaAppearances MediaAppearance[]
 
   @@unique([email])
   @@unique([email, username])
@@ -1097,7 +1097,7 @@ model Book {
   title       String
   url         String
   description String?
-  converImage String?
+  coverImage  String?
   createdAt   DateTime @default(now()) @db.Timestamptz(3)
   updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
@@ -1109,12 +1109,12 @@ model Podcast {
   title       String
   url         String
   description String?
-  converImage String?
+  coverImage  String?
   createdAt   DateTime @default(now()) @db.Timestamptz(3)
   updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
   hosts            User[]
-  mediaAppearences MediaAppearence[]
+  mediaAppearences MediaAppearance[]
 
   @@unique([title])
   @@unique([url])
@@ -1125,12 +1125,12 @@ model PodcastEpisode {
   title       String
   url         String
   description String?
-  converImage String?
+  coverImage  String?
   createdAt   DateTime @default(now()) @db.Timestamptz(3)
   updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
   hosts            User[]
-  mediaAppearences MediaAppearence[]
+  mediaAppearences MediaAppearance[]
 
   @@unique([title])
   @@unique([url])
@@ -1145,12 +1145,12 @@ model Video {
   updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
   hosts            User[]
-  mediaAppearences MediaAppearence[]
+  mediaAppearences MediaAppearance[]
 
   @@unique([url])
 }
 
-model MediaAppearence {
+model MediaAppearance {
   id          Int      @id @default(autoincrement())
   title       String
   url         String

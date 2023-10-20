@@ -3,7 +3,7 @@ import { z } from "zod";
 export const ZVideoAddSchema = z.object({
   title: z.string(),
   url: z.string(),
-  description: z.string() || undefined,
+  description: z.string().nullish(),
   updatedAt: z.date(),
 });
 
@@ -11,7 +11,7 @@ export const ZVideoUpdateSchema = z.object({
   id: z.number(),
   title: z.string(),
   url: z.string(),
-  description: z.string() || undefined,
+  description: z.string().nullish(),
   updatedAt: z.date(),
 });
 

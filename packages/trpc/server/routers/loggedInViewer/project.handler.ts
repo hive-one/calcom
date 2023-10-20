@@ -3,7 +3,7 @@ import type { GetServerSidePropsContext, NextApiResponse } from "next";
 import { prisma } from "@calcom/prisma";
 import type { TrpcSessionUser } from "@calcom/trpc/server/trpc";
 
-import type { TProjectAddSchema } from "./project.schema";
+import type { TProjectAddSchema, TProjectRemoveSchema, TProjectUpdateSchema } from "./project.schema";
 
 type AddProject = {
   ctx: {
@@ -31,4 +31,36 @@ export const addProjectHandler = async ({ ctx, input }: AddProject) => {
   });
 
   return { ...addProject };
+};
+
+type RemoveProject = {
+  input: TProjectRemoveSchema;
+};
+
+export const removeProjectHandler = async ({ input }: RemoveProject) => {
+  const res = await prisma.project.delete({
+    where: {
+      id: input.id,
+    },
+  });
+
+  return { ...res };
+};
+
+type UpdateProject = {
+  input: TProjectUpdateSchema;
+};
+
+export const updateProjectHandler = async ({ input }: UpdateProject) => {
+  const res = await prisma.project.update({
+    where: {
+      id: input.id,
+    },
+    data: {
+      ...input,
+      updatedAt: new Date(),
+    },
+  });
+
+  return { ...res };
 };
