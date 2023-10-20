@@ -11,7 +11,6 @@ export const ZWorkExperienceAddSchema = z.object({
     endDay: z.number().int().nullish(),
     endMonth: z.number().int().nullish(),
     endYear: z.number().int().nullish(),
-    userId: z.number().int(),
   }),
   company: z.object({
     name: z.string(),
