@@ -44,9 +44,14 @@ type RemovePodcast = {
 export const removePodcastHandler = async ({ ctx, input }: RemovePodcast) => {
   const { user } = ctx;
 
-  const removePodcastRes = await prisma.podcast.delete({
+  const removePodcastRes = await prisma.user.update({
     where: {
-      id: input.id,
+      id: ctx.user.id,
+    },
+    data: {
+      podcasts: {
+        disconnect: [{ id: input.id }],
+      },
     },
   });
 

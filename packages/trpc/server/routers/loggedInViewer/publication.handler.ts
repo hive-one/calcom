@@ -46,9 +46,14 @@ type RemovePublication = {
 };
 
 export const removePublicationHandler = async ({ ctx, input }: RemovePublication) => {
-  const res = await prisma.publication.delete({
+  const res = await prisma.user.update({
     where: {
-      id: input.id,
+      id: ctx.user.id,
+    },
+    data: {
+      publications: {
+        disconnect: [{ id: input.id }],
+      },
     },
   });
 

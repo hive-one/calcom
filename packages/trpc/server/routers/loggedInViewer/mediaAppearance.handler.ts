@@ -38,13 +38,22 @@ export const addMediaAppearanceHandler = async ({ ctx, input }: AddMediaAppearan
 };
 
 type RemoveMediaAppearance = {
+  ctx: {
+    user: NonNullable<TrpcSessionUser>;
+    res?: NextApiResponse | GetServerSidePropsContext["res"];
+  };
   input: TMediaAppearanceRemoveSchema;
 };
 
-export const removeMediaAppearanceHandler = async ({ input }: RemoveMediaAppearance) => {
-  const res = await prisma.mediaAppearance.delete({
+export const removeMediaAppearanceHandler = async ({ ctx, input }: RemoveMediaAppearance) => {
+  const res = await prisma.user.update({
     where: {
-      id: input.id,
+      id: ctx.user.id,
+    },
+    data: {
+      mediaAppearances: {
+        disconnect: [{ id: input.id }],
+      },
     },
   });
 

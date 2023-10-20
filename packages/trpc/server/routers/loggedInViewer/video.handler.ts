@@ -60,9 +60,14 @@ type RemoveVideo = {
 };
 
 export const removeVideoHandler = async ({ ctx, input }: RemoveVideo) => {
-  const res = await prisma.video.delete({
+  const res = await prisma.user.update({
     where: {
-      id: input.id,
+      id: ctx.user.id,
+    },
+    data: {
+      videos: {
+        disconnect: [{ id: input.id }],
+      },
     },
   });
 

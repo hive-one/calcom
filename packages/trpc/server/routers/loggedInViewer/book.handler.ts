@@ -14,8 +14,6 @@ type AddBook = {
 };
 
 export const addBookHandler = async ({ ctx, input }: AddBook) => {
-  const { user } = ctx;
-
   const addBook = await prisma.user.update({
     where: {
       id: ctx.user.id,
@@ -42,11 +40,14 @@ type RemoveBook = {
 };
 
 export const removeBookHandler = async ({ ctx, input }: RemoveBook) => {
-  const { user } = ctx;
-
-  const removeBookRes = await prisma.book.delete({
+  const removeBookRes = await prisma.user.update({
     where: {
-      isbn: input.isbn,
+      id: ctx.user.id,
+    },
+    data: {
+      books: {
+        disconnect: [{ isbn: input.isbn }],
+      },
     },
   });
 
