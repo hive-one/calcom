@@ -5,6 +5,7 @@ export const ZPodcastEpisodeAddSchema = z.object({
   url: z.string(),
   description: z.string().nullish(),
   coverImage: z.string().nullish(),
+  podcastId: z.number().int(),
 });
 
 export const ZPodcastEpisodeDeleteSchema = z.object({
@@ -17,6 +18,7 @@ export const ZPodcastEpisodeUpdateSchema = z.object({
   url: z.string(),
   description: z.string().nullish(),
   coverImage: z.string().nullish(),
+  podcastId: z.number().int(),
 });
 
 export type TPodcastEpisodeUpdateSchema = z.infer<typeof ZPodcastEpisodeUpdateSchema>;

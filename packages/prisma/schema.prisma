@@ -1115,6 +1115,7 @@ model Podcast {
 
   hosts            User[]
   mediaAppearances MediaAppearance[]
+  podcastEpisodes  PodcastEpisode[]
 
   @@unique([title])
   @@unique([url])
@@ -1131,6 +1132,9 @@ model PodcastEpisode {
 
   hosts            User[]
   mediaAppearances MediaAppearance[]
+
+  podcastId Int
+  podcast   Podcast @relation(fields: [podcastId], references: [id], onDelete: Cascade)
 
   @@unique([title])
   @@unique([url])

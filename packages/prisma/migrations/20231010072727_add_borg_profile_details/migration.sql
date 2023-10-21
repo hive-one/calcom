@@ -124,6 +124,7 @@ CREATE TABLE "PodcastEpisode" (
     "coverImage" TEXT,
     "createdAt" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(3) NOT NULL,
+    "podcastId" INTEGER NOT NULL,
 
     CONSTRAINT "PodcastEpisode_pkey" PRIMARY KEY ("id")
 );
@@ -302,6 +303,9 @@ ALTER TABLE "WorkExperience" ADD CONSTRAINT "WorkExperience_companyId_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "WorkExperience" ADD CONSTRAINT "WorkExperience_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PodcastEpisode" ADD CONSTRAINT "PodcastEpisode_podcastId_fkey" FOREIGN KEY ("podcastId") REFERENCES "Podcast"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MediaAppearance" ADD CONSTRAINT "MediaAppearance_podcastId_fkey" FOREIGN KEY ("podcastId") REFERENCES "Podcast"("id") ON DELETE CASCADE ON UPDATE CASCADE;
