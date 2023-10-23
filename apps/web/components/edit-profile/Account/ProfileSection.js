@@ -76,32 +76,6 @@ const ProfileSection = ({ profile, setProfile, updateAvatar, setAvatarFile, avat
             imageSrc={profile?.avatar}
           />
         </div>
-
-        {/* <PhotoUpload
-          avatarUrl={profile.avatar_url}
-          onPhotoChange={(file) => {
-            setAvatarFile(file);
-          }}
-        /> */}
-        <div className="sm:col-span-3">
-          <Label>Company/Institute</Label>
-          <Input
-            name="company"
-            className="mt-2"
-            value={profile.company}
-            onChange={(e) => setProfile({ ...profile, company: e.target.value })}
-          />
-        </div>
-        <div className="sm:col-span-3">
-          <Label>Role/Position</Label>
-          <Input
-            name="role"
-            className="mt-2"
-            label="Role/Position"
-            value={profile.role}
-            onChange={(e) => setProfile({ ...profile, role: e.target.value })}
-          />
-        </div>
       </div>
     </FormBlock>
   );

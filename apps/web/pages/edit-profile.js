@@ -3,14 +3,12 @@ import Spinner from "@ui/spinner";
 import clsx from "clsx";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Linkedin } from "react-bootstrap-icons";
 import toast from "react-hot-toast";
 
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
 import { trpc } from "@calcom/trpc/react";
-
-import { logOut } from "@lib/firebase/utils";
 
 import PageWrapper from "@components/PageWrapper";
 import AdviceSection from "@components/edit-profile/Account/AdviceSection";
@@ -31,8 +29,12 @@ import { ssrInit } from "@server/lib/ssr";
 
 import { Container } from "../ui";
 
-const EditProfile = () => {
-  const [user] = trpc.viewer.me.useSuspenseQuery();
+const formatDate = (date) => date.toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false });
+
+const EditProfile = ({ user: userData }) => {
+  // const [user] = trpc.viewer.me.useSuspenseQuery();
+  const user = JSON.parse(userData);
+  console.log({ user });
   // const router = useRouter();
   const [isLoading, setIsLoading] = useState();
   const [formLoading, setFormLoading] = useState(false);
@@ -40,6 +42,7 @@ const EditProfile = () => {
   const avatarRef = useRef(null);
   const [activeSetting, setActiveSetting] = useState("profile");
   const [avatarFile, setAvatarFile] = useState(null);
+  console.log({ user, profile });
 
   const utils = trpc.useContext();
   const onSuccess = async () => {
@@ -61,7 +64,8 @@ const EditProfile = () => {
   const removeProjectMutation = trpc.viewer.removeProject.useMutation();
 
   const addWorkExpMutation = trpc.viewer.addWorkExperience.useMutation();
-  const addCompanyMutation = trpc.viewer.addCompany.useMutation();
+  const updateWorkExpMutation = trpc.viewer.updateWorkExperience.useMutation();
+  const removeWorkExpMutation = trpc.viewer.removeWorkExperience.useMutation();
 
   const addPublicationMutation = trpc.viewer.addPublication.useMutation();
   const updatePublicationMutation = trpc.viewer.updatePublication.useMutation();
@@ -79,9 +83,18 @@ const EditProfile = () => {
   const updateMediaAppearenceMutation = trpc.viewer.updateMediaAppearence.useMutation();
   const removeMediaAppearenceMutation = trpc.viewer.removeMediaAppearence.useMutation();
 
-  useEffect(() => {
-    setProfile(user);
-  }, [user]);
+  // useEffect(() => {
+  //   setProfile((prev) => ({
+  //     ...user,
+  //     workExperiences: prev?.workExperiences.map((item) => {
+  //       return {
+  //         ...item,
+  //         workStart: formatDate(item.startYear) + "-" + formatDate(item.startMonth) + "-" + formatDate(item.startDay),
+  //         workEnd: formatDate(item.endYear) + "-" + formatDate(item.endMonth) + "-" + formatDate(item.endDay),
+  //       };
+  //     }),
+  //   }));
+  // }, [user]);
 
   async function updateAvatar(event) {
     event.preventDefault();
@@ -99,7 +112,7 @@ const EditProfile = () => {
     console.log({ profile });
     mutation.mutate(profile);
 
-    profile?.socialLinks.map((socialLink) => {
+    profile?.socialLinks?.map((socialLink) => {
       let now = new Date();
       let socialLinkData = {
         ...socialLink,
@@ -114,7 +127,7 @@ const EditProfile = () => {
       }
     });
 
-    profile?.facts.map((fact) => {
+    profile?.facts?.map((fact) => {
       let now = new Date();
       let factsData = {
         ...fact,
@@ -129,9 +142,7 @@ const EditProfile = () => {
       }
     });
 
-    toast.success(`Update profile successfully`);
-
-    profile?.projects.map((project) => {
+    profile?.projects?.map((project) => {
       let now = new Date();
       let projectData = {
         ...project,
@@ -145,7 +156,7 @@ const EditProfile = () => {
       }
     });
 
-    profile?.videos.map((vid) => {
+    profile?.videos?.map((vid) => {
       let vidData = {
         ...vid,
         userId: user?.id,
@@ -159,44 +170,51 @@ const EditProfile = () => {
       }
     });
 
-    profile?.workExperiences.map((exp) => {
-      let companyData = {
-        name: exp.company,
-        url: exp.url,
-        linkedInId: "",
-      };
-      const addCompanyRes = addCompanyMutation.mutate(companyData);
-
-      if (exp?.roles?.length) {
-        exp?.roles.map((role) => {
-          const addWorkExpRes = addWorkExpMutation.mutate({
-            title: role.title,
-            startDay: parseInt(role.startDay),
-            startMonth: parseInt(role.startMonth),
-            startYear: parseInt(role.startYear),
-            endDay: parseInt(role.endDay),
-            endMonth: parseInt(role.endMonth),
-            endYear: parseInt(role.endYear),
-            description: role.description,
-            updatedAt: new Date(),
-            companyId: addCompanyRes?.data?.id,
-            userId: user?.id,
-          });
-        });
-      }
-      let expData = {
-        ...exp,
-        userId: user?.id,
-      };
-
+    profile?.workExperiences?.map((exp) => {
       if (exp?.id) {
-        // updateFactMutation.mutate(factsData);
+        let expData = {
+          id: exp?.id,
+          title: exp.title,
+          description: exp?.description ?? "",
+          startDay: exp.startDay,
+          startMonth: exp.startMonth,
+          startYear: exp.startYear,
+          endDay: exp.endDay,
+          endMonth: exp.endMonth,
+          endYear: exp.endYear,
+          userId: user?.id,
+          companyId: exp?.companyId,
+        };
+        updateWorkExpMutation.mutate(expData);
       } else {
+        let expData = {
+          company: {
+            name: exp.company,
+            url: exp.url,
+            linkedInId: JSON.stringify(Math.floor(Math.random() * 100)),
+          },
+          workExperience: {
+            title: exp.title,
+            description: exp?.description ?? "",
+            updatedAt: new Date(),
+            userId: user?.id,
+            startDay: exp.startDay,
+            startMonth: exp.startMonth,
+            startYear: exp.startYear,
+            endDay: exp.endDay,
+            endMonth: exp.endMonth,
+            endYear: exp.endYear,
+            isCurrentRole: exp?.isCurrentRole,
+            user,
+          },
+        };
+        console.log({ expData });
+        console.log("adding exp", expData);
         addWorkExpMutation.mutate(expData);
       }
     });
 
-    profile?.publications.map((pub) => {
+    profile?.publications?.map((pub) => {
       let pubData = {
         ...pub,
         updatedAt: new Date(),
@@ -209,7 +227,7 @@ const EditProfile = () => {
       }
     });
 
-    profile?.books.map((book) => {
+    profile?.books?.map((book) => {
       let bookData = {
         ...book,
         updatedAt: new Date(),
@@ -237,18 +255,6 @@ const EditProfile = () => {
         addMediaAppearenceMutation.mutate(appData);
       }
     });
-
-    // try {
-    //   setFormLoading(true);
-    //   event.preventDefault();
-    //   const docData = avatarFile ? { ...profile, avatar_url: await uploadPhoto(avatarFile) } : profile;
-    //   await addProfile(docData);
-    //   toast.success("Profile updated successfully 🎉");
-    // } catch (error) {
-    //   toast.error("Something went wrong 😕");
-    // } finally {
-    //   setFormLoading(false);
-    // }
   };
 
   const addAdviceItem = () => {
@@ -280,20 +286,16 @@ const EditProfile = () => {
 
   const addExperience = () => {
     const newExperience = {
-      company: "",
-      url: "",
-      roles: [
-        {
-          title: "",
-          description: "",
-          startDay: "",
-          startMonth: "",
-          startYear: "",
-          endDay: "",
-          endMonth: "",
-          endYear: "",
-        },
-      ],
+      company: { company: "", url: "", title: "" },
+      workExperience: {
+        description: "",
+        startDay: "",
+        startMonth: "",
+        startYear: "",
+        endDay: "",
+        endMonth: "",
+        endYear: "",
+      },
     };
     setProfile((prevProfile) => ({
       ...prevProfile,
@@ -452,7 +454,8 @@ const EditProfile = () => {
     }));
   };
 
-  const removeExperience = (index) => {
+  const removeExperience = ({ index, id }) => {
+    removeWorkExpMutation.mutate({ id });
     setProfile((prevProfile) => ({
       ...prevProfile,
       workExperiences: prevProfile.workExperiences.filter((_, i) => i !== index),
@@ -630,7 +633,7 @@ const EditProfile = () => {
   return (
     <main className="min-h-screen bg-white">
       <NextSeo title="Profile Settings - Borg.id" />
-      <Navbar uid={user?.uid} logOut={logOut} email={user?.email} />
+      <Navbar username={user?.username} />
       {isLoading ? (
         <div className="flex min-h-screen items-center justify-center">
           <Spinner label="Loading profile..." />
@@ -703,6 +706,13 @@ export const getServerSideProps = async (context) => {
   const user = await prisma.user.findUnique({
     where: {
       id: session.user.id,
+    },
+    include: {
+      workExperiences: {
+        include: {
+          company: true,
+        },
+      },
     },
   });
 

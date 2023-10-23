@@ -2,16 +2,14 @@
 
 import { SignOut, LinkSimple, User } from "@phosphor-icons/react";
 import * as Menu from "@radix-ui/react-dropdown-menu";
-import { forgotPassword } from "lib/firebase";
 import Link from "next/link";
-import toast from "react-hot-toast";
 
-const UserMenu = ({ uid, logOut, resetPassword }) => {
+const UserMenu = ({ username, logOut }) => {
   const menuItems = [
     {
       label: "View public profile",
       icon: <LinkSimple className="mr-2 h-4 w-4" />,
-      href: `/${uid}`,
+      href: `/${username}`,
       target: "_blank",
     },
     {
@@ -62,17 +60,7 @@ const UserMenu = ({ uid, logOut, resetPassword }) => {
   );
 };
 
-const Navbar = ({ uid, logOut, email }) => {
-  async function resetPassword() {
-    if (!email) return;
-    try {
-      await forgotPassword(email);
-      toast.success("Check your email for further instructions 😊");
-    } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong 😕");
-    }
-  }
+const Navbar = ({ username }) => {
   return (
     <nav className="sticky top-0 z-50 bg-white shadow">
       <div className="mx-auto max-w-6xl px-4 sm:px-0">
@@ -83,7 +71,7 @@ const Navbar = ({ uid, logOut, email }) => {
             </Link>
           </div>
           <div className="flex items-center">
-            <UserMenu uid={uid} logOut={logOut} resetPassword={resetPassword} />
+            <UserMenu username={username} />
           </div>
         </div>
       </div>

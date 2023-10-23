@@ -280,11 +280,11 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
             </div>
           </Section>
         )}
-        {profileData?.appearances && profileData.appearances.length > 0 && (
+        {profileData?.mediaAppearances && profileData?.mediaAppearances?.length > 0 && (
           <Section title="Podcasts (appearances)">
             <div id="podcasts-appearances">
               <ul className="space-y-3">
-                {profileData.appearances.map((appearance, index) => (
+                {profileData.mediaAppearances.map((appearance, index) => (
                   <li key={index}>
                     <a href={appearance.url} target="_blank" rel="noopener noreferrer">
                       {appearance.title}
@@ -308,13 +308,13 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
         ) : (
           ""
         )}
-        {profileData?.experience?.length ? (
+        {profileData?.workExperiences?.length ? (
           <Section id="experience" title="Experience">
-            {profileData?.experience?.map((experience, index) => (
+            {profileData?.workExperiences?.map((experience, index) => (
               <ExperienceItem
                 key={index}
                 experience={experience}
-                trail={index === profileData?.experience?.length - 1 ? false : true}
+                trail={index === profileData?.workExperiences?.length - 1 ? false : true}
               />
             ))}
           </Section>
@@ -348,7 +348,11 @@ export const getServerSideProps = async (context) => {
       projects: true,
       podcasts: true,
       videos: true,
-      workExperiences: true,
+      workExperiences: {
+        include: {
+          company: true,
+        },
+      },
       books: true,
       socialLinks: true,
       facts: true,

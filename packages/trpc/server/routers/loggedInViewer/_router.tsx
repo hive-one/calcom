@@ -37,7 +37,11 @@ import { ZSubmitFeedbackInputSchema } from "./submitFeedback.schema";
 import { ZUpdateProfileInputSchema } from "./updateProfile.schema";
 import { ZUpdateUserDefaultConferencingAppInputSchema } from "./updateUserDefaultConferencingApp.schema";
 import { ZVideoAddSchema, ZVideoUpdateSchema, ZVideoRemoveSchema } from "./video.schema";
-import { ZWorkExperienceAddSchema } from "./workExperience.schema";
+import {
+  ZWorkExperienceAddSchema,
+  ZWorkExperienceUpdateSchema,
+  ZWorkExperienceDeleteSchema,
+} from "./workExperience.schema";
 import { ZWorkflowOrderInputSchema } from "./workflowOrder.schema";
 
 type AppsRouterHandlerCache = {
@@ -76,6 +80,8 @@ type AppsRouterHandlerCache = {
   updateProject?: typeof import("./project.handler").updateProjectHandler;
   removeProject?: typeof import("./project.handler").removeProjectHandler;
   addWorkExperience?: typeof import("./workExperience.handler").addWorkExperienceHandler;
+  updateWorkExperience?: typeof import("./workExperience.handler").updateWorkExperienceHandler;
+  removeWorkExperience?: typeof import("./workExperience.handler").removeWorkExperienceHandler;
   addCompany?: typeof import("./company.handler").addCompanyHandler;
   addPublication?: typeof import("./publication.handler").addPublicationHandler;
   updatePublication?: typeof import("./publication.handler").updatePublicationHandler;
@@ -361,6 +367,40 @@ export const loggedInViewerRouter = router({
 
     return UNSTABLE_HANDLER_CACHE.addWorkExperience({ ctx, input });
   }),
+
+  updateWorkExperience: authedProcedure
+    .input(ZWorkExperienceUpdateSchema)
+    .mutation(async ({ ctx, input }) => {
+      if (!UNSTABLE_HANDLER_CACHE.updateWorkExperience) {
+        UNSTABLE_HANDLER_CACHE.updateWorkExperience = (
+          await import("./workExperience.handler")
+        ).updateWorkExperienceHandler;
+      }
+
+      // Unreachable code but required for type safety
+      if (!UNSTABLE_HANDLER_CACHE.updateWorkExperience) {
+        throw new Error("Failed to load handler");
+      }
+
+      return UNSTABLE_HANDLER_CACHE.updateWorkExperience({ ctx, input });
+    }),
+
+  removeWorkExperience: authedProcedure
+    .input(ZWorkExperienceDeleteSchema)
+    .mutation(async ({ ctx, input }) => {
+      if (!UNSTABLE_HANDLER_CACHE.removeWorkExperience) {
+        UNSTABLE_HANDLER_CACHE.removeWorkExperience = (
+          await import("./workExperience.handler")
+        ).removeWorkExperienceHandler;
+      }
+
+      // Unreachable code but required for type safety
+      if (!UNSTABLE_HANDLER_CACHE.removeWorkExperience) {
+        throw new Error("Failed to load handler");
+      }
+
+      return UNSTABLE_HANDLER_CACHE.removeWorkExperience({ ctx, input });
+    }),
 
   addCompany: authedProcedure.input(ZCompanyAddSchema).mutation(async ({ ctx, input }) => {
     if (!UNSTABLE_HANDLER_CACHE.addCompany) {
