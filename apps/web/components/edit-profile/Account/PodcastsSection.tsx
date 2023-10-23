@@ -105,7 +105,7 @@ const PodcastsSection = ({
               required
               value={profile?.podcasts[0]?.title}
               onChange={(e) => {
-                let newPod = [...profile.podcasts];
+                const newPod = [...profile.podcasts];
                 newPod[0].title = e.target.value;
                 setProfile({
                   ...profile,
@@ -122,7 +122,7 @@ const PodcastsSection = ({
               required
               value={profile?.podcasts[0]?.url}
               onChange={(e) => {
-                let newPod = [...profile.podcasts];
+                const newPod = [...profile.podcasts];
                 newPod[0].url = e.target.value;
                 setProfile({
                   ...profile,
@@ -137,7 +137,7 @@ const PodcastsSection = ({
               label="Cover image URL"
               value={profile?.podcasts[0].coverImage}
               onChange={(e) => {
-                let newPod = [...profile.podcasts];
+                const newPod = [...profile.podcasts];
                 newPod[0].coverImage = e.target.value;
                 setProfile({
                   ...profile,

@@ -29,7 +29,7 @@ import { ssrInit } from "@server/lib/ssr";
 
 import { Container } from "../ui";
 
-var groupBy = function (xs, key) {
+const groupBy = function (xs, key) {
   return xs.reduce(function (rv, x) {
     (rv[x[key]] = rv[x[key]] || []).push(x);
     return rv;
@@ -159,8 +159,8 @@ const EditProfile = () => {
     mutation.mutate(profile);
 
     profile?.socialLinks?.map((socialLink) => {
-      let now = new Date();
-      let socialLinkData = {
+      const now = new Date();
+      const socialLinkData = {
         ...socialLink,
         userId: user?.id,
         updatedAt: now,
@@ -174,8 +174,8 @@ const EditProfile = () => {
     });
 
     profile?.facts?.map((fact) => {
-      let now = new Date();
-      let factsData = {
+      const now = new Date();
+      const factsData = {
         ...fact,
         userId: user?.id,
         updatedAt: now,
@@ -189,8 +189,8 @@ const EditProfile = () => {
     });
 
     profile?.projects?.map((project) => {
-      let now = new Date();
-      let projectData = {
+      const now = new Date();
+      const projectData = {
         ...project,
         updatedAt: now,
       };
@@ -203,7 +203,7 @@ const EditProfile = () => {
     });
 
     profile?.videos?.map((vid) => {
-      let vidData = {
+      const vidData = {
         ...vid,
         userId: user?.id,
         updatedAt: new Date(),
@@ -217,7 +217,7 @@ const EditProfile = () => {
     });
 
     profile?.publications?.map((pub) => {
-      let pubData = {
+      const pubData = {
         ...pub,
         updatedAt: new Date(),
       };
@@ -230,7 +230,7 @@ const EditProfile = () => {
     });
 
     profile?.books?.map((book) => {
-      let bookData = {
+      const bookData = {
         ...book,
         updatedAt: new Date(),
       };
@@ -355,7 +355,7 @@ const EditProfile = () => {
   };
 
   const addExperienceRole = ({ expIndex }) => {
-    let newExp = [...profile.workExperiences];
+    const newExp = [...profile.workExperiences];
     newExp[expIndex].roles = [
       ...newExp[expIndex].roles,
       {
@@ -463,7 +463,7 @@ const EditProfile = () => {
   };
 
   const addPodcastEpisode = () => {
-    let newPods = [...profile.podcasts];
+    const newPods = [...profile.podcasts];
     newPods[0].episodes = newPods[0].episodes?.length
       ? [...newPods[0].episodes, { title: "", url: "", description: "", coverImage: "" }]
       : [{ title: "", url: "", description: "", coverImage: "" }];
@@ -474,7 +474,7 @@ const EditProfile = () => {
   };
 
   const removePodcastEpisode = (index) => {
-    let newPods = [...profile.podcasts];
+    const newPods = [...profile.podcasts];
     newPods[0].episodes.splice(index, 1);
     setProfile({
       ...profile,
@@ -658,7 +658,7 @@ const EditProfile = () => {
       ),
     },
     {
-      label: "Podcast Appearences",
+      label: "Podcast Appearances",
       value: "podcast-appearances",
       content: (
         <PodcastAppearancesSection
