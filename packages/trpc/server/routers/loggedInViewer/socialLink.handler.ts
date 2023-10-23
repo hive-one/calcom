@@ -18,10 +18,19 @@ type AddSocialLink = {
 };
 
 export const addSocialLinkHandler = async ({ ctx, input }: AddSocialLink) => {
-  const { user } = ctx;
-
-  const addSocialLinkRes = await prisma.socialLink.create({
-    data: input,
+  const addSocialLinkRes = await prisma.socialLink.upsert({
+    where: {
+      url_userId: {
+        url: input.url,
+        userId: ctx.user.id,
+      },
+    },
+    update: {},
+    create: {
+      ...input,
+      updatedAt: new Date(),
+      userId: ctx.user.id,
+    },
   });
 
   return { ...addSocialLinkRes };

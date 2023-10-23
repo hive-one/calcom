@@ -134,7 +134,7 @@ CREATE TABLE "Video" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "url" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
+    "description" TEXT,
     "createdAt" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(3) NOT NULL,
 
@@ -146,7 +146,7 @@ CREATE TABLE "MediaAppearance" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "url" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
+    "description" TEXT,
     "mediaType" TEXT NOT NULL,
     "createdAt" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(3) NOT NULL,

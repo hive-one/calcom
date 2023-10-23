@@ -14,17 +14,23 @@ type AddPodcast = {
 };
 
 export const addPodcastHandler = async ({ ctx, input }: AddPodcast) => {
-  const { user } = ctx;
-
-  const addPodcast = await prisma.user.update({
+  const addPodcast = await prisma.podcast.upsert({
     where: {
-      id: ctx.user.id,
+      title: input.title,
     },
-    data: {
-      podcasts: {
-        create: {
-          ...input,
-          updatedAt: new Date(),
+    update: {
+      hosts: {
+        connect: {
+          id: ctx.user.id,
+        },
+      },
+    },
+    create: {
+      ...input,
+      updatedAt: new Date(),
+      hosts: {
+        connect: {
+          id: ctx.user.id,
         },
       },
     },
@@ -42,8 +48,6 @@ type RemovePodcast = {
 };
 
 export const removePodcastHandler = async ({ ctx, input }: RemovePodcast) => {
-  const { user } = ctx;
-
   const removePodcastRes = await prisma.user.update({
     where: {
       id: ctx.user.id,

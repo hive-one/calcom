@@ -10,8 +10,15 @@ type AddFact = {
 };
 
 export const addFactHandler = async ({ input }: AddFact) => {
-  const res = await prisma.fact.create({
-    data: {
+  const res = await prisma.fact.upsert({
+    where: {
+      title_userId: {
+        title: input.title,
+        userId: input.userId,
+      },
+    },
+    update: {},
+    create: {
       ...input,
       updatedAt: new Date(),
     },

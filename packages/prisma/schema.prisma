@@ -1086,7 +1086,7 @@ model Publication {
   createdAt   DateTime @default(now()) @db.Timestamptz(3)
   updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
-  author User[]
+  authors User[]
 
   @@unique([title])
   @@unique([url])
@@ -1144,7 +1144,7 @@ model Video {
   id          Int      @id @default(autoincrement())
   title       String
   url         String
-  description String
+  description String?
   createdAt   DateTime @default(now()) @db.Timestamptz(3)
   updatedAt   DateTime @updatedAt @db.Timestamptz(3)
 
@@ -1158,7 +1158,7 @@ model MediaAppearance {
   id          Int      @id @default(autoincrement())
   title       String
   url         String
-  description String
+  description String?
   mediaType   String
   createdAt   DateTime @default(now()) @db.Timestamptz(3)
   updatedAt   DateTime @updatedAt @db.Timestamptz(3)

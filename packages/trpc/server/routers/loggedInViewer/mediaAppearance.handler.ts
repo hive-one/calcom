@@ -18,17 +18,23 @@ type AddMediaAppearance = {
 };
 
 export const addMediaAppearanceHandler = async ({ ctx, input }: AddMediaAppearance) => {
-  const { user } = ctx;
-
-  const addMediaAppearance = await prisma.user.update({
+  const addMediaAppearance = await prisma.mediaAppearance.upsert({
     where: {
-      id: ctx.user.id,
+      url: input.url,
     },
-    data: {
-      mediaAppearances: {
-        create: {
-          ...input,
-          description: input.description!,
+    update: {
+      guests: {
+        connect: {
+          id: ctx.user.id,
+        },
+      },
+    },
+    create: {
+      ...input,
+      updatedAt: new Date(),
+      guests: {
+        connect: {
+          id: ctx.user.id,
         },
       },
     },

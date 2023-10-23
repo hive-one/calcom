@@ -14,19 +14,18 @@ type AddProject = {
 };
 
 export const addProjectHandler = async ({ ctx, input }: AddProject) => {
-  const { user } = ctx;
-
-  const addProject = await prisma.user.update({
+  const addProject = await prisma.project.upsert({
     where: {
-      id: ctx.user.id,
-    },
-    data: {
-      projects: {
-        create: {
-          ...input,
-          updatedAt: new Date(),
-        },
+      title_userId: {
+        title: input.title,
+        userId: ctx.user.id,
       },
+    },
+    update: {},
+    create: {
+      ...input,
+      updatedAt: new Date(),
+      userId: ctx.user.id,
     },
   });
 

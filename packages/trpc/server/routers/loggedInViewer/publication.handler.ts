@@ -18,17 +18,23 @@ type AddPublication = {
 };
 
 export const addPublicationHandler = async ({ ctx, input }: AddPublication) => {
-  const { user } = ctx;
-
-  const addPublication = await prisma.user.update({
+  const addPublication = await prisma.publication.upsert({
     where: {
-      id: ctx.user.id,
+      title: input.title,
     },
-    data: {
-      publications: {
-        create: {
-          ...input,
-          updatedAt: new Date(),
+    update: {
+      authors: {
+        connect: {
+          id: ctx.user.id,
+        },
+      },
+    },
+    create: {
+      ...input,
+      updatedAt: new Date(),
+      authors: {
+        connect: {
+          id: ctx.user.id,
         },
       },
     },

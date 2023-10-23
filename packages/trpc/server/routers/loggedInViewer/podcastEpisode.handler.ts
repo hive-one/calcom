@@ -18,17 +18,17 @@ type AddPodcastEpisode = {
 };
 
 export const addPodcastEpisodeHandler = async ({ ctx, input }: AddPodcastEpisode) => {
-  const { user } = ctx;
-
-  const addPodcastEpisode = await prisma.user.update({
+  const addPodcastEpisode = await prisma.podcastEpisode.upsert({
     where: {
-      id: ctx.user.id,
+      title: input.title,
     },
-    data: {
-      podcastEpisodes: {
-        create: {
-          ...input,
-          updatedAt: new Date(),
+    update: {},
+    create: {
+      ...input,
+      updatedAt: new Date(),
+      hosts: {
+        connect: {
+          id: ctx.user.id,
         },
       },
     },

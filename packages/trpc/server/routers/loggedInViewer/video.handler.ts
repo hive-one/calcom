@@ -14,18 +14,23 @@ type AddVideo = {
 };
 
 export const addVideoHandler = async ({ ctx, input }: AddVideo) => {
-  const { user } = ctx;
-
-  const addVideo = await prisma.user.update({
+  const addVideo = await prisma.video.upsert({
     where: {
-      id: ctx.user.id,
+      url: input.url,
     },
-    data: {
-      videos: {
-        create: {
-          title: input.title,
-          url: input.url,
-          description: input.description!,
+    update: {
+      hosts: {
+        connect: {
+          id: ctx.user.id,
+        },
+      },
+    },
+    create: {
+      ...input,
+      updatedAt: new Date(),
+      hosts: {
+        connect: {
+          id: ctx.user.id,
         },
       },
     },
