@@ -18,6 +18,7 @@ import { titleCase } from "title-case";
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
 import { getUsernameList } from "@calcom/lib/defaultEvents";
 import { md } from "@calcom/lib/markdownIt";
+import prisma from "@calcom/prisma";
 import { Tooltip } from "@calcom/ui";
 
 import PageWrapper from "@components/PageWrapper";
