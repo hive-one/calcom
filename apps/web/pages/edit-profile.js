@@ -8,6 +8,7 @@ import { Linkedin } from "react-bootstrap-icons";
 import toast from "react-hot-toast";
 
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
+import prisma from "@calcom/prisma";
 import { trpc } from "@calcom/trpc/react";
 
 import PageWrapper from "@components/PageWrapper";
