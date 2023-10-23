@@ -29,19 +29,13 @@ import { ssrInit } from "@server/lib/ssr";
 
 import { Container } from "../ui";
 
-const formatDate = (date) => date.toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false });
-
-const EditProfile = ({ user: userData }) => {
-  // const [user] = trpc.viewer.me.useSuspenseQuery();
-  const user = JSON.parse(userData);
-  console.log({ user });
-  // const router = useRouter();
+const EditProfile = () => {
+  const [user] = trpc.viewer.me.useSuspenseQuery();
   const [isLoading, setIsLoading] = useState();
   const [formLoading, setFormLoading] = useState(false);
   const [profile, setProfile] = useState(user);
   const avatarRef = useRef(null);
   const [activeSetting, setActiveSetting] = useState("profile");
-  const [avatarFile, setAvatarFile] = useState(null);
   console.log({ user, profile });
 
   const utils = trpc.useContext();
@@ -79,22 +73,9 @@ const EditProfile = ({ user: userData }) => {
   const updateVideoMutation = trpc.viewer.updateVideo.useMutation();
   const removeVideoMutation = trpc.viewer.removeVideo.useMutation();
 
-  const addMediaAppearenceMutation = trpc.viewer.addMediaAppearence.useMutation();
-  const updateMediaAppearenceMutation = trpc.viewer.updateMediaAppearence.useMutation();
-  const removeMediaAppearenceMutation = trpc.viewer.removeMediaAppearence.useMutation();
-
-  // useEffect(() => {
-  //   setProfile((prev) => ({
-  //     ...user,
-  //     workExperiences: prev?.workExperiences.map((item) => {
-  //       return {
-  //         ...item,
-  //         workStart: formatDate(item.startYear) + "-" + formatDate(item.startMonth) + "-" + formatDate(item.startDay),
-  //         workEnd: formatDate(item.endYear) + "-" + formatDate(item.endMonth) + "-" + formatDate(item.endDay),
-  //       };
-  //     }),
-  //   }));
-  // }, [user]);
+  const addMediaAppearenceMutation = trpc.viewer.addMediaAppearance.useMutation();
+  const updateMediaAppearenceMutation = trpc.viewer.updateMediaAppearance.useMutation();
+  const removeMediaAppearenceMutation = trpc.viewer.removeMediaAppearance.useMutation();
 
   async function updateAvatar(event) {
     event.preventDefault();
@@ -107,7 +88,6 @@ const EditProfile = ({ user: userData }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     delete profile.avatar;
     console.log({ profile });
     mutation.mutate(profile);
@@ -505,7 +485,6 @@ const EditProfile = ({ user: userData }) => {
             avatarRef={avatarRef}
             profile={profile}
             setProfile={setProfile}
-            setAvatarFile={setAvatarFile}
           />
         </>
       ),
@@ -708,11 +687,19 @@ export const getServerSideProps = async (context) => {
       id: session.user.id,
     },
     include: {
+      publications: true,
+      projects: true,
+      podcasts: true,
+      videos: true,
       workExperiences: {
         include: {
           company: true,
         },
       },
+      books: true,
+      socialLinks: true,
+      facts: true,
+      mediaAppearances: true,
     },
   });
 

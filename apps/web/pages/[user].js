@@ -273,12 +273,14 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
         ) : (
           ""
         )}
-        {profileData?.podcasts?.length && (
+        {profileData?.podcasts?.length ? (
           <Section title="Podcasts">
             <div id="podcasts">
               <PodcastItem podcast={profileData?.podcasts} />
             </div>
           </Section>
+        ) : (
+          ""
         )}
         {profileData?.mediaAppearances && profileData?.mediaAppearances?.length > 0 && (
           <Section title="Podcasts (appearances)">

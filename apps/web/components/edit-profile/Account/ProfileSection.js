@@ -1,15 +1,17 @@
 import { Input } from "@shadcdn/ui/input";
 import { Label } from "@shadcdn/ui/label";
-import Tiptap from "@ui/tiptap";
+import { useState } from "react";
 
 import OrganizationAvatar from "@calcom/features/ee/organizations/components/OrganizationAvatar";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
-import { ImageUploader } from "@calcom/ui";
+import { md } from "@calcom/lib/markdownIt";
+import { ImageUploader, Editor } from "@calcom/ui";
 
 import FormBlock from "./FormBlock";
 
-const ProfileSection = ({ profile, setProfile, updateAvatar, setAvatarFile, avatarRef }) => {
+const ProfileSection = ({ profile, setProfile, updateAvatar, avatarRef }) => {
   const { t } = useLocale();
+  const [firstRender, setFirstRender] = useState(true);
   return (
     <FormBlock title="Profile" description="This information will be linked to your account.">
       <div className="space-y-5">
@@ -26,11 +28,15 @@ const ProfileSection = ({ profile, setProfile, updateAvatar, setAvatarFile, avat
         </div>
         <div className="col-span-full">
           <Label>Write a bio about yourself</Label>
-          <div className="focus-within:ring-ring mt-2 rounded-lg border p-2 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
-            <Tiptap
-              hideInfo
-              value={profile.bio}
-              onChange={(value) => setProfile({ ...profile, bio: value })}
+          <div className="mt-2">
+            <Editor
+              getText={() => md.render(profile?.bio || "")}
+              setText={(value) => {
+                setProfile({ ...profile, bio: value });
+              }}
+              excludedToolbarItems={["blockType"]}
+              firstRender={firstRender}
+              setFirstRender={setFirstRender}
             />
           </div>
         </div>
@@ -59,7 +65,6 @@ const ProfileSection = ({ profile, setProfile, updateAvatar, setAvatarFile, avat
             buttonMsg={t("add_profile_photo")}
             handleAvatarChange={(newAvatar) => {
               setProfile((prev) => ({ ...prev, avatar: newAvatar }));
-              console.log({ newAvatar });
               if (avatarRef.current) {
                 avatarRef.current.value = newAvatar;
               }
