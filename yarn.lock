@@ -15608,6 +15608,7 @@ __metadata:
     lucide-react: ^0.171.0
     mailhog: ^4.16.0
     prettier: ^2.8.6
+    title-case: ^4.1.2
     tsc-absolute: ^1.0.0
     turbo: ^1.10.1
     typescript: ^4.9.4
@@ -34274,6 +34275,13 @@ __metadata:
   dependencies:
     tslib: ^2.0.3
   checksum: e8b7ea006b53cf3208d278455d9f1e22c409459d7f9878da324fa3b18cc0aef8560924c19c744e870394a5d9cddfdbe029ebae9875909ee7f4fc562e7cbfc53e
+  languageName: node
+  linkType: hard
+
+"title-case@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "title-case@npm:4.1.2"
+  checksum: d62766c0898811486d652836c07bbcc7caa648d3c70115c411efeee0e9a123d4a813b9b09388e3760d922d0109148b8ff5189c371234ee310247fc433bb328fc
   languageName: node
   linkType: hard
 

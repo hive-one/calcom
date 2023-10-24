@@ -14,6 +14,7 @@ import { NextSeo } from "next-seo";
 import Link from "next/link";
 import { useState } from "react";
 import { CalendarPlus } from "react-bootstrap-icons";
+import { titleCase } from "title-case";
 
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
 import { getUsernameList } from "@calcom/lib/defaultEvents";
@@ -103,6 +104,12 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
 
   const isLoggedInUser = profileData?.id === session?.user?.id;
 
+  const currentRole = profileData?.workExperiences?.filter((item) => item?.isCurrentRole)[0]?.title ?? "";
+  const currentCompany =
+    profileData?.workExperiences?.filter((item) => item?.isCurrentRole)[0]?.company.name ?? "";
+
+  console.log({ currentCompany, currentRole });
+
   return (
     <div className="flex flex-col items-center bg-white leading-6 text-gray-900">
       {/* Profile header */}
@@ -143,16 +150,20 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
             <div className="font-bold" id="name">
               {profileData?.name}
             </div>
-            {/* {profileData?.role && (
+            {currentRole ? (
               <div className="text-sm leading-6" id="role">
-                {titleCase(profileData?.role)}
+                {titleCase(currentRole)}
               </div>
-            )} */}
-            {profileData?.company && (
+            ) : (
+              ""
+            )}
+            {currentCompany ? (
               <div className="flex flex-row items-start gap-1.5 text-sm leading-6">
                 <div className="w-3 shrink-0 text-gray-400">at</div>
-                <div id="company">{insertNonBreakingSpaces(profileData?.company)}</div>
+                <div id="company">{insertNonBreakingSpaces(currentCompany)}</div>
               </div>
+            ) : (
+              ""
             )}
           </div>
 
