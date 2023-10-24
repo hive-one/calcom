@@ -74,8 +74,8 @@ const EditProfile = () => {
   const updatePodcastMutation = trpc.viewer.updatePodcast.useMutation();
   const removePodcastMutation = trpc.viewer.removePodcast.useMutation();
 
-  const addPodcastEpMutation = trpc.viewer.addPodcastEp.useMutation();
-  const removePodcastEpMutation = trpc.viewer.removePodcastEp.useMutation();
+  // const addPodcastEpMutation = trpc.viewer.addPodcastEp.useMutation();
+  // const removePodcastEpMutation = trpc.viewer.removePodcastEp.useMutation();
 
   const addVideoMutation = trpc.viewer.addVideo.useMutation();
   const updateVideoMutation = trpc.viewer.updateVideo.useMutation();
@@ -197,7 +197,6 @@ const EditProfile = () => {
           },
         };
         console.log({ expData });
-        console.log("adding exp", expData);
         addWorkExpMutation.mutate(expData);
       }
     });

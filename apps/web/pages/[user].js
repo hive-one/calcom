@@ -12,7 +12,6 @@ import VideoItem from "@ui/valery/video-item";
 import { cva } from "class-variance-authority";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
-import { useState } from "react";
 import { CalendarPlus } from "react-bootstrap-icons";
 import { titleCase } from "title-case";
 
@@ -84,7 +83,6 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
   const profileData = JSON.parse(user);
   const eventTypes = JSON.parse(userEvents);
   const session = userSession ? JSON.parse(userSession) : null;
-  const [firstRender, setFirstRender] = useState(true);
 
   console.log({ profileData, eventTypes, session });
   const bookCallLink = `/${profileData?.username}/${
@@ -107,8 +105,6 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
   const currentRole = profileData?.workExperiences?.filter((item) => item?.isCurrentRole)[0]?.title ?? "";
   const currentCompany =
     profileData?.workExperiences?.filter((item) => item?.isCurrentRole)[0]?.company.name ?? "";
-
-  console.log({ currentCompany, currentRole });
 
   return (
     <div className="flex flex-col items-center bg-white leading-6 text-gray-900">

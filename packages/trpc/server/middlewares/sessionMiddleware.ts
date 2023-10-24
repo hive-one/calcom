@@ -66,10 +66,18 @@ export async function getUserFromSession(ctx: TRPCContextInner, session: Maybe<S
       socialLinks: true,
       facts: true,
       projects: true,
-      workExperiences: true,
+      workExperiences: {
+        include: {
+          company: true,
+        },
+      },
       publications: true,
       books: true,
-      podcasts: true,
+      podcasts: {
+        include: {
+          podcastEpisodes: true,
+        },
+      },
       videos: true,
       mediaAppearances: true,
       organization: {
