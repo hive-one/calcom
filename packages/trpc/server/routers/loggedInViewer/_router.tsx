@@ -92,6 +92,7 @@ type AppsRouterHandlerCache = {
   removeBook?: typeof import("./book.handler").removeBookHandler;
   addPodcast?: typeof import("./podcast.handler").addPodcastHandler;
   updatePodcast?: typeof import("./podcast.handler").updatePodcastHandler;
+  removePodcast?: typeof import("./podcast.handler").removePodcastHandler;
   addPodcastEp?: typeof import("./podcastEpisode.handler").addPodcastEpisodeHandler;
   removePodcastEp?: typeof import("./podcastEpisode.handler").removePodcastEpisodeHandler;
   addVideo?: typeof import("./video.handler").addVideoHandler;
@@ -527,6 +528,19 @@ export const loggedInViewerRouter = router({
     }
 
     return UNSTABLE_HANDLER_CACHE.updatePodcast({ input });
+  }),
+
+  removePodcast: authedProcedure.input(ZPodcastDeleteSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.removePodcast) {
+      UNSTABLE_HANDLER_CACHE.removePodcast = (await import("./podcast.handler")).removePodcastHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.removePodcast) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.removePodcast({ ctx, input });
   }),
 
   addPodcastEp: authedProcedure.input(ZPodcastEpisodeAddSchema).mutation(async ({ ctx, input }) => {

@@ -72,6 +72,7 @@ const EditProfile = () => {
 
   const addPodcastMutation = trpc.viewer.addPodcast.useMutation();
   const updatePodcastMutation = trpc.viewer.updatePodcast.useMutation();
+  const removePodcastMutation = trpc.viewer.removePodcast.useMutation();
 
   const addPodcastEpMutation = trpc.viewer.addPodcastEp.useMutation();
   const removePodcastEpMutation = trpc.viewer.removePodcastEp.useMutation();
@@ -251,7 +252,6 @@ const EditProfile = () => {
       };
 
       delete podData.episodes;
-      console.log("podData", podData);
 
       if (podData?.id) {
         updatePodcastMutation.mutate({ ...podData, id: podData.id });
@@ -259,11 +259,11 @@ const EditProfile = () => {
         addPodcastMutation.mutate(podData);
       }
 
-      pod?.episodes?.map((ep) => {
-        const epData = { ...ep, podcastId: pod?.id };
-        console.log({ epData });
-        addPodcastEpMutation.mutate(epData);
-      });
+      // pod?.episodes?.map((ep) => {
+      //   const epData = { ...ep, podcastId: pod?.id };
+      //   console.log({ epData });
+      //   addPodcastEpMutation.mutate(epData);
+      // });
     });
   };
 
@@ -380,20 +380,21 @@ const EditProfile = () => {
           title: "",
           url: "",
           coverImage: "",
-          episodes: [
-            {
-              title: "",
-              url: "",
-              description: "",
-              coverImage: "",
-            },
-          ],
+          // episodes: [
+          //   {
+          //     title: "",
+          //     url: "",
+          //     description: "",
+          //     coverImage: "",
+          //   },
+          // ],
         },
       ],
     });
   };
 
   const deletePodcast = () => {
+    removePodcastMutation.mutate({ id: profile?.podcasts[0]?.id });
     setProfile({
       ...profile,
       podcasts: null,

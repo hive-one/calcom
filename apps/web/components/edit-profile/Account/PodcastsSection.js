@@ -205,18 +205,18 @@ const PodcastsSection = ({
         </div>
       )}
       <div className="col-span-full mt-6 flex items-center gap-x-3">
-        {profile?.podcasts[0]?.id ? (
+        {/* {profile?.podcasts[0]?.id ? (
           <Button type="button" onClick={addPodcastEpisode} variant="outline" size="sm">
             Add episode
           </Button>
         ) : (
           ""
-        )}
+        )} */}
         <Button type="button" onClick={hasPodcast ? deletePodcast : addPodcast} variant="outline" size="sm">
           {hasPodcast ? "Remove podcast" : "Add podcast"}
         </Button>
-        <span>or</span>
-        <RssFeedModal setProfile={setProfile} profile={profile} />
+        {/* <span>or</span> */}
+        {/* <RssFeedModal setProfile={setProfile} profile={profile} /> */}
       </div>
     </FormBlock>
   );
