@@ -25,7 +25,7 @@ export const addPodcastEpisodeHandler = async ({ ctx, input }: AddPodcastEpisode
       id: ctx.user.id,
     },
     data: {
-      podcastEpisodes: {
+      podcastepisodes: {
         create: {
           ...input,
           updatedAt: new Date(),

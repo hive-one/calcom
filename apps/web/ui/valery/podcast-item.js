@@ -5,14 +5,14 @@ const PodcastItem = ({ podcast }) => {
     <div>
       <p className="font-semibold">HOST</p>
       <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
-        {podcast?.cover_image && (
+        {podcast?.coverImage && (
           <img
-            src={podcast?.cover_image}
+            src={podcast?.coverImage}
             alt={podcast?.title}
             className="aspect-square flex-shrink-0 rounded-lg object-cover"
           />
         )}
-        {!podcast?.cover_image && (
+        {!podcast?.coverImage && (
           <div className="aspect-square flex-shrink-0 rounded-lg bg-gray-200 object-cover">
             <Microphone className="h-8 w-8 text-gray-500" />
           </div>

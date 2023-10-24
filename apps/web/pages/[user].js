@@ -1,5 +1,4 @@
 import { Button } from "@shadcdn/ui";
-import RichContentParser from "@ui/fayaz/RichContentParser";
 import insertNonBreakingSpaces from "@ui/utilities/insert-non-breaking-spaces";
 import BioLink from "@ui/valery/bio-link";
 import BookItem from "@ui/valery/book-item";
@@ -13,10 +12,12 @@ import VideoItem from "@ui/valery/video-item";
 import { cva } from "class-variance-authority";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
+import { useState } from "react";
 import { CalendarPlus } from "react-bootstrap-icons";
 
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
 import { getUsernameList } from "@calcom/lib/defaultEvents";
+import { md } from "@calcom/lib/markdownIt";
 import { Tooltip } from "@calcom/ui";
 
 import PageWrapper from "@components/PageWrapper";
@@ -82,6 +83,7 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
   const profileData = JSON.parse(user);
   const eventTypes = JSON.parse(userEvents);
   const session = userSession ? JSON.parse(userSession) : null;
+  const [firstRender, setFirstRender] = useState(true);
 
   console.log({ profileData, eventTypes, session });
   const bookCallLink = `/${profileData?.username}/${
@@ -181,6 +183,7 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
           ) : (
             ""
           )}
+
           {user?.email?.includes("hive.one") || user?.email?.includes("bord.id") ? (
             <div>
               <Button
@@ -209,7 +212,13 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
         </div>
 
         {/* About */}
-        {profileData?.bio ? <RichContentParser content={profileData.bio} /> : ""}
+        {profileData?.bio ? (
+          <>
+            <div id="bio" dangerouslySetInnerHTML={{ __html: md.render(profileData.bio) }} />
+          </>
+        ) : (
+          ""
+        )}
       </div>
       {/* Gray section */}
       <div className="relative flex w-full flex-col items-center bg-gray-200 pb-[88px] pt-14">
@@ -276,7 +285,7 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
         {profileData?.podcasts?.length ? (
           <Section title="Podcasts">
             <div id="podcasts">
-              <PodcastItem podcast={profileData?.podcasts} />
+              <PodcastItem podcast={profileData?.podcasts[0]} />
             </div>
           </Section>
         ) : (
@@ -359,6 +368,7 @@ export const getServerSideProps = async (context) => {
       socialLinks: true,
       facts: true,
       mediaAppearances: true,
+      podcastepisodes: true,
     },
   });
 

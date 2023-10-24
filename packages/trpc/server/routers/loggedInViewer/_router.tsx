@@ -19,7 +19,8 @@ import {
   ZMediaAppearanceRemoveSchema,
   ZMediaAppearanceUpdateSchema,
 } from "./mediaAppearance.schema";
-import { ZPodcastAddSchema } from "./podcast.schema";
+import { ZPodcastAddSchema, ZPodcastDeleteSchema, ZPodcastUpdateSchema } from "./podcast.schema";
+import { ZPodcastEpisodeAddSchema } from "./podcastEpisode.schema";
 import { ZProjectAddSchema, ZProjectUpdateSchema, ZProjectRemoveSchema } from "./project.schema";
 import {
   ZPublicationAddSchema,
@@ -90,6 +91,9 @@ type AppsRouterHandlerCache = {
   updateBook?: typeof import("./book.handler").updateBookHandler;
   removeBook?: typeof import("./book.handler").removeBookHandler;
   addPodcast?: typeof import("./podcast.handler").addPodcastHandler;
+  updatePodcast?: typeof import("./podcast.handler").updatePodcastHandler;
+  addPodcastEp?: typeof import("./podcastEpisode.handler").addPodcastEpisodeHandler;
+  removePodcastEp?: typeof import("./podcastEpisode.handler").removePodcastEpisodeHandler;
   addVideo?: typeof import("./video.handler").addVideoHandler;
   updateVideo?: typeof import("./video.handler").updateVideoHandler;
   removeVideo?: typeof import("./video.handler").removeVideoHandler;
@@ -510,6 +514,49 @@ export const loggedInViewerRouter = router({
     }
 
     return UNSTABLE_HANDLER_CACHE.addPodcast({ ctx, input });
+  }),
+
+  updatePodcast: authedProcedure.input(ZPodcastUpdateSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.updatePodcast) {
+      UNSTABLE_HANDLER_CACHE.updatePodcast = (await import("./podcast.handler")).updatePodcastHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.updatePodcast) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.updatePodcast({ ctx, input });
+  }),
+
+  addPodcastEp: authedProcedure.input(ZPodcastEpisodeAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addPodcastEp) {
+      UNSTABLE_HANDLER_CACHE.addPodcastEp = (
+        await import("./podcastEpisode.handler")
+      ).addPodcastEpisodeHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addPodcastEp) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addPodcastEp({ ctx, input });
+  }),
+
+  removePodcastEp: authedProcedure.input(ZPodcastDeleteSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.removePodcastEp) {
+      UNSTABLE_HANDLER_CACHE.removePodcastEp = (
+        await import("./podcastEpisode.handler")
+      ).removePodcastEpisodeHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.removePodcastEp) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.removePodcastEp({ ctx, input });
   }),
 
   addVideo: authedProcedure.input(ZVideoAddSchema).mutation(async ({ ctx, input }) => {

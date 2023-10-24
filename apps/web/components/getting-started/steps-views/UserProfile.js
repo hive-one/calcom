@@ -78,7 +78,6 @@ const UserProfile = () => {
     },
   });
   const onSubmit = handleSubmit((data) => {
-    console.info({ data, errors });
     if (!data?.advises?.length) {
       setError("advises", { type: "custom", message: "This field is required" });
       return;

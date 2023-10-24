@@ -3,7 +3,7 @@ import Spinner from "@ui/spinner";
 import clsx from "clsx";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Linkedin } from "react-bootstrap-icons";
 import toast from "react-hot-toast";
 
@@ -44,6 +44,8 @@ const EditProfile = () => {
     await utils.viewer.me.invalidate();
   };
 
+  useEffect(() => setProfile(user), [user]);
+
   const mutation = trpc.viewer.updateProfile.useMutation({
     onSuccess: onSuccess,
   });
@@ -69,6 +71,11 @@ const EditProfile = () => {
   const removeBookMutation = trpc.viewer.removeBook.useMutation();
 
   const addPodcastMutation = trpc.viewer.addPodcast.useMutation();
+  const updatePodcastMutation = trpc.viewer.updatePodcast.useMutation();
+
+  const addPodcastEpMutation = trpc.viewer.addPodcastEp.useMutation();
+  const removePodcastEpMutation = trpc.viewer.removePodcastEp.useMutation();
+
   const addVideoMutation = trpc.viewer.addVideo.useMutation();
   const updateVideoMutation = trpc.viewer.updateVideo.useMutation();
   const removeVideoMutation = trpc.viewer.removeVideo.useMutation();
@@ -235,6 +242,25 @@ const EditProfile = () => {
         addMediaAppearenceMutation.mutate(appData);
       }
     });
+
+    profile?.podcasts?.map((pod) => {
+      const podData = {
+        ...pod,
+      };
+
+      delete podData.episodes;
+      console.log("podData", podData);
+
+      if (podData?.id) {
+        updatePodcastMutation.mutate({ ...podData, id: podData.id });
+      } else {
+        addPodcastMutation.mutate(podData);
+      }
+
+      pod?.episodes?.map((ep) => {
+        addPodcastEpMutation.mutate(ep);
+      });
+    });
   };
 
   const addAdviceItem = () => {
@@ -345,17 +371,21 @@ const EditProfile = () => {
   const addPodcast = () => {
     setProfile({
       ...profile,
-      podcasts: {
-        title: "",
-        url: "",
-        cover_image: "",
-        episodes: [
-          {
-            title: "",
-            url: "",
-          },
-        ],
-      },
+      podcasts: [
+        {
+          title: "",
+          url: "",
+          coverImage: "",
+          episodes: [
+            {
+              title: "",
+              url: "",
+              description: "",
+              coverImage: "",
+            },
+          ],
+        },
+      ],
     });
   };
 
@@ -367,30 +397,22 @@ const EditProfile = () => {
   };
 
   const addPodcastEpisode = () => {
+    let newPods = [...profile.podcasts];
+    newPods[0].episodes = newPods[0].episodes?.length
+      ? [...newPods[0].episodes, { title: "", url: "", description: "", coverImage: "" }]
+      : [{ title: "", url: "", description: "", coverImage: "" }];
     setProfile({
       ...profile,
-      podcasts: {
-        ...profile.podcasts,
-        episodes: [
-          ...profile.podcasts.episodes,
-          {
-            title: "",
-            url: "",
-          },
-        ],
-      },
+      podcasts: newPods,
     });
   };
 
   const removePodcastEpisode = (index) => {
-    const newEpisodes = [...profile.podcasts.episodes];
-    newEpisodes.splice(index, 1);
+    let newPods = [...profile.podcasts];
+    newPods[0].episodes.splice(index, 1);
     setProfile({
       ...profile,
-      podcasts: {
-        ...profile.podcasts,
-        episodes: newEpisodes,
-      },
+      podcasts: newPods,
     });
   };
 
@@ -700,6 +722,7 @@ export const getServerSideProps = async (context) => {
       socialLinks: true,
       facts: true,
       mediaAppearances: true,
+      podcastepisodes: true,
     },
   });
 
