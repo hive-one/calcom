@@ -5,7 +5,7 @@ export const ZBookAddSchema = z.object({
   title: z.string(),
   url: z.string(),
   description: z.string().nullish(),
-  converImage: z.string().nullish(),
+  coverImage: z.string().nullish(),
 });
 export const ZBookRemoveSchema = z.object({
   isbn: z.string(),
@@ -16,7 +16,7 @@ export const ZBookUpdateSchema = z.object({
   title: z.string(),
   url: z.string(),
   description: z.string().nullish(),
-  converImage: z.string().nullish(),
+  coverImage: z.string().nullish(),
 });
 
 export type TBookAddSchema = z.infer<typeof ZBookAddSchema>;

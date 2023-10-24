@@ -330,7 +330,7 @@ const EditProfile = () => {
       title: "",
       url: "",
       description: "",
-      converImage: "",
+      coverImage: "",
       updatedAt: new Date(),
     };
     setProfile((prevProfile) => ({
