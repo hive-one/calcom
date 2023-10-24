@@ -4,7 +4,7 @@ import { SignOut, LinkSimple, User } from "@phosphor-icons/react";
 import * as Menu from "@radix-ui/react-dropdown-menu";
 import Link from "next/link";
 
-const UserMenu = ({ username, logOut }) => {
+const UserMenu = ({ username }) => {
   const menuItems = [
     {
       label: "View public profile",

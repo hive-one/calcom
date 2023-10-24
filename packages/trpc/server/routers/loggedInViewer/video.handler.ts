@@ -23,8 +23,9 @@ export const addVideoHandler = async ({ ctx, input }: AddVideo) => {
     data: {
       videos: {
         create: {
-          ...input,
-          updatedAt: new Date(),
+          title: input.title,
+          url: input.url,
+          description: input.description!,
         },
       },
     },
@@ -44,6 +45,7 @@ export const updateVideoHandler = async ({ input }: UpdateVideo) => {
     },
     data: {
       ...input,
+      description: input.description!,
       updatedAt: new Date(),
     },
   });

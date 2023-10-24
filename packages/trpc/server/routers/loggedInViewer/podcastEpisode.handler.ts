@@ -5,7 +5,7 @@ import type { TrpcSessionUser } from "@calcom/trpc/server/trpc";
 
 import type {
   TPodcastEpisodeAddSchema,
-  ZPodcastEpisodeDeleteSchema,
+  TPodcastEpisodeDeleteSchema,
   TPodcastEpisodeUpdateSchema,
 } from "./podcastEpisode.schema";
 
@@ -42,7 +42,7 @@ type RemovePodcastEpisode = {
     user: NonNullable<TrpcSessionUser>;
     res?: NextApiResponse | GetServerSidePropsContext["res"];
   };
-  input: ZPodcastEpisodeDeleteSchema;
+  input: TPodcastEpisodeDeleteSchema;
 };
 
 export const removePodcastEpisodeHandler = async ({ ctx, input }: RemovePodcastEpisode) => {

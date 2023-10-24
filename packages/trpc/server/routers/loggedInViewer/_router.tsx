@@ -386,7 +386,7 @@ export const loggedInViewerRouter = router({
         throw new Error("Failed to load handler");
       }
 
-      return UNSTABLE_HANDLER_CACHE.updateWorkExperience({ ctx, input });
+      return UNSTABLE_HANDLER_CACHE.updateWorkExperience({ input });
     }),
 
   removeWorkExperience: authedProcedure
@@ -526,7 +526,7 @@ export const loggedInViewerRouter = router({
       throw new Error("Failed to load handler");
     }
 
-    return UNSTABLE_HANDLER_CACHE.updatePodcast({ ctx, input });
+    return UNSTABLE_HANDLER_CACHE.updatePodcast({ input });
   }),
 
   addPodcastEp: authedProcedure.input(ZPodcastEpisodeAddSchema).mutation(async ({ ctx, input }) => {
@@ -644,7 +644,7 @@ export const loggedInViewerRouter = router({
         throw new Error("Failed to load handler");
       }
 
-      return UNSTABLE_HANDLER_CACHE.removeMediaAppearance({ input });
+      return UNSTABLE_HANDLER_CACHE.removeMediaAppearance({ ctx, input });
     }),
 
   addFact: authedProcedure.input(ZFactAddSchema).mutation(async ({ input }) => {

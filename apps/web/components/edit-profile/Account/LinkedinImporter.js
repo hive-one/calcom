@@ -28,7 +28,7 @@ const handleSubmit = async (url, setLoading, setLinkedinData) => {
   }
 };
 
-const LinkedinImporter = ({ profile, setProfile }) => {
+const LinkedinImporter = ({ setProfile }) => {
   const [loading, setLoading] = useState(false);
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [linkedinData, setLinkedinData] = useState(null);

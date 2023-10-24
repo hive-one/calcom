@@ -28,7 +28,7 @@ export const addMediaAppearanceHandler = async ({ ctx, input }: AddMediaAppearan
       mediaAppearances: {
         create: {
           ...input,
-          updatedAt: new Date(),
+          description: input.description!,
         },
       },
     },
@@ -71,6 +71,7 @@ export const updateMediaAppearanceHandler = async ({ input }: UpdateMediaAppeara
     },
     data: {
       ...input,
+      description: input.description!,
       updatedAt: new Date(),
     },
   });

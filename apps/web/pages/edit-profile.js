@@ -235,6 +235,8 @@ const EditProfile = () => {
         mediaType: "",
         podcastId: null,
         videoId: null,
+        podcastId: null,
+        updatedAt: new Date(),
       };
       if (app?.id) {
         updateMediaAppearenceMutation.mutate(appData);

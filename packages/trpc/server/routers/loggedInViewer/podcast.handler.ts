@@ -3,7 +3,7 @@ import type { GetServerSidePropsContext, NextApiResponse } from "next";
 import { prisma } from "@calcom/prisma";
 import type { TrpcSessionUser } from "@calcom/trpc/server/trpc";
 
-import type { TPodcastAddSchema, ZPodcastDeleteSchema, TPodcastUpdateSchema } from "./podcast.schema";
+import type { TPodcastAddSchema, TPodcastDeleteSchema, TPodcastUpdateSchema } from "./podcast.schema";
 
 type AddPodcast = {
   ctx: {
@@ -38,7 +38,7 @@ type RemovePodcast = {
     user: NonNullable<TrpcSessionUser>;
     res?: NextApiResponse | GetServerSidePropsContext["res"];
   };
-  input: ZPodcastDeleteSchema;
+  input: TPodcastDeleteSchema;
 };
 
 export const removePodcastHandler = async ({ ctx, input }: RemovePodcast) => {
