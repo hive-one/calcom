@@ -258,7 +258,9 @@ const EditProfile = () => {
       }
 
       pod?.episodes?.map((ep) => {
-        addPodcastEpMutation.mutate(ep);
+        const epData = { ...ep, podcastId: pod?.id };
+        console.log({ epData });
+        addPodcastEpMutation.mutate(epData);
       });
     });
   };
@@ -722,7 +724,6 @@ export const getServerSideProps = async (context) => {
       socialLinks: true,
       facts: true,
       mediaAppearances: true,
-      podcastepisodes: true,
     },
   });
 

@@ -261,7 +261,7 @@ model User {
   publications     Publication[]
   books            Book[]
   podcasts         Podcast[]
-  podcastepisodes  PodcastEpisode[]
+  podcastEpisodes  PodcastEpisode[]
   videos           Video[]
   mediaAppearances MediaAppearance[]
 

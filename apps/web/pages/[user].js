@@ -368,7 +368,7 @@ export const getServerSideProps = async (context) => {
       socialLinks: true,
       facts: true,
       mediaAppearances: true,
-      podcastepisodes: true,
+      podcastEpisodes: true,
     },
   });
 
