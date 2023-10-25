@@ -566,13 +566,6 @@ const EditProfile = () => {
     }));
   };
 
-  // const hasBasicDetails = (profile) => {
-  //   const hasName = profile.name || profile?.name?.length;
-  //   const hasBio = profile?.bio?.content?.length && profile?.bio?.content[0]?.content?.length;
-  //   console.info({ hasName, hasBio });
-  //   return hasName && hasBio;
-  // };
-
   const SETTINGS = [
     {
       label: "Profile",

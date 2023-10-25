@@ -106,6 +106,8 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
   const currentCompany =
     profileData?.workExperiences?.filter((item) => item?.isCurrentRole)[0]?.company.name ?? "";
 
+  console.log({ currentRole, currentCompany });
+
   return (
     <div className="flex flex-col items-center bg-white leading-6 text-gray-900">
       {/* Profile header */}

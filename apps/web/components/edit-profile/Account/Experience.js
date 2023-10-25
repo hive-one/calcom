@@ -138,7 +138,7 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                             experience: newExperience,
                           });
                         }}
-                        disabled={role.end_date === "Present"}
+                        disabled={role.isCurrentRole}
                       />
                       <div>
                         <label className="mt-1 inline-flex items-center">
@@ -149,9 +149,9 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                             onChange={(e) => {
                               const newExperience = profile.experience;
                               if (e.target.checked) {
-                                newExperience[companyId].roles[roleIndex].end_date = "Present";
+                                newExperience[companyId].roles[roleIndex].isCurrentRole = true;
                               } else {
-                                newExperience[companyId].roles[roleIndex].end_date = "";
+                                newExperience[companyId].roles[roleIndex].isCurrentRole = false;
                               }
                               setProfile({
                                 ...profile,
