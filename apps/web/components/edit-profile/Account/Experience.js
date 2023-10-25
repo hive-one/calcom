@@ -4,134 +4,195 @@ import React from "react";
 
 import EmptyState from "./EmptyState";
 import FormBlock from "./FormBlock";
+import TimelineBlock from "./TimelineBlock";
 
 const formatDate = (date) => date?.toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false });
 
-const Experience = ({ profile, setProfile, addExperience, removeExperience }) => {
+const Experience = ({ profile, setProfile, addExperience, removeExperience, removeExperienceRole }) => {
   return (
     <FormBlock title="Experience" description="Your work experience.">
-      {!profile?.workExperiences?.length > 0 && <EmptyState label="Add some roles and get started." />}
+      {!profile?.experience ||
+        (!Object.entries(profile?.experience)?.length > 0 && (
+          <EmptyState label="Add some roles and get started." />
+        ))}
       <div className="space-y-4 divide-y">
-        {profile?.workExperiences?.length > 0 &&
-          profile.workExperiences.map((exp, expIndex) => (
-            <div key={expIndex} className="relative space-y-4 pt-4">
-              {profile.workExperiences.length > 1 && (
+        {profile?.experience &&
+          Object.entries(profile?.experience)?.length > 0 &&
+          Object.entries(profile.experience).map(([companyId, company], companyIndex) => (
+            <div key={companyIndex} className="relative space-y-4 pt-4">
+              {profile.experience.length > 1 && (
                 <RemoveButton
                   label="Remove company"
-                  onClick={() => removeExperience({ index: expIndex, id: exp?.id })}
+                  onClick={() => removeExperience({ companyId: company?.companyId, index: companyIndex })}
                   className="absolute right-0 top-7 z-30"
                 />
               )}
               <div className="sm:col-span-3">
                 <Label>Company/Institution</Label>
                 <Input
-                  value={exp?.company?.name}
+                  value={company.name}
                   onChange={(e) => {
-                    const newExperience = [...profile.workExperiences];
-                    newExperience[expIndex].company = e.target.value;
+                    const newExperience = profile.experience;
+                    newExperience[companyId].name = e.target.value;
                     setProfile({
                       ...profile,
-                      workExperiences: newExperience,
+                      experience: newExperience,
                     });
                   }}
                 />
               </div>
-
               <div className="sm:col-span-3">
                 <Label>URL</Label>
                 <Input
                   label="URL"
                   type="url"
-                  value={exp?.company?.url}
+                  value={company.url}
                   onChange={(e) => {
-                    const newExperience = [...profile.workExperiences];
-                    newExperience[expIndex].url = e.target.value;
+                    const newExperience = profile.experience;
+                    newExperience[companyId].url = e.target.value;
                     setProfile({
                       ...profile,
-                      workExperiences: newExperience,
+                      experience: newExperience,
                     });
                   }}
                 />
               </div>
 
-              <div className="sm:col-span-3">
-                <Label>Role/Title</Label>
-                <Input
-                  label="Role/Title"
-                  value={exp.title}
-                  onChange={(e) => {
-                    const newExperience = [...profile.workExperiences];
-                    newExperience[expIndex].title = e.target.value;
-                    setProfile({
-                      ...profile,
-                      workExperiences: newExperience,
-                    });
-                  }}
-                />
-              </div>
-              <div className="sm:col-span-3">
-                <Label>Start Date</Label>
-                <Input
-                  type="date"
-                  required
-                  value={exp?.startYear + "-" + formatDate(exp?.startMonth) + "-" + formatDate(exp?.startDay)}
-                  onChange={(e) => {
-                    const newExperience = [...profile.workExperiences];
-                    newExperience[expIndex].workStart = e.target.value;
-                    newExperience[expIndex].startDay = parseInt(e.target.value.split("-")[2]);
-                    newExperience[expIndex].startMonth = parseInt(e.target.value.split("-")[1]);
-                    newExperience[expIndex].startYear = parseInt(e.target.value.split("-")[0]);
-
-                    console.log(newExperience);
-                    setProfile({
-                      ...profile,
-                      workExperiences: newExperience,
-                    });
-                  }}
-                />
-              </div>
-              <div className="mt-4 sm:col-span-3">
-                <Label>End Date</Label>
-                <Input
-                  label="End Date"
-                  type="date"
-                  value={exp?.endYear + "-" + formatDate(exp?.endMonth) + "-" + formatDate(exp?.endDay)}
-                  required
-                  onChange={(e) => {
-                    const newExperience = [...profile.workExperiences];
-                    newExperience[expIndex].workEnd = e.target.value;
-                    newExperience[expIndex].endDay = parseInt(e.target.value.split("-")[2]);
-                    newExperience[expIndex].endMonth = parseInt(e.target.value.split("-")[1]);
-                    newExperience[expIndex].endYear = parseInt(e.target.value.split("-")[0]);
-                    console.log("newExperience end", newExperience);
-                    setProfile({
-                      ...profile,
-                      workExperiences: newExperience,
-                    });
-                  }}
-                  disabled={exp?.isCurrentRole}
-                />
-                <label className="mt-1 inline-flex items-center">
-                  <input
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    defaultChecked={exp?.isCurrentRole}
-                    onChange={(e) => {
-                      const newExperience = [...profile.workExperiences];
-                      if (e.target.checked) {
-                        newExperience[expIndex].isCurrentRole = true;
-                      } else {
-                        newExperience[expIndex].isCurrentRole = false;
-                      }
+              {company?.roles?.map((role, roleIndex) => (
+                <div key={roleIndex} className="relative">
+                  {company.roles.length > 1 && (
+                    <RemoveButton
+                      label="Remove role"
+                      onClick={() => removeExperienceRole({ roleIndex, companyId, expId: role?.id })}
+                      className="absolute -top-px right-0 z-30"
+                    />
+                  )}
+                  <TimelineBlock trail={true}>
+                    <div className="sm:col-span-3">
+                      <Label>Role/Title</Label>
+                      <Input
+                        label="Role/Title"
+                        value={role.title}
+                        onChange={(e) => {
+                          const newExperience = profile.experience;
+                          newExperience[companyId].roles[roleIndex].title = e.target.value;
+                          setProfile({
+                            ...profile,
+                            experience: newExperience,
+                          });
+                        }}
+                      />
+                    </div>
+                    <div className="sm:col-span-3">
+                      <Label>Start Date</Label>
+                      <Input
+                        type="date"
+                        required
+                        value={
+                          role?.startYear +
+                          "-" +
+                          formatDate(role?.startMonth) +
+                          "-" +
+                          formatDate(role?.startDay)
+                        }
+                        onChange={(e) => {
+                          const newExperience = profile.experience;
+                          newExperience[companyId].roles[roleIndex].startDay = parseInt(
+                            e.target.value.split("-")[2]
+                          );
+                          newExperience[companyId].roles[roleIndex].startMonth = parseInt(
+                            e.target.value.split("-")[1]
+                          );
+                          newExperience[companyId].roles[roleIndex].startYear = parseInt(
+                            e.target.value.split("-")[0]
+                          );
+                          setProfile({
+                            ...profile,
+                            experience: newExperience,
+                          });
+                        }}
+                      />
+                    </div>
+                    <div className="mt-4 sm:col-span-3">
+                      <Label>End Date</Label>
+                      <Input
+                        label="End Date"
+                        type="date"
+                        value={
+                          role?.endYear + "-" + formatDate(role?.endMonth) + "-" + formatDate(role?.endDay)
+                        }
+                        required
+                        onChange={(e) => {
+                          const newExperience = profile.experience;
+                          newExperience[companyId].roles[roleIndex].endDay = parseInt(
+                            e.target.value.split("-")[2]
+                          );
+                          newExperience[companyId].roles[roleIndex].endMonth = parseInt(
+                            e.target.value.split("-")[1]
+                          );
+                          newExperience[companyId].roles[roleIndex].endYear = parseInt(
+                            e.target.value.split("-")[0]
+                          );
+                          setProfile({
+                            ...profile,
+                            experience: newExperience,
+                          });
+                        }}
+                        disabled={role.end_date === "Present"}
+                      />
+                      <div>
+                        <label className="mt-1 inline-flex items-center">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                            defaultChecked={role.end_date === "Present"}
+                            onChange={(e) => {
+                              const newExperience = profile.experience;
+                              if (e.target.checked) {
+                                newExperience[companyId].roles[roleIndex].end_date = "Present";
+                              } else {
+                                newExperience[companyId].roles[roleIndex].end_date = "";
+                              }
+                              setProfile({
+                                ...profile,
+                                experience: newExperience,
+                              });
+                            }}
+                          />
+                          <span className="ml-2 text-sm">I currently work here</span>
+                        </label>
+                      </div>
+                    </div>
+                  </TimelineBlock>
+                </div>
+              ))}
+              <TimelineBlock trail={false}>
+                <div className="col-span-full">
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      const newExperience = profile.experience;
+                      newExperience[companyId].roles.push({
+                        title: "",
+                        description: "",
+                        startDay: "",
+                        startMonth: "",
+                        startYear: "",
+                        endDay: "",
+                        endMonth: "",
+                        endYear: "",
+                      });
                       setProfile({
                         ...profile,
-                        workExperiences: newExperience,
+                        experience: newExperience,
                       });
                     }}
-                  />
-                  <span className="ml-2 text-sm">I currently work here</span>
-                </label>
-              </div>
+                    variant="outline"
+                    size="sm">
+                    Add Role
+                  </Button>
+                </div>
+              </TimelineBlock>
             </div>
           ))}
       </div>

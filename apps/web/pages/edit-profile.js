@@ -29,6 +29,13 @@ import { ssrInit } from "@server/lib/ssr";
 
 import { Container } from "../ui";
 
+var groupBy = function (xs, key) {
+  return xs.reduce(function (rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});
+};
+
 const EditProfile = () => {
   const [user] = trpc.viewer.me.useSuspenseQuery();
   const [isLoading, setIsLoading] = useState();
@@ -36,7 +43,8 @@ const EditProfile = () => {
   const [profile, setProfile] = useState(user);
   const avatarRef = useRef(null);
   const [activeSetting, setActiveSetting] = useState("profile");
-  console.log({ user, profile });
+  // console.log({ user, profile });
+  // console.log({ workExp: profile?.workExperiences, exp: profile?.experience });
 
   const utils = trpc.useContext();
   const onSuccess = async () => {
@@ -44,7 +52,57 @@ const EditProfile = () => {
     await utils.viewer.me.invalidate();
   };
 
-  useEffect(() => setProfile(user), [user]);
+  const transformExpForUI = (a) => {
+    return Object.entries(groupBy(a?.workExperiences, "companyId")).map(([id, exp]) => {
+      if (exp?.length > 1) {
+        return {
+          companyId: parseInt(id),
+          name: exp[0]?.company.name,
+          url: exp[0]?.company.url,
+          description: exp[0]?.company.description ?? "",
+          roles: exp?.map((role) => {
+            return {
+              description: role.description ?? "",
+              endDay: role.endDay,
+              endMonth: role.endMonth,
+              endYear: role.endYear,
+              startDay: role.startDay,
+              startMonth: role.startMonth,
+              startYear: role.startYear,
+              title: role.title,
+              id: role.id ?? null,
+              isCurrentRole: role.isCurrentRole,
+            };
+          }),
+        };
+      }
+
+      return {
+        companyId: parseInt(id),
+        name: exp[0]?.company.name,
+        url: exp[0]?.company.url,
+        description: exp[0]?.company.description ?? "",
+        roles: [
+          {
+            description: exp[0].description ?? "",
+            endDay: exp[0].endDay,
+            endMonth: exp[0].endMonth,
+            endYear: exp[0].endYear,
+            startDay: exp[0].startDay,
+            startMonth: exp[0].startMonth,
+            startYear: exp[0].startYear,
+            title: exp[0].title,
+            id: exp[0].id ?? null,
+            isCurrentRole: exp[0].isCurrentRole,
+          },
+        ],
+      };
+    });
+  };
+
+  useEffect(() => {
+    setProfile({ ...user, experience: transformExpForUI(profile) });
+  }, [user]);
 
   const mutation = trpc.viewer.updateProfile.useMutation({
     onSuccess: onSuccess,
@@ -158,49 +216,6 @@ const EditProfile = () => {
       }
     });
 
-    profile?.workExperiences?.map((exp) => {
-      if (exp?.id) {
-        let expData = {
-          id: exp?.id,
-          title: exp.title,
-          description: exp?.description ?? "",
-          startDay: exp.startDay,
-          startMonth: exp.startMonth,
-          startYear: exp.startYear,
-          endDay: exp.endDay,
-          endMonth: exp.endMonth,
-          endYear: exp.endYear,
-          userId: user?.id,
-          companyId: exp?.companyId,
-        };
-        updateWorkExpMutation.mutate(expData);
-      } else {
-        let expData = {
-          company: {
-            name: exp.company,
-            url: exp.url,
-            linkedInId: JSON.stringify(Math.floor(Math.random() * 100)),
-          },
-          workExperience: {
-            title: exp.title,
-            description: exp?.description ?? "",
-            updatedAt: new Date(),
-            userId: user?.id,
-            startDay: exp.startDay,
-            startMonth: exp.startMonth,
-            startYear: exp.startYear,
-            endDay: exp.endDay,
-            endMonth: exp.endMonth,
-            endYear: exp.endYear,
-            isCurrentRole: exp?.isCurrentRole,
-            user,
-          },
-        };
-        console.log({ expData });
-        addWorkExpMutation.mutate(expData);
-      }
-    });
-
     profile?.publications?.map((pub) => {
       let pubData = {
         ...pub,
@@ -257,12 +272,37 @@ const EditProfile = () => {
       } else {
         addPodcastMutation.mutate(podData);
       }
+    });
 
-      // pod?.episodes?.map((ep) => {
-      //   const epData = { ...ep, podcastId: pod?.id };
-      //   console.log({ epData });
-      //   addPodcastEpMutation.mutate(epData);
-      // });
+    Object.entries(profile?.experience)?.map(([id, exp]) => {
+      if (exp?.roles?.length) {
+        exp.roles.map((role) => {
+          if (role?.id) {
+            const updateWorkExData = {
+              ...role,
+              id: role?.id,
+              userId: user?.id,
+              companyId: exp?.companyId,
+            };
+
+            console.log({ updateWorkExData });
+            updateWorkExpMutation.mutate(updateWorkExData);
+          } else {
+            const addWorkExData = {
+              company: {
+                name: exp?.name,
+                url: exp.url,
+                description: exp.description ?? "",
+              },
+              workExperience: {
+                ...role,
+              },
+            };
+            console.log({ addWorkExData });
+            addWorkExpMutation.mutate(addWorkExData);
+          }
+        });
+      }
     });
   };
 
@@ -295,8 +335,30 @@ const EditProfile = () => {
 
   const addExperience = () => {
     const newExperience = {
-      company: { company: "", url: "", title: "" },
-      workExperience: {
+      company: "",
+      url: "",
+      roles: [
+        {
+          title: "",
+          description: "",
+          start_date: "",
+          end_date: "",
+        },
+      ],
+    };
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      experience: prevProfile?.experience?.length
+        ? [...prevProfile.experience, newExperience]
+        : [newExperience],
+    }));
+  };
+
+  const addExperienceRole = ({ expIndex }) => {
+    let newExp = [...profile.workExperiences];
+    newExp[expIndex].roles = [
+      ...newExp[expIndex].roles,
+      {
         description: "",
         startDay: "",
         startMonth: "",
@@ -305,10 +367,10 @@ const EditProfile = () => {
         endMonth: "",
         endYear: "",
       },
-    };
+    ];
     setProfile((prevProfile) => ({
       ...prevProfile,
-      workExperiences: [...prevProfile.workExperiences, newExperience],
+      workExperiences: newExp,
     }));
   };
 
@@ -460,20 +522,31 @@ const EditProfile = () => {
     }));
   };
 
-  const removeExperience = ({ index, id }) => {
-    removeWorkExpMutation.mutate({ id });
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      workExperiences: prevProfile.workExperiences.filter((_, i) => i !== index),
-    }));
+  const removeExperience = ({ index, companyId }) => {
+    console.log({ companyId });
+    profile?.experience?.map((exp) => {
+      if (exp?.companyId === companyId) {
+        exp?.roles?.map((role) => {
+          removeWorkExpMutation.mutate({ id: role?.id });
+        });
+      }
+    });
+
+    setProfile((prevProfile) => {
+      let newExperience = prevProfile.experience;
+      newExperience = newExperience.filter((exp) => exp.companyId !== companyId);
+      return {
+        ...prevProfile,
+        experience: newExperience,
+      };
+    });
   };
 
-  const removeExperienceRole = (experienceIndex, roleIndex) => {
+  const removeExperienceRole = ({ roleIndex, companyId, expId }) => {
+    removeWorkExpMutation.mutate({ id: expId });
     setProfile((prevProfile) => {
-      const newExperience = [...prevProfile.experience];
-      newExperience[experienceIndex].roles = newExperience[experienceIndex].roles.filter(
-        (_, i) => i !== roleIndex
-      );
+      const newExperience = prevProfile.experience;
+      newExperience[companyId].roles = newExperience[companyId].roles.filter((_, i) => i !== roleIndex);
       return {
         ...prevProfile,
         experience: newExperience,
@@ -559,6 +632,7 @@ const EditProfile = () => {
           profile={profile}
           setProfile={setProfile}
           addExperience={addExperience}
+          addExperienceRole={addExperienceRole}
           removeExperience={removeExperience}
           removeExperienceRole={removeExperienceRole}
         />
