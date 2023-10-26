@@ -1,5 +1,6 @@
 import { AuthContextProvider } from "context/authContext";
 import React from "react";
+import { Toaster } from "react-hot-toast";
 
 import { trpc } from "@calcom/trpc/react";
 
@@ -13,6 +14,7 @@ function MyApp(props: AppProps) {
   return (
     <AuthContextProvider>
       <Component {...pageProps} />
+      <Toaster />
     </AuthContextProvider>
   );
 }

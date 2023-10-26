@@ -13,11 +13,11 @@ async function getEpisodes(url, setProfile) {
   try {
     const feed = await fetch(`/api/rss-feed?feed=${url}`).then((res) => res.json());
     if (feed.episodes && feed.title && feed.url) {
-      const { episodes, title, cover_image, url } = feed;
+      const { episodes, title, coverImage, url } = feed;
       const newPodcast = {
         title,
         url,
-        cover_image,
+        coverImage,
         episodes,
       };
       setProfile((prevProfile) => ({
@@ -92,7 +92,7 @@ const PodcastsSection = ({
   addPodcastEpisode,
   removePodcastEpisode,
 }) => {
-  const hasPodcast = profile?.podcast?.episodes;
+  const hasPodcast = profile?.podcasts?.length;
   return (
     <FormBlock title="Podcasts" description="Showcase your star podcasts.">
       {!hasPodcast ? (
@@ -103,46 +103,53 @@ const PodcastsSection = ({
             <Label>Title</Label>
             <Input
               required
-              value={profile.podcast.title}
-              onChange={(e) =>
+              value={profile?.podcasts[0]?.title}
+              onChange={(e) => {
+                const newPod = [...profile.podcasts];
+                newPod[0].title = e.target.value;
                 setProfile({
                   ...profile,
-                  podcast: { ...profile.podcast, title: e.target.value },
-                })
-              }
+                  podcasts: newPod,
+                });
+              }}
             />
           </div>
 
           <div>
             <Label>URL</Label>
             <Input
+              type="url"
               required
-              value={profile.podcast.url}
-              onChange={(e) =>
+              value={profile?.podcasts[0]?.url}
+              onChange={(e) => {
+                const newPod = [...profile.podcasts];
+                newPod[0].url = e.target.value;
                 setProfile({
                   ...profile,
-                  podcast: { ...profile.podcast, url: e.target.value },
-                })
-              }
+                  podcasts: newPod,
+                });
+              }}
             />
           </div>
           <div>
             <Label>Cover Image URL</Label>
             <Input
               label="Cover image URL"
-              value={profile.podcast.cover_image}
-              onChange={(e) =>
+              value={profile?.podcasts[0].coverImage}
+              onChange={(e) => {
+                const newPod = [...profile.podcasts];
+                newPod[0].coverImage = e.target.value;
                 setProfile({
                   ...profile,
-                  podcast: { ...profile.podcast, cover_image: e.target.value },
-                })
-              }
+                  podcasts: newPod,
+                });
+              }}
             />
           </div>
-          {profile.podcast?.cover_image ? (
+          {profile?.podcasts[0]?.coverImage ? (
             <img
-              src={profile.podcast?.cover_image}
-              alt={profile.podcast?.title}
+              src={profile?.podcasts[0]?.coverImage}
+              alt={profile?.podcasts[0]?.title}
               className="h-16 w-16 rounded-lg object-cover"
             />
           ) : (
@@ -150,20 +157,20 @@ const PodcastsSection = ({
               <Image className="h-8 w-8 text-gray-500" />
             </div>
           )}
-          {profile?.podcast.episodes?.length > 0 &&
-            profile?.podcast.episodes.map((podcast, i) => (
+          {profile?.podcasts[0]?.episodes?.length > 0 &&
+            profile?.podcasts[0].episodes.map((ep, i) => (
               <div key={i} className="space-y-4 pt-2">
                 <div className="sm:col-span-3">
                   <Label>Episode title</Label>
                   <Input
                     required
-                    value={podcast.title}
+                    value={ep.title}
                     onChange={(e) => {
-                      const newEpisode = [...profile.podcast.episodes];
-                      newEpisode[i].title = e.target.value;
+                      const newPods = [...profile.podcasts];
+                      newPods[0].episodes[i].title = e.target.value;
                       setProfile({
                         ...profile,
-                        podcast: { ...profile.podcast, episodes: newEpisode },
+                        podcasts: newPods,
                       });
                     }}
                   />
@@ -174,20 +181,23 @@ const PodcastsSection = ({
                     required
                     label="Episode URL"
                     type="url"
-                    value={podcast.url}
+                    value={ep.url}
                     onChange={(e) => {
-                      const newEpisode = [...profile.podcast.episodes];
-                      newEpisode[i].url = e.target.value;
+                      const newPods = [...profile.podcasts];
+                      newPods[0].episodes[i].url = e.target.value;
                       setProfile({
                         ...profile,
-                        podcast: { ...profile.podcast, episodes: newEpisode },
+                        podcasts: newPods,
                       });
                     }}
                   />
                 </div>
-                {profile?.podcast?.episodes?.length > 1 && (
+                {profile?.podcasts[0]?.episodes?.length > 1 && (
                   <div className="col-span-full flex items-center justify-end">
-                    <RemoveButton label="Remove episode" onClick={() => removePodcastEpisode(i)} />
+                    <RemoveButton
+                      label="Remove episode"
+                      onClick={() => removePodcastEpisode({ index: i, id: ep?.id })}
+                    />
                   </div>
                 )}
               </div>
@@ -195,16 +205,18 @@ const PodcastsSection = ({
         </div>
       )}
       <div className="col-span-full mt-6 flex items-center gap-x-3">
-        {profile?.podcast?.episodes?.length > 0 && (
-          <Button onClick={addPodcastEpisode} variant="outline" size="sm">
+        {/* {profile?.podcasts[0]?.id ? (
+          <Button type="button" onClick={addPodcastEpisode} variant="outline" size="sm">
             Add episode
           </Button>
-        )}
-        <Button onClick={hasPodcast ? deletePodcast : addPodcast} variant="outline" size="sm">
+        ) : (
+          ""
+        )} */}
+        <Button type="button" onClick={hasPodcast ? deletePodcast : addPodcast} variant="outline" size="sm">
           {hasPodcast ? "Remove podcast" : "Add podcast"}
         </Button>
-        <span>or</span>
-        <RssFeedModal setProfile={setProfile} profile={profile} />
+        {/* <span>or</span> */}
+        {/* <RssFeedModal setProfile={setProfile} profile={profile} /> */}
       </div>
     </FormBlock>
   );

@@ -60,6 +60,6 @@ export const meHandler = async ({ ctx }: MeOptions) => {
     books: user.books,
     podcasts: user.podcasts,
     videos: user.videos,
-    mediaAppearences: user.mediaAppearences,
+    mediaAppearances: user.mediaAppearances,
   };
 };

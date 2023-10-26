@@ -29,13 +29,13 @@ const BooksSection = ({ profile, setProfile, addBook, removeBook }) => {
                 />
               </div>
               <div className="col-span-full flex items-center justify-end">
-                <RemoveButton label="Remove" onClick={() => removeBook(i)} />
+                <RemoveButton label="Remove" onClick={() => removeBook({ index: i, isbn: book.isbn })} />
               </div>
             </div>
           ))}
       </div>
       <div className="col-span-full mt-6">
-        <Button onClick={() => addBook("books")} variant="outline" size="sm">
+        <Button type="button" onClick={() => addBook("books")} variant="outline" size="sm">
           Add section
         </Button>
       </div>
