@@ -28,7 +28,7 @@
 }
 
 .editor-inner {
-  background: var(--cal-bg);
+  background: white;
   position: relative;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
@@ -68,7 +68,7 @@
 .editor-paragraph {
   margin: 0;
   position: relative;
-  color: var(--cal-text);
+  @apply dark:text-black text-black;
 }
 
 .editor-paragraph:last-child {
@@ -116,7 +116,7 @@ pre::-webkit-scrollbar-thumb {
 .toolbar {
   display: flex;
   margin-bottom: 1px;
-  background: var(--cal-bg);
+  background: white;
   padding: 2px;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
@@ -189,6 +189,10 @@ pre::-webkit-scrollbar-thumb {
 .toolbar .toolbar-item .icon {
   display: flex;
   color: var(--cal-text);
+}
+
+.toolbar svg {
+  @apply dark:text-black dark:hover:text-white;
 }
 
 #block-controls button:hover {
