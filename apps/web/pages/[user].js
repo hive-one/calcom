@@ -110,7 +110,7 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
   console.log({ currentRole, currentCompany });
 
   return (
-    <div className="flex flex-col items-center bg-white leading-6 text-gray-900">
+    <div className="flex min-h-screen flex-col items-center bg-white leading-6 text-gray-900 dark:bg-white">
       {/* Profile header */}
       <NextSeo
         title={`${profileData?.name} – Book a call with me`}
