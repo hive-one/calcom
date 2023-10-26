@@ -11,6 +11,7 @@ export function Tooltip({
   onOpenChange,
   delayDuration,
   side = "top",
+  show,
   ...props
 }: {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ export function Tooltip({
   delayDuration?: number;
   open?: boolean;
   defaultOpen?: boolean;
+  show: boolean;
   side?: "top" | "right" | "bottom" | "left";
   onOpenChange?: (open: boolean) => void;
 } & TooltipPrimitive.TooltipContentProps) {
@@ -28,20 +30,24 @@ export function Tooltip({
       defaultOpen={defaultOpen}
       onOpenChange={onOpenChange}>
       <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
-      <TooltipPrimitive.Portal>
-        <TooltipPrimitive.Content
-          {...props}
-          className={classNames(
-            side === "top" && "-mt-7",
-            side === "right" && "ml-2",
-            "bg-inverted text-inverted relative z-50 rounded-md px-2 py-1 text-xs font-semibold shadow-lg",
-            props.className && `${props.className}`
-          )}
-          side={side}
-          align="center">
-          {content}
-        </TooltipPrimitive.Content>
-      </TooltipPrimitive.Portal>
+      {show ? (
+        <TooltipPrimitive.Portal>
+          <TooltipPrimitive.Content
+            {...props}
+            className={classNames(
+              side === "top" && "-mt-7",
+              side === "right" && "ml-2",
+              "bg-inverted text-inverted relative z-50 rounded-md px-2 py-1 text-xs font-semibold shadow-lg",
+              props.className && `${props.className}`
+            )}
+            side={side}
+            align="center">
+            {content}
+          </TooltipPrimitive.Content>
+        </TooltipPrimitive.Portal>
+      ) : (
+        ""
+      )}
     </TooltipPrimitive.Root>
   );
 }

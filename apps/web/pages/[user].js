@@ -250,7 +250,7 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
                 {profileData?.adviceOn?.map((title) => (
                   <Tooltip
                     show={title?.length > 50}
-                    text={<div className="w-[400px] break-all">{title}</div>}
+                    content={<div className="break-all">{title}</div>}
                     key={title}>
                     <div className="flex flex-col whitespace-nowrap rounded-lg border border-solid border-gray-300 bg-gray-50 px-[15px] py-[7px] text-lg leading-[24px] text-gray-600">
                       {title?.slice(0, 50)}
