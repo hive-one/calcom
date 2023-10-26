@@ -17,8 +17,9 @@ const handleSubmit = async (url, setLoading, setLinkedinData) => {
     if (!isValidLinkedInUrl(url)) return;
     const username = extractUserNameFromLinkedinUrl(url);
     if (!username) return;
-    const response = await fetch(`/api/linkedin?user=${username}`);
+    const response = await fetch(`/api/borg/getLinkedin?user=${username}`);
     const data = await response.json();
+    console.log("data", data);
     setLinkedinData(data);
     setLoading(false);
   } catch (error) {
@@ -27,7 +28,7 @@ const handleSubmit = async (url, setLoading, setLinkedinData) => {
   }
 };
 
-const LinkedinImporter = ({ profile, setProfile }) => {
+const LinkedinImporter = ({ setProfile }) => {
   const [loading, setLoading] = useState(false);
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [linkedinData, setLinkedinData] = useState(null);
@@ -36,14 +37,14 @@ const LinkedinImporter = ({ profile, setProfile }) => {
     const newProfile = {
       name: linkedinData.name,
       bio: linkedinData.description,
-      experience: linkedinData.roles ? linkedinExperienceTransformer(linkedinData.roles) : [],
+      workExperiences: linkedinData.roles ? linkedinExperienceTransformer(linkedinData.roles) : [],
       projects: linkedinData.projects ? linkedinProjectsTransformer(linkedinData.projects) : [],
       publications: linkedinData.publications
         ? linkedinPublicationsTransformer(linkedinData.publications)
         : [],
     };
     console.log(newProfile);
-    setProfile({ ...profile, ...newProfile });
+    setProfile((prev) => ({ ...prev, ...newProfile }));
     toast.success("Profile filled successfully, dont forget to save it");
   }
 
@@ -73,7 +74,7 @@ const LinkedinImporter = ({ profile, setProfile }) => {
             <p className="mb-4 font-mono text-sm">
               ✅ Linkeding profile data available, click the button below to prefill the form.
             </p>
-            <Button variant="primary" onClick={startAutoFill}>
+            <Button type="button" variant="primary" onClick={startAutoFill}>
               Confirm and Save
             </Button>
           </div>

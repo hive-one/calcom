@@ -49,6 +49,8 @@ const UserProfile = () => {
   const telemetry = useTelemetry();
   const [firstRender, setFirstRender] = useState(true);
 
+  const linksMutation = trpc.viewer.updateLinks.useMutation({});
+
   const mutation = trpc.viewer.updateProfile.useMutation({
     onSuccess: async (_data, context) => {
       if (context.avatar) {
@@ -76,7 +78,6 @@ const UserProfile = () => {
     },
   });
   const onSubmit = handleSubmit((data) => {
-    console.info({ data, errors });
     if (!data?.advises?.length) {
       setError("advises", { type: "custom", message: "This field is required" });
       return;
@@ -92,6 +93,7 @@ const UserProfile = () => {
     telemetry.event(telemetryEventTypes.onboardingFinished);
 
     mutation.mutate(payload);
+    linksMutation.mutate(data?.socialLinks);
   });
 
   async function updateProfileHandler(event) {

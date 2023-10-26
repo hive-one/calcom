@@ -22,7 +22,7 @@ const PublicationsSection = ({ profile, setProfile, addPublication, removePublic
                   onChange={(e) => {
                     const newPublicationss = [...profile.publications];
                     newPublicationss[i].title = e.target.value;
-                    setProfile({ ...profile, publications: newPublicationss });
+                    setProfile((prev) => ({ ...prev, publications: newPublicationss }));
                   }}
                 />
               </div>
@@ -35,7 +35,7 @@ const PublicationsSection = ({ profile, setProfile, addPublication, removePublic
                   onChange={(e) => {
                     const newPublicationss = [...profile.publications];
                     newPublicationss[i].url = e.target.value;
-                    setProfile({ ...profile, publications: newPublicationss });
+                    setProfile((prev) => ({ ...prev, publications: newPublicationss }));
                   }}
                 />
               </div>
@@ -46,18 +46,21 @@ const PublicationsSection = ({ profile, setProfile, addPublication, removePublic
                   onChange={(e) => {
                     const newPublicationss = [...profile.publications];
                     newPublicationss[i].description = e.target.value;
-                    setProfile({ ...profile, publications: newPublicationss });
+                    setProfile((prev) => ({ ...prev, publications: newPublicationss }));
                   }}
                 />
               </div>
               <div className="col-span-full flex items-center justify-end">
-                <RemoveButton label="Remove" onClick={() => removePublication(i)} />
+                <RemoveButton
+                  label="Remove"
+                  onClick={() => removePublication({ index: i, id: publication.id })}
+                />
               </div>
             </div>
           ))}
       </div>
       <div className="col-span-full mt-6">
-        <Button onClick={addPublication} variant="outline" size="sm">
+        <Button type="button" onClick={addPublication} variant="outline" size="sm">
           Add publication
         </Button>
       </div>

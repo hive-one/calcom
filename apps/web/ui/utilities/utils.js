@@ -48,17 +48,17 @@ export const linkedinExperienceTransformer = (roles) => {
     if (role.org_id && role.org_type !== "school") {
       if (!companies[role.org_id]) {
         companies[role.org_id] = {
-          company: role.org_name,
-          url: role.org_url,
+          company: role.org_name ?? "",
+          url: role.org_url ?? "",
           roles: [],
         };
       }
 
       const formattedRole = {
-        title: role.role_job_title,
+        title: role.role_job_title ?? "",
         start_date: role.role_start_date,
         end_date: role.role_end_date === null ? "Present" : role.role_end_date,
-        description: role.role_description,
+        description: role.role_description ?? "",
       };
 
       companies[role.org_id].roles.push(formattedRole);
@@ -77,9 +77,9 @@ export const linkedinProjectsTransformer = (projects) => {
 
   for (const project of projects) {
     const formattedProject = {
-      description: project?.description || "",
-      title: project?.name || "",
-      url: project?.url || "",
+      description: project?.description ?? "",
+      title: project?.name ?? "",
+      url: project?.url ?? "",
     };
     // if (!formattedProject.title) return;
     transformedData.push(formattedProject);
@@ -91,9 +91,9 @@ export const linkedinPublicationsTransformer = (publications) => {
   const transformedData = [];
   for (const publication of publications) {
     const formattedPublication = {
-      description: publication.description,
-      title: publication.name,
-      url: publication.url,
+      description: publication.description ?? "",
+      title: publication.name ?? "",
+      url: publication.url ?? "",
     };
     if (!formattedPublication.title) return;
     transformedData.push(formattedPublication);

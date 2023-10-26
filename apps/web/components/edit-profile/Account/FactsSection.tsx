@@ -1,4 +1,4 @@
-import { Input, TextArea, Button } from "@shadcdn/ui";
+import { Input, Textarea, Button, Label } from "@shadcdn/ui";
 import RemoveButton from "@ui/fayaz/RemoveButton";
 import React from "react";
 
@@ -14,8 +14,8 @@ const FactsSection = ({ profile, setProfile, addFact, removeFact }) => {
           profile.facts.map((fact, i) => (
             <div key={i} className="space-y-4 pt-4">
               <div className="sm:col-span-3">
+                <Label>Title</Label>
                 <Input
-                  label="Title"
                   value={fact.title}
                   onChange={(e) => {
                     const newFacts = [...profile.facts];
@@ -25,8 +25,8 @@ const FactsSection = ({ profile, setProfile, addFact, removeFact }) => {
                 />
               </div>
               <div className="sm:col-span-3">
+                <Label>URL</Label>
                 <Input
-                  label="URL"
                   type="url"
                   value={fact.url}
                   onChange={(e) => {
@@ -37,7 +37,8 @@ const FactsSection = ({ profile, setProfile, addFact, removeFact }) => {
                 />
               </div>
               <div className="col-span-full">
-                <TextArea
+                <Label>Description</Label>
+                <Textarea
                   label="Description"
                   value={fact.description}
                   onChange={(e) => {
@@ -48,13 +49,13 @@ const FactsSection = ({ profile, setProfile, addFact, removeFact }) => {
                 />
               </div>
               <div className="col-span-full flex items-center justify-end">
-                <RemoveButton label="Remove" onClick={() => removeFact(i)} />
+                <RemoveButton label="Remove" onClick={() => removeFact({ index: i, id: fact?.id })} />
               </div>
             </div>
           ))}
       </div>
       <div className="col-span-full mt-6">
-        <Button onClick={addFact} size="sm" variant="outline">
+        <Button type="button" onClick={() => addFact()} size="sm" variant="outline">
           Add fact
         </Button>
       </div>

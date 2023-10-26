@@ -13,21 +13,21 @@ const PodcastAppearancesSection = ({
 }) => {
   return (
     <FormBlock title="Podcasts appearences" description="Add links to podcasts where you have appeared.">
-      {!profile?.appearances?.length > 0 && <EmptyState label="To add a appearence click below" />}
+      {!profile?.mediaAppearances?.length > 0 && <EmptyState label="To add a appearence click below" />}
       <div className="space-y-4 divide-y">
-        {profile?.appearances?.length > 0 &&
-          profile.appearances.map((appearance, i) => (
+        {profile?.mediaAppearances?.length > 0 &&
+          profile.mediaAppearances.map((appearance, i) => (
             <div key={i} className="space-y-4 pt-4">
               <div className="col-span-full">
                 <Label>Title</Label>
                 <Input
                   value={appearance.title}
                   onChange={(e) => {
-                    const newAppearances = [...profile.appearances];
+                    const newAppearances = [...profile.mediaAppearances];
                     newAppearances[i].title = e.target.value;
                     setProfile({
                       ...profile,
-                      appearances: newAppearances,
+                      mediaAppearances: newAppearances,
                     });
                   }}
                 />
@@ -38,23 +38,26 @@ const PodcastAppearancesSection = ({
                   type="url"
                   value={appearance.url}
                   onChange={(e) => {
-                    const newAppearances = [...profile.appearances];
+                    const newAppearances = [...profile.mediaAppearances];
                     newAppearances[i].url = e.target.value;
                     setProfile({
                       ...profile,
-                      appearances: newAppearances,
+                      mediaAppearances: newAppearances,
                     });
                   }}
                 />
               </div>
               <div className="col-span-full flex items-center justify-end">
-                <RemoveButton label="Remove" onClick={() => removePodcastAppearance(i)} />
+                <RemoveButton
+                  label="Remove"
+                  onClick={() => removePodcastAppearance({ index: i, id: appearance.id })}
+                />
               </div>
             </div>
           ))}
       </div>
       <div className="col-span-full mt-6">
-        <Button onClick={() => addPodcastAppearance()} variant="outline" size="sm">
+        <Button type="button" onClick={() => addPodcastAppearance()} variant="outline" size="sm">
           Add appearence
         </Button>
       </div>

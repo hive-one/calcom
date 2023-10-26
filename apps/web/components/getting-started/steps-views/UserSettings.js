@@ -36,9 +36,6 @@ const UserSettings = (props) => {
   const {
     register,
     handleSubmit,
-    control,
-    setError,
-    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {

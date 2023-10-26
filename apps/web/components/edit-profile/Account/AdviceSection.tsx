@@ -7,10 +7,10 @@ import FormBlock from "./FormBlock";
 const AdviceSection = ({ profile, setProfile, addAdviceItem, removeAdviceItem }) => {
   return (
     <FormBlock title="Advice" description="What can you advise on? Add some topics you can help others with.">
-      {profile?.advice_on?.length === 0 && <EmptyState label="Things which you can advise others on" />}
+      {profile?.adviceOn?.length === 0 && <EmptyState label="Things which you can advise others on" />}
       <div className="space-y-4 divide-y">
-        {profile?.advice_on?.length > 0 &&
-          profile.advice_on.map((advice, i) => (
+        {profile?.adviceOn?.length > 0 &&
+          profile.adviceOn.map((advice, i) => (
             <div key={i} className="space-y-4 pt-2">
               <div>
                 <Label>{`Advice #${i + 1}`}</Label>
@@ -18,9 +18,9 @@ const AdviceSection = ({ profile, setProfile, addAdviceItem, removeAdviceItem })
                   <Input
                     value={advice}
                     onChange={(e) => {
-                      const newAdvice = [...profile.advice_on];
+                      const newAdvice = [...profile.adviceOn];
                       newAdvice[i] = e.target.value.slice(0, 100);
-                      setProfile({ ...profile, advice_on: newAdvice });
+                      setProfile({ ...profile, adviceOn: newAdvice });
                     }}
                     required
                   />
