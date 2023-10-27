@@ -62,7 +62,7 @@ const ProfileSection = ({ profile, setProfile, updateAvatar, avatarRef }) => {
           <ImageUploader
             target="avatar"
             id="avatar-upload"
-            buttonMsg={t("add_profile_photo")}
+            buttonMsg="Change avatar"
             handleAvatarChange={(newAvatar) => {
               setProfile((prev) => ({ ...prev, avatar: newAvatar }));
               if (avatarRef.current) {

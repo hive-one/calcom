@@ -5,11 +5,12 @@ import { NextSeo } from "next-seo";
 import Link from "next/link";
 import React, { useState, useRef, useEffect } from "react";
 import { Linkedin } from "react-bootstrap-icons";
-import toast from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
 import prisma from "@calcom/prisma";
 import { trpc } from "@calcom/trpc/react";
+import { showToast } from "@calcom/ui";
 
 import PageWrapper from "@components/PageWrapper";
 import AdviceSection from "@components/edit-profile/Account/AdviceSection";
@@ -49,7 +50,6 @@ const EditProfile = () => {
 
   const utils = trpc.useContext();
   const onSuccess = async () => {
-    toast.success("Profile updated successfully 🎉");
     await utils.viewer.me.invalidate();
   };
 
@@ -150,13 +150,13 @@ const EditProfile = () => {
     mutation.mutate({
       avatar: enteredAvatar,
     });
-    toast.success("Avatar updated successfully 🎉");
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     delete profile.avatar;
     console.log({ profile });
+    showToast("Changes saved", "success");
     mutation.mutate(profile);
 
     profile?.socialLinks?.map((socialLink) => {
@@ -595,7 +595,7 @@ const EditProfile = () => {
       ),
     },
     {
-      label: "Advise",
+      label: "Advice",
       value: "advices",
       content: (
         <AdviceSection
@@ -705,6 +705,9 @@ const EditProfile = () => {
 
   return (
     <main className="min-h-screen bg-white">
+      <div>
+        <Toaster position="bottom-right" />
+      </div>
       <NextSeo title="Profile Settings - Borg.id" />
       <Navbar username={user?.username} />
       {isLoading ? (

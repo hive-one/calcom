@@ -191,6 +191,7 @@ const LinkSection = ({ profile, setProfile }) => {
                   <Input
                     label="Name"
                     value={link.name}
+                    placeholder="Link label"
                     onChange={(e) => handleLinkNameChange(e, i)}
                     disabled={link.key !== "OTHER"}
                   />
