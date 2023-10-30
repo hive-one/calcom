@@ -37,7 +37,10 @@ const LinkedinImporter = ({ setProfile }) => {
     const newProfile = {
       name: linkedinData.name,
       bio: linkedinData.description,
-      workExperiences: linkedinData.roles ? linkedinExperienceTransformer(linkedinData.roles) : [],
+      workExperiences: linkedinData.roles
+        ? linkedinExperienceTransformer(linkedinData.roles)?.workExperiences
+        : [],
+      experience: linkedinData.roles ? linkedinExperienceTransformer(linkedinData.roles)?.experience : [],
       projects: linkedinData.projects ? linkedinProjectsTransformer(linkedinData.projects) : [],
       publications: linkedinData.publications
         ? linkedinPublicationsTransformer(linkedinData.publications)
