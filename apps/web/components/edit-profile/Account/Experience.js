@@ -103,9 +103,7 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                           newExperience[companyId].roles[roleIndex].startMonth = parseInt(
                             e.target.value.split("-")[1]
                           );
-                          newExperience[companyId].roles[roleIndex].startYear = parseInt(
-                            e.target.value.split("-")[0]
-                          );
+                          newExperience[companyId].roles[roleIndex].startYear = e.target.value.split("-")[0];
                           setProfile({
                             ...profile,
                             experience: newExperience,
@@ -130,9 +128,7 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                           newExperience[companyId].roles[roleIndex].endMonth = parseInt(
                             e.target.value.split("-")[1]
                           );
-                          newExperience[companyId].roles[roleIndex].endYear = parseInt(
-                            e.target.value.split("-")[0]
-                          );
+                          newExperience[companyId].roles[roleIndex].endYear = e.target.value.split("-")[0];
                           setProfile({
                             ...profile,
                             experience: newExperience,

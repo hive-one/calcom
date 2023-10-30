@@ -281,6 +281,8 @@ const EditProfile = () => {
           if (role?.id) {
             const updateWorkExData = {
               ...role,
+              startYear: role?.startYear ? parseInt(role?.startYear) : null,
+              endYear: role?.endYear ? parseInt(role?.endYear) : null,
               id: role?.id,
               userId: user?.id,
               companyId: exp?.companyId,
@@ -297,6 +299,8 @@ const EditProfile = () => {
               },
               workExperience: {
                 ...role,
+                startYear: role?.startYear ? parseInt(role?.startYear) : null,
+                endYear: role?.endYear ? parseInt(role?.endYear) : null,
               },
             };
             console.log({ addWorkExData });
