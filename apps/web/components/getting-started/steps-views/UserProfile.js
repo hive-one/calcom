@@ -243,6 +243,7 @@ const UserProfile = () => {
             <section key={item.id} className="flex flex-col">
               <div className="flex items-center gap-2">
                 <Input
+                  autoFocus
                   className="border-default mb-0 w-full rounded-md border text-sm"
                   placeholder="Enter your expertise"
                   {...register(`advises.${index}`, {

@@ -102,7 +102,7 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-    setProfile({ ...user, experience: transformExpForUI(profile) });
+    setProfile((prev) => ({ ...prev, experience: transformExpForUI(profile) }));
   }, [user]);
 
   const mutation = trpc.viewer.updateProfile.useMutation({
