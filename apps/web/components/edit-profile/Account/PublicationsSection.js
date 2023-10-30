@@ -18,6 +18,8 @@ const PublicationsSection = ({ profile, setProfile, addPublication, removePublic
               <div className="sm:col-span-3">
                 <Label>Title</Label>
                 <Input
+                  placeholder="e.g How to build strong teams"
+                  required
                   value={publication.title}
                   onChange={(e) => {
                     const newPublicationss = [...profile.publications];
@@ -31,6 +33,8 @@ const PublicationsSection = ({ profile, setProfile, addPublication, removePublic
                 <Input
                   label="URL"
                   type="url"
+                  placeholder="https://yoursite.com/blog/build-teams"
+                  required
                   value={publication.url}
                   onChange={(e) => {
                     const newPublicationss = [...profile.publications];

@@ -16,6 +16,7 @@ const AdviceSection = ({ profile, setProfile, addAdviceItem, removeAdviceItem })
                 <Label>{`Advice #${i + 1}`}</Label>
                 <div className="flex items-end gap-x-2">
                   <Input
+                    placeholder="e.g. How to get started with public speaking"
                     value={advice}
                     onChange={(e) => {
                       const newAdvice = [...profile.adviceOn];

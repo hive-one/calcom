@@ -247,17 +247,21 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
           {profileData?.adviceOn?.length ? (
             <Section title="Advise On">
               <div id="advice" className="flex flex-wrap gap-2">
-                {profileData?.adviceOn?.map((title) => (
-                  <Tooltip
-                    show={title?.length > 50}
-                    content={<div className="break-all">{title}</div>}
-                    key={title}>
-                    <div className="flex flex-col whitespace-nowrap rounded-lg border border-solid border-gray-300 bg-gray-50 px-[15px] py-[7px] text-lg leading-[24px] text-gray-600">
-                      {title?.slice(0, 50)}
-                      {title?.length > 50 ? "..." : ""}
-                    </div>
-                  </Tooltip>
-                ))}
+                {profileData?.adviceOn?.map((title) =>
+                  title?.length ? (
+                    <Tooltip
+                      show={title?.length > 50}
+                      content={<div className="break-all">{title}</div>}
+                      key={title}>
+                      <div className="flex flex-col whitespace-nowrap rounded-lg border border-solid border-gray-300 bg-gray-50 px-[15px] py-[7px] text-lg leading-[24px] text-gray-600">
+                        {title?.slice(0, 50)}
+                        {title?.length > 50 ? "..." : ""}
+                      </div>
+                    </Tooltip>
+                  ) : (
+                    ""
+                  )
+                )}
               </div>
             </Section>
           ) : (

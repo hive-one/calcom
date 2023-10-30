@@ -170,6 +170,7 @@ const LinkSection = ({ profile, setProfile }) => {
                   <Input
                     placeholder="https://twitter.com/handle"
                     type="url"
+                    required
                     value={link.url}
                     onChange={(e) => handleLinkUrlChange(e, i)}
                   />

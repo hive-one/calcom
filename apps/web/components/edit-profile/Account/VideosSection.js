@@ -17,6 +17,7 @@ const VideosSection = ({ profile, setProfile, addVideo, removeVideo }) => {
                 <Label>Title</Label>
                 <Input
                   value={video.title}
+                  placeholder="Enter video title"
                   onChange={(e) => {
                     const newVideo = profile?.videos?.length ? [...profile.videos] : [];
                     newVideo[i].title = e.target.value;
@@ -31,6 +32,7 @@ const VideosSection = ({ profile, setProfile, addVideo, removeVideo }) => {
                 <Label>URL</Label>
                 <Input
                   value={video.url}
+                  placeholder="e.g https://youtube.com/watch?v=1234"
                   onChange={(e) => {
                     const newVideo = profile?.videos?.length ? [...profile.videos] : [];
                     newVideo[i].url = e.target.value;

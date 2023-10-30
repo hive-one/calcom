@@ -102,6 +102,7 @@ const PodcastsSection = ({
           <div>
             <Label>Title</Label>
             <Input
+              placeholder="e.g The Joe Rogan Experience"
               required
               value={profile?.podcasts[0]?.title}
               onChange={(e) => {
@@ -118,6 +119,7 @@ const PodcastsSection = ({
           <div>
             <Label>URL</Label>
             <Input
+              placeholder="https://open.spotify.com/show/abc"
               type="url"
               required
               value={profile?.podcasts[0]?.url}
@@ -134,7 +136,7 @@ const PodcastsSection = ({
           <div>
             <Label>Cover Image URL</Label>
             <Input
-              label="Cover image URL"
+              placeholder="https://open.spotify.com/show/abc.png"
               value={profile?.podcasts[0].coverImage}
               onChange={(e) => {
                 const newPod = [...profile.podcasts];
@@ -163,6 +165,7 @@ const PodcastsSection = ({
                 <div className="sm:col-span-3">
                   <Label>Episode title</Label>
                   <Input
+                    placeholder="Episode title"
                     required
                     value={ep.title}
                     onChange={(e) => {
