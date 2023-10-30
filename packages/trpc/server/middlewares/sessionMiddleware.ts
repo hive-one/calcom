@@ -60,6 +60,26 @@ export async function getUserFromSession(ctx: TRPCContextInner, session: Maybe<S
       allowDynamicBooking: true,
       allowSEOIndexing: true,
       receiveMonthlyDigestEmail: true,
+      adviceOn: true,
+      pricePerHour: true,
+      priceCurrency: true,
+      socialLinks: true,
+      facts: true,
+      projects: true,
+      workExperiences: {
+        include: {
+          company: true,
+        },
+      },
+      publications: true,
+      books: true,
+      podcasts: {
+        include: {
+          podcastEpisodes: true,
+        },
+      },
+      videos: true,
+      mediaAppearances: true,
       organization: {
         select: {
           id: true,

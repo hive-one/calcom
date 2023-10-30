@@ -13,17 +13,18 @@ import { ArrowRight } from "@calcom/ui/components/icon";
 
 import { UsernameAvailabilityField } from "@components/ui/UsernameAvailability";
 
-interface IUserSettingsProps {
-  nextStep: () => void;
-  hideUsername?: boolean;
-}
+// interface IUserSettingsProps {
+//   nextStep: () => void;
+//   hideUsername?: boolean;
+// }
 
-const UserSettings = (props: IUserSettingsProps) => {
+const UserSettings = (props) => {
   const { nextStep } = props;
   const [user] = trpc.viewer.me.useSuspenseQuery();
   const { t } = useLocale();
   const [selectedTimeZone, setSelectedTimeZone] = useState(dayjs.tz.guess());
   const telemetry = useTelemetry();
+
   const userSettingsSchema = z.object({
     name: z
       .string()
@@ -36,7 +37,7 @@ const UserSettings = (props: IUserSettingsProps) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<z.infer<typeof userSettingsSchema>>({
+  } = useForm({
     defaultValues: {
       name: user?.name || "",
     },

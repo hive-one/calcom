@@ -1,3 +1,4 @@
+import { Button } from "@shadcdn/ui";
 import insertNonBreakingSpaces from "@ui/utilities/insert-non-breaking-spaces";
 import BioLink from "@ui/valery/bio-link";
 import BookItem from "@ui/valery/book-item";
@@ -9,15 +10,16 @@ import ProjectItem from "@ui/valery/project-item";
 import Publication from "@ui/valery/publication-item";
 import VideoItem from "@ui/valery/video-item";
 import { cva } from "class-variance-authority";
-// import { createCheckoutSession } from "lib/stripe";
-import { useAuthContext } from "context/authContext";
-import { getProfile } from "lib/firebase/utils";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
 import { CalendarPlus } from "react-bootstrap-icons";
 import { titleCase } from "title-case";
 
-import { Button, Tooltip } from "@calcom/ui";
+import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
+import { getUsernameList } from "@calcom/lib/defaultEvents";
+import { md } from "@calcom/lib/markdownIt";
+import prisma from "@calcom/prisma";
+import { Tooltip } from "@calcom/ui";
 
 import PageWrapper from "@components/PageWrapper";
 
@@ -42,12 +44,8 @@ const Section = ({ title, tileLayout = false, children }) => {
 // Top: Links to social media, etc. (Icon-only.)
 // Bottom: Generic links
 const LinksSection = ({ links }) => {
-  const iconLinks = links?.filter(
-    ({ type, url }) => type !== "generic_link" && type !== "website" && url !== ""
-  );
-  const genericLinks = links?.filter(
-    ({ type, url }) => type === "generic_link" || (type === "website" && url !== "")
-  );
+  const iconLinks = links?.filter(({ key, url }) => key !== "other" && key !== "website" && url !== "");
+  const genericLinks = links?.filter(({ key, url }) => key === "other" || (key === "website" && url !== ""));
 
   // Two-part variant
   // return (
@@ -71,23 +69,29 @@ const LinksSection = ({ links }) => {
   return (
     <div className="flex max-w-md flex-col gap-3">
       <div className="flex flex-wrap gap-x-5 gap-y-1">
-        {iconLinks.map(({ type, url, name }, index) => (
-          <BioLink key={"0" + index} {...{ type, url, name }} />
-        ))}
-        {genericLinks.map(({ type, url, name }, index) => (
-          <BioLink key={"1" + index} {...{ type, url, name }} />
+        {iconLinks.map((item) => {
+          return <BioLink key={item?.id} itemKey={item?.key} name={item?.name} url={item?.url} />;
+        })}
+        {genericLinks.map((item) => (
+          <BioLink key={item?.id} itemKey={item?.key} name={item?.name} url={item?.url} />
         ))}
       </div>
     </div>
   );
 };
 
-const ProfilePage = ({ profileData }) => {
-  const { user } = useAuthContext();
-  console.log({ profileData });
+const ProfilePage = ({ user, userEvents, userSession }) => {
+  const profileData = JSON.parse(user);
+  const eventTypes = JSON.parse(userEvents);
+  const session = userSession ? JSON.parse(userSession) : null;
+
+  console.log({ profileData, eventTypes, session });
+  const bookCallLink = `/${profileData?.username}/${
+    eventTypes?.filter((item) => item.length === 30)[0]?.slug
+  }`;
 
   const userPhoto = () => {
-    if (profileData.avatar_url) return profileData.avatar_url;
+    if (profileData.avatar) return profileData?.avatar;
     if (profileData.name) return `https://api.dicebear.com/6.x/initials/svg?seed=${profileData.name}`;
     return `https://api.dicebear.com/7.x/shapes/svg?seed=${profileData.uid}`;
   };
@@ -97,10 +101,16 @@ const ProfilePage = ({ profileData }) => {
       ? profileData.bio.content[0].content.map((item) => item?.text ?? "").join("")
       : "";
 
-  const isLoggedInUser = profileData?.uid === user?.uid;
+  const isLoggedInUser = profileData?.id === session?.user?.id;
+
+  const currentRole = profileData?.workExperiences?.filter((item) => item?.isCurrentRole)[0]?.title ?? "";
+  const currentCompany =
+    profileData?.workExperiences?.filter((item) => item?.isCurrentRole)[0]?.company.name ?? "";
+
+  console.log({ currentRole, currentCompany });
 
   return (
-    <div className="flex flex-col items-center bg-white leading-6 text-gray-900">
+    <div className="flex min-h-screen flex-col items-center bg-white leading-6 text-gray-900 dark:bg-white">
       {/* Profile header */}
       <NextSeo
         title={`${profileData?.name} – Book a call with me`}
@@ -139,130 +149,51 @@ const ProfilePage = ({ profileData }) => {
             <div className="font-bold" id="name">
               {profileData?.name}
             </div>
-            {profileData?.role && (
+            {currentRole ? (
               <div className="text-sm leading-6" id="role">
-                {titleCase(profileData?.role)}
+                {titleCase(currentRole)}
               </div>
+            ) : (
+              ""
             )}
-            {profileData?.company && (
+            {currentCompany ? (
               <div className="flex flex-row items-start gap-1.5 text-sm leading-6">
                 <div className="w-3 shrink-0 text-gray-400">at</div>
-                <div id="company">{insertNonBreakingSpaces(profileData?.company)}</div>
+                <div id="company">{insertNonBreakingSpaces(currentCompany)}</div>
               </div>
+            ) : (
+              ""
             )}
           </div>
+
           {/* Button block */}
           <div
             id="call-charges"
             className="flex flex-col items-center gap-1.5 self-center justify-self-end leading-6 sm:self-center">
-            {user?.uid ? (
-              // <Tooltip
-              //   side="bottom"
-              //   open={!profileData?.calendar?.calcom_event_url}
-              //   content={
-              //     !profileData?.calendar?.calcom_event_url
-              //       ? "This user doesn't have a call booking link yet"
-              //       : ""
-              //   }
-              // >
-              <Button
-                className="flex h-10 flex-row items-center justify-center gap-2 rounded-lg bg-gray-900 px-6 text-white hover:bg-gray-800 active:bg-gray-950"
-                disabled={!profileData?.calendar?.calcom_event_url}
-                // onClick={() => {
-                //   NProgress.set(0.4);
-                //   try {
-                //     createCheckoutSession({
-                //       bookedByUid: user?.uid,
-                //       bookingByName: user?.displayName ?? null,
-                //       bookedByEmail: user?.email,
-                //       bookingWithUid: profileData?.uid,
-                //       bookingWithName: profileData?.name,
-                //       bookingWithEmail: profileData?.email,
-                //       bookingLink:
-                //         profileData?.calendar?.calcom_event_url ??
-                //         profileData?.calendar_link,
-                //       chargeAmount: profileData?.call_charges,
-                //       calUserId: profileData?.calendar?.calcom_user_id,
-                //     });
-                //   } catch (e) {
-                //     console.log(
-                //       "Error redirecting to Stripe payment page: ",
-                //       e
-                //     );
-                //     NProgress.done();
-                //   }
-                // }}
-              >
+            <Button
+              className="flex h-10 flex-row items-center justify-center gap-2 rounded-lg bg-gray-900 px-6 text-white hover:bg-gray-800 active:bg-gray-950"
+              asChild>
+              <Link href={bookCallLink}>
                 <CalendarPlus size={16} />
                 <div className="whitespace-nowrap ">Book a Call →</div>
-              </Button>
-            ) : (
-              // </Tooltip>
-              <Button
-                className="flex h-10 flex-row items-center justify-center gap-2 rounded-lg bg-gray-900 px-6 text-white hover:bg-gray-800 active:bg-gray-950"
-                disabled={!profileData?.calendar?.calcom_event_url}
-                // onClick={() => {
-                //   NProgress.set(0.4);
-                //   try {
-                //     const auth = getAuth();
-                //     signInAnonymously(auth)
-                //       .then(async (data) => {
-                //         const { user } = data;
-                //         if (user?.uid) {
-                //           try {
-                //             createCheckoutSession({
-                //               bookedByUid: user?.uid,
-                //               bookingByName: user?.displayName ?? null,
-                //               bookedByEmail: user?.email,
-                //               bookingWithUid: profileData?.uid,
-                //               bookingWithName: profileData?.name,
-                //               bookingWithEmail: profileData?.email,
-                //               bookingLink:
-                //                 profileData?.calendar?.calcom_event_url ??
-                //                 profileData?.calendar_link,
-                //               chargeAmount: profileData?.call_charges,
-                //               calUserId: profileData?.calendar?.calcom_user_id,
-                //             });
-                //           } catch (e) {
-                //             console.log(
-                //               "Error redirecting to Stripe payment page: ",
-                //               e
-                //             );
-                //             NProgress.done();
-                //           }
-                //         }
-                //       })
-                //       .catch((error) => {
-                //         toast.error(error.message);
-                //         console.log("error", error);
-                //       });
-                //   } catch (e) {
-                //     console.error(e);
-                //   }
-                // }}
-              >
-                <CalendarPlus size={16} />
-                <div className="whitespace-nowrap ">Book a Call →</div>
-              </Button>
-            )}
+              </Link>
+            </Button>
 
-            <div className="text-[15px] text-gray-900">${profileData?.call_charges}/hr</div>
+            <div className="text-[15px] text-gray-900">${profileData?.pricePerHour}/hr</div>
           </div>
         </div>
         {/* Links */}
-        {profileData.links?.length > 0 && <LinksSection links={profileData.links} />}
+        {profileData.socialLinks?.length > 0 && <LinksSection links={profileData.socialLinks} />}
 
         <div className="flex items-center gap-2">
           {isLoggedInUser ? (
             <Button variant="outline" size="sm" asChild>
-              <Link href="/account">
-                {/* <Pencil className="mr-2" /> */}
-                Edit profile
-              </Link>
+              <Link href="/edit-profile">Edit profile</Link>
             </Button>
           ) : (
             ""
           )}
+
           {user?.email?.includes("hive.one") || user?.email?.includes("bord.id") ? (
             <div>
               <Button
@@ -291,11 +222,13 @@ const ProfilePage = ({ profileData }) => {
         </div>
 
         {/* About */}
-        {/* {profileData?.bio ? (
-          <RichContentParser content={profileData.bio} />
+        {profileData?.bio ? (
+          <>
+            <div id="bio" dangerouslySetInnerHTML={{ __html: md.render(profileData.bio) }} />
+          </>
         ) : (
           ""
-        )} */}
+        )}
       </div>
       {/* Gray section */}
       <div className="relative flex w-full flex-col items-center bg-gray-200 pb-[88px] pt-14">
@@ -304,20 +237,20 @@ const ProfilePage = ({ profileData }) => {
           {profileData?.facts?.length > 0 && (
             <Section title="Facts">
               <div id="facts" className="grid gap-5 sm:grid-cols-2">
-                {profileData?.facts.map(({ title, description, url }, index) => (
-                  <FactItem key={index} {...{ title, description, url }} />
+                {profileData?.facts.map(({ id, title, description, url }, index) => (
+                  <FactItem key={index} {...{ id, title, description, url }} />
                 ))}
               </div>
             </Section>
           )}
           {/* Advise on */}
-          {profileData?.advice_on?.length ? (
+          {profileData?.adviceOn?.length ? (
             <Section title="Advise On">
               <div id="advice" className="flex flex-wrap gap-2">
-                {profileData?.advice_on?.map((title) => (
+                {profileData?.adviceOn?.map((title) => (
                   <Tooltip
                     show={title?.length > 50}
-                    text={<div className="w-[400px] break-all">{title}</div>}
+                    content={<div className="break-all">{title}</div>}
                     key={title}>
                     <div className="flex flex-col whitespace-nowrap rounded-lg border border-solid border-gray-300 bg-gray-50 px-[15px] py-[7px] text-lg leading-[24px] text-gray-600">
                       {title?.slice(0, 50)}
@@ -359,18 +292,20 @@ const ProfilePage = ({ profileData }) => {
         ) : (
           ""
         )}
-        {profileData?.podcast?.episodes?.length && (
+        {profileData?.podcasts?.length ? (
           <Section title="Podcasts">
             <div id="podcasts">
-              <PodcastItem podcast={profileData.podcast} />
+              <PodcastItem podcast={profileData?.podcasts[0]} />
             </div>
           </Section>
+        ) : (
+          ""
         )}
-        {profileData?.appearances && profileData.appearances.length > 0 && (
+        {profileData?.mediaAppearances && profileData?.mediaAppearances?.length > 0 && (
           <Section title="Podcasts (appearances)">
             <div id="podcasts-appearances">
               <ul className="space-y-3">
-                {profileData.appearances.map((appearance, index) => (
+                {profileData.mediaAppearances.map((appearance, index) => (
                   <li key={index}>
                     <a href={appearance.url} target="_blank" rel="noopener noreferrer">
                       {appearance.title}
@@ -394,13 +329,13 @@ const ProfilePage = ({ profileData }) => {
         ) : (
           ""
         )}
-        {profileData?.experience?.length ? (
+        {profileData?.workExperiences?.length ? (
           <Section id="experience" title="Experience">
-            {profileData?.experience?.map((experience, index) => (
+            {profileData?.workExperiences?.map((experience, index) => (
               <ExperienceItem
                 key={index}
                 experience={experience}
-                trail={index === profileData?.experience?.length - 1 ? false : true}
+                trail={index === profileData?.workExperiences?.length - 1 ? false : true}
               />
             ))}
           </Section>
@@ -420,413 +355,70 @@ const ProfilePage = ({ profileData }) => {
   );
 };
 
-export async function getServerSideProps({ params, res }) {
-  res.setHeader("Cache-Control", "public, s-maxage=10, stale-while-revalidate=59");
-  const profileID = params.user;
-  console.log("profileID", profileID);
-  let profileData;
+export const getServerSideProps = async (context) => {
+  const { req, res } = context;
+  const session = await getServerSession({ req, res });
+  const usernameList = getUsernameList(context.query.user);
 
-  try {
-    profileData = await getProfile(profileID);
-    console.log("profileData", profileData);
-    if (!profileData) {
-      throw new Error("User not found"); // Throw an error if profileData is empty
-    }
-  } catch (e) {
-    res.statusCode = 404; // Set the status code to 404
-    return {
-      props: {
-        profileID,
-        profileData: null, // Set profileData to null
+  const user = await prisma.user.findFirst({
+    where: {
+      username: usernameList[0],
+    },
+    include: {
+      publications: true,
+      projects: true,
+      podcasts: true,
+      videos: true,
+      workExperiences: {
+        include: {
+          company: true,
+        },
       },
-    };
+      books: true,
+      socialLinks: true,
+      facts: true,
+      mediaAppearances: true,
+      podcastEpisodes: true,
+    },
+  });
+
+  const userEvents = await prisma.eventType.findMany({
+    where: {
+      AND: [
+        {
+          teamId: null,
+        },
+        {
+          OR: [
+            {
+              userId: user?.id,
+            },
+            {
+              users: {
+                some: {
+                  id: user?.id,
+                },
+              },
+            },
+          ],
+        },
+      ],
+    },
+  });
+
+  if (!user) {
+    throw new Error("User from session not found");
   }
 
   return {
     props: {
-      profileID,
-      profileData: JSON.parse(JSON.stringify(profileData)),
+      user: JSON.stringify(user),
+      userEvents: JSON.stringify(userEvents ?? []),
+      userSession: session ? JSON.stringify(session) : null,
     },
   };
-}
+};
 
 ProfilePage.PageWrapper = PageWrapper;
 
 export default ProfilePage;
-
-// import type { DehydratedState } from "@tanstack/react-query";
-// import classNames from "classnames";
-// import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
-// import Link from "next/link";
-// import { Toaster } from "react-hot-toast";
-// import type { z } from "zod";
-
-// import {
-//   sdkActionManager,
-//   useEmbedNonStylesConfig,
-//   useEmbedStyles,
-//   useIsEmbed,
-// } from "@calcom/embed-core/embed-iframe";
-// import OrganizationAvatar from "@calcom/features/ee/organizations/components/OrganizationAvatar";
-// import { getSlugOrRequestedSlug } from "@calcom/features/ee/organizations/lib/orgDomains";
-// import { orgDomainConfig } from "@calcom/features/ee/organizations/lib/orgDomains";
-// import { EventTypeDescriptionLazy as EventTypeDescription } from "@calcom/features/eventtypes/components";
-// import EmptyPage from "@calcom/features/eventtypes/components/EmptyPage";
-// import { getUsernameList } from "@calcom/lib/defaultEvents";
-// import { useLocale } from "@calcom/lib/hooks/useLocale";
-// import { useRouterQuery } from "@calcom/lib/hooks/useRouterQuery";
-// import useTheme from "@calcom/lib/hooks/useTheme";
-// import { markdownToSafeHTML } from "@calcom/lib/markdownToSafeHTML";
-// import { stripMarkdown } from "@calcom/lib/stripMarkdown";
-// import prisma from "@calcom/prisma";
-// import type { EventType, User } from "@calcom/prisma/client";
-// import { baseEventTypeSelect } from "@calcom/prisma/selects";
-// import { EventTypeMetaDataSchema } from "@calcom/prisma/zod-utils";
-// import { HeadSeo, UnpublishedEntity } from "@calcom/ui";
-// import { Verified, ArrowRight } from "@calcom/ui/components/icon";
-
-// import type { EmbedProps } from "@lib/withEmbedSsr";
-
-// import { ssrInit } from "@server/lib/ssr";
-
-// export function UserPage(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
-//   const { users, profile, eventTypes, markdownStrippedBio, entity } = props;
-
-//   const [user] = users; //To be used when we only have a single user, not dynamic group
-//   useTheme(profile.theme);
-//   const { t } = useLocale();
-
-//   const isBioEmpty = !user.bio || !user.bio.replace("<p><br></p>", "").length;
-
-//   const isEmbed = useIsEmbed(props.isEmbed);
-//   const eventTypeListItemEmbedStyles = useEmbedStyles("eventTypeListItem");
-//   const shouldAlignCentrallyInEmbed = useEmbedNonStylesConfig("align") !== "left";
-//   const shouldAlignCentrally = !isEmbed || shouldAlignCentrallyInEmbed;
-//   const {
-//     // So it doesn't display in the Link (and make tests fail)
-//     user: _user,
-//     orgSlug: _orgSlug,
-//     ...query
-//   } = useRouterQuery();
-
-//   /*
-//    const telemetry = useTelemetry();
-//    useEffect(() => {
-//     if (top !== window) {
-//       //page_view will be collected automatically by _middleware.ts
-//       telemetry.event(telemetryEventTypes.embedView, collectPageParameters("/[user]"));
-//     }
-//   }, [telemetry, router.asPath]); */
-
-//   if (entity?.isUnpublished) {
-//     return (
-//       <div className="flex h-full min-h-[100dvh] items-center justify-center">
-//         <UnpublishedEntity {...entity} />
-//       </div>
-//     );
-//   }
-
-//   const isEventListEmpty = eventTypes.length === 0;
-//   return (
-//     <>
-//       <HeadSeo
-//         title={profile.name}
-//         description={markdownStrippedBio}
-//         meeting={{
-//           title: markdownStrippedBio,
-//           profile: { name: `${profile.name}`, image: null },
-//           users: [{ username: `${user.username}`, name: `${user.name}` }],
-//         }}
-//         nextSeoProps={{
-//           noindex: !profile.allowSEOIndexing,
-//           nofollow: !profile.allowSEOIndexing,
-//         }}
-//       />
-
-//       <div className={classNames(shouldAlignCentrally ? "mx-auto" : "", isEmbed ? "max-w-3xl" : "")}>
-//         <main
-//           className={classNames(
-//             shouldAlignCentrally ? "mx-auto" : "",
-//             isEmbed ? "border-booker border-booker-width  bg-default rounded-md border" : "",
-//             "max-w-3xl px-4 py-24"
-//           )}>
-//           <div className="mb-8 text-center">
-//             <OrganizationAvatar
-//               imageSrc={profile.image}
-//               size="xl"
-//               alt={profile.name}
-//               organizationSlug={profile.organizationSlug}
-//             />
-//             <h1 className="font-cal text-emphasis mb-1 text-3xl" data-testid="name-title">
-//               {profile.name}
-//               {user.verified && (
-//                 <Verified className=" mx-1 -mt-1 inline h-6 w-6 fill-blue-500 text-white dark:text-black" />
-//               )}
-//             </h1>
-//             {!isBioEmpty && (
-//               <>
-//                 <div
-//                   className="  text-subtle break-words text-sm [&_a]:text-blue-500 [&_a]:underline [&_a]:hover:text-blue-600"
-//                   dangerouslySetInnerHTML={{ __html: props.safeBio }}
-//                 />
-//               </>
-//             )}
-//           </div>
-
-//           <div
-//             className={classNames("rounded-md ", !isEventListEmpty && "border-subtle border")}
-//             data-testid="event-types">
-//             {user.away ? (
-//               <div className="overflow-hidden rounded-sm border ">
-//                 <div className="text-muted  p-8 text-center">
-//                   <h2 className="font-cal text-default mb-2 text-3xl">😴{" " + t("user_away")}</h2>
-//                   <p className="mx-auto max-w-md">{t("user_away_description") as string}</p>
-//                 </div>
-//               </div>
-//             ) : (
-//               eventTypes.map((type) => (
-//                 <div
-//                   key={type.id}
-//                   style={{ display: "flex", ...eventTypeListItemEmbedStyles }}
-//                   className="bg-default border-subtle dark:bg-muted dark:hover:bg-emphasis hover:bg-muted group relative border-b first:rounded-t-md last:rounded-b-md last:border-b-0">
-//                   <ArrowRight className="text-emphasis  absolute right-4 top-4 h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
-//                   {/* Don't prefetch till the time we drop the amount of javascript in [user][type] page which is impacting score for [user] page */}
-//                   <div className="block w-full p-5">
-//                     <Link
-//                       prefetch={false}
-//                       href={{
-//                         pathname: `/${user.username}/${type.slug}`,
-//                         query,
-//                       }}
-//                       passHref
-//                       onClick={async () => {
-//                         sdkActionManager?.fire("eventTypeSelected", {
-//                           eventType: type,
-//                         });
-//                       }}
-//                       data-testid="event-type-link">
-//                       <div className="flex flex-wrap items-center">
-//                         <h2 className=" text-default pr-2 text-sm font-semibold">{type.title}</h2>
-//                       </div>
-//                       <EventTypeDescription eventType={type} isPublic={true} shortenDescription />
-//                     </Link>
-//                   </div>
-//                 </div>
-//               ))
-//             )}
-//           </div>
-
-//           {isEventListEmpty && <EmptyPage name={profile.name || "User"} />}
-//         </main>
-//         <Toaster position="bottom-right" />
-//       </div>
-//     </>
-//   );
-// }
-
-// UserPage.isBookingPage = true;
-// UserPage.PageWrapper = PageWrapper;
-
-// const getEventTypesWithHiddenFromDB = async (userId: number) => {
-//   return (
-//     await prisma.eventType.findMany({
-//       where: {
-//         AND: [
-//           {
-//             teamId: null,
-//           },
-//           {
-//             OR: [
-//               {
-//                 userId,
-//               },
-//               {
-//                 users: {
-//                   some: {
-//                     id: userId,
-//                   },
-//                 },
-//               },
-//             ],
-//           },
-//         ],
-//       },
-//       orderBy: [
-//         {
-//           position: "desc",
-//         },
-//         {
-//           id: "asc",
-//         },
-//       ],
-//       select: {
-//         ...baseEventTypeSelect,
-//         metadata: true,
-//       },
-//     })
-//   ).map((eventType) => ({
-//     ...eventType,
-//     metadata: EventTypeMetaDataSchema.parse(eventType.metadata),
-//   }));
-// };
-
-// export type UserPageProps = {
-//   trpcState: DehydratedState;
-//   profile: {
-//     name: string;
-//     image: string;
-//     theme: string | null;
-//     brandColor: string;
-//     darkBrandColor: string;
-//     organizationSlug: string | null;
-//     allowSEOIndexing: boolean;
-//   };
-//   users: Pick<User, "away" | "name" | "username" | "bio" | "verified">[];
-//   themeBasis: string | null;
-//   markdownStrippedBio: string;
-//   safeBio: string;
-//   entity: {
-//     isUnpublished?: boolean;
-//     orgSlug?: string | null;
-//     name?: string | null;
-//   };
-//   eventTypes: ({
-//     descriptionAsSafeHTML: string;
-//     metadata: z.infer<typeof EventTypeMetaDataSchema>;
-//   } & Pick<
-//     EventType,
-//     | "id"
-//     | "title"
-//     | "slug"
-//     | "length"
-//     | "hidden"
-//     | "requiresConfirmation"
-//     | "requiresBookerEmailVerification"
-//     | "price"
-//     | "currency"
-//     | "recurringEvent"
-//   >)[];
-// } & EmbedProps;
-
-// export const getServerSideProps: GetServerSideProps<UserPageProps> = async (context) => {
-//   const ssr = await ssrInit(context);
-//   const { currentOrgDomain, isValidOrgDomain } = orgDomainConfig(
-//     context.req.headers.host ?? "",
-//     context.params?.orgSlug
-//   );
-//   const usernameList = getUsernameList(context.query.user as string);
-//   const dataFetchStart = Date.now();
-//   const usersWithoutAvatar = await prisma.user.findMany({
-//     where: {
-//       username: {
-//         in: usernameList,
-//       },
-//       organization: isValidOrgDomain && currentOrgDomain ? getSlugOrRequestedSlug(currentOrgDomain) : null,
-//     },
-//     select: {
-//       id: true,
-//       username: true,
-//       email: true,
-//       name: true,
-//       bio: true,
-//       brandColor: true,
-//       darkBrandColor: true,
-//       organizationId: true,
-//       organization: {
-//         select: {
-//           slug: true,
-//           name: true,
-//         },
-//       },
-//       theme: true,
-//       away: true,
-//       verified: true,
-//       allowDynamicBooking: true,
-//       allowSEOIndexing: true,
-//     },
-//   });
-
-//   const isDynamicGroup = usersWithoutAvatar.length > 1;
-//   if (isDynamicGroup) {
-//     return {
-//       redirect: {
-//         permanent: false,
-//         destination: `/${usernameList.join("+")}/dynamic`,
-//       },
-//     } as {
-//       redirect: {
-//         permanent: false;
-//         destination: string;
-//       };
-//     };
-//   }
-
-//   const users = usersWithoutAvatar.map((user) => ({
-//     ...user,
-//     avatar: `/${user.username}/avatar.png`,
-//   }));
-
-//   if (!users.length || (!isValidOrgDomain && !users.some((user) => user.organizationId === null))) {
-//     return {
-//       notFound: true,
-//     } as {
-//       notFound: true;
-//     };
-//   }
-
-//   const [user] = users; //to be used when dealing with single user, not dynamic group
-
-//   const profile = {
-//     name: user.name || user.username || "",
-//     image: user.avatar,
-//     theme: user.theme,
-//     brandColor: user.brandColor,
-//     darkBrandColor: user.darkBrandColor,
-//     organizationSlug: user.organization?.slug ?? null,
-//     allowSEOIndexing: user.allowSEOIndexing ?? true,
-//   };
-
-//   const eventTypesWithHidden = await getEventTypesWithHiddenFromDB(user.id);
-//   const dataFetchEnd = Date.now();
-//   if (context.query.log === "1") {
-//     context.res.setHeader("X-Data-Fetch-Time", `${dataFetchEnd - dataFetchStart}ms`);
-//   }
-//   const eventTypesRaw = eventTypesWithHidden.filter((evt) => !evt.hidden);
-
-//   const eventTypes = eventTypesRaw.map((eventType) => ({
-//     ...eventType,
-//     metadata: EventTypeMetaDataSchema.parse(eventType.metadata || {}),
-//     descriptionAsSafeHTML: markdownToSafeHTML(eventType.description),
-//   }));
-
-//   const safeBio = markdownToSafeHTML(user.bio) || "";
-
-//   const markdownStrippedBio = stripMarkdown(user?.bio || "");
-//   const org = usersWithoutAvatar[0].organization;
-
-//   return {
-//     props: {
-//       users: users.map((user) => ({
-//         name: user.name,
-//         username: user.username,
-//         bio: user.bio,
-//         away: user.away,
-//         verified: user.verified,
-//       })),
-//       entity: {
-//         isUnpublished: org?.slug === null,
-//         orgSlug: currentOrgDomain,
-//         name: org?.name ?? null,
-//       },
-//       eventTypes,
-//       safeBio,
-//       profile,
-//       // Dynamic group has no theme preference right now. It uses system theme.
-//       themeBasis: user.username,
-//       trpcState: ssr.dehydrate(),
-//       markdownStrippedBio,
-//     },
-//   };
-// };
-
-// export default UserPage;

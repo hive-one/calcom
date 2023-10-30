@@ -1,36 +1,55 @@
+import { Button as Xbutton } from "@shadcdn/ui";
 import { useRouter } from "next/navigation";
-import type { FormEvent } from "react";
 import { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 
 import OrganizationAvatar from "@calcom/features/ee/organizations/components/OrganizationAvatar";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { md } from "@calcom/lib/markdownIt";
-import { telemetryEventTypes, useTelemetry } from "@calcom/lib/telemetry";
+import { useTelemetry, telemetryEventTypes } from "@calcom/lib/telemetry";
 import turndown from "@calcom/lib/turndownService";
 import { trpc } from "@calcom/trpc/react";
-import { Button, Editor, ImageUploader, Label, showToast } from "@calcom/ui";
+import { Button, Editor, ImageUploader, Label, showToast, Select, Input } from "@calcom/ui";
 import { ArrowRight } from "@calcom/ui/components/icon";
+import { X, Plus } from "@calcom/ui/components/icon";
 
-type FormData = {
-  bio: string;
-};
+import { chargeOptions } from "@lib/firebase/constants";
 
 const UserProfile = () => {
   const [user] = trpc.viewer.me.useSuspenseQuery();
   const { t } = useLocale();
-  const avatarRef = useRef<HTMLInputElement>(null);
-  const { setValue, handleSubmit, getValues } = useForm<FormData>({
-    defaultValues: { bio: user?.bio || "" },
+  const avatarRef = useRef(null);
+  const {
+    setValue,
+    control,
+    register,
+    handleSubmit,
+    getValues,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      bio: user?.bio || "",
+      advises: user?.adviceOn ?? [""],
+      pricePerHour: user?.pricePerHour || 300,
+    },
+  });
+
+  const { fields, prepend, remove } = useFieldArray({
+    control,
+    name: "advises",
   });
 
   const { data: eventTypes } = trpc.viewer.eventTypes.list.useQuery();
-  const [imageSrc, setImageSrc] = useState<string>(user?.avatar || "");
+  const [imageSrc, setImageSrc] = useState(user?.avatar || "");
   const utils = trpc.useContext();
   const router = useRouter();
   const createEventType = trpc.viewer.eventTypes.create.useMutation();
   const telemetry = useTelemetry();
   const [firstRender, setFirstRender] = useState(true);
+
+  const linksMutation = trpc.viewer.updateLinks.useMutation({});
 
   const mutation = trpc.viewer.updateProfile.useMutation({
     onSuccess: async (_data, context) => {
@@ -51,29 +70,33 @@ const UserProfile = () => {
         }
 
         await utils.viewer.me.refetch();
-        router.push(
-          process.env.NODE_ENV === "production"
-            ? "https://borg.id/auth/login"
-            : "http://localhost:3001/auth/login"
-        );
+        router.push(`/${user?.username}`);
       }
     },
     onError: () => {
       showToast(t("problem_saving_user_profile"), "error");
     },
   });
-  const onSubmit = handleSubmit((data: { bio: string }) => {
-    const { bio } = data;
+  const onSubmit = handleSubmit((data) => {
+    if (!data?.advises?.length) {
+      setError("advises", { type: "custom", message: "This field is required" });
+      return;
+    }
+
+    const payload = {
+      bio: data?.bio,
+      adviceOn: data?.advises,
+      pricePerHour: data?.pricePerHour?.value,
+      completedOnboarding: true,
+    };
 
     telemetry.event(telemetryEventTypes.onboardingFinished);
 
-    mutation.mutate({
-      bio,
-      completedOnboarding: true,
-    });
+    mutation.mutate(payload);
+    linksMutation.mutate(data?.socialLinks);
   });
 
-  async function updateProfileHandler(event: FormEvent<HTMLFormElement>) {
+  async function updateProfileHandler(event) {
     event.preventDefault();
     const enteredAvatar = avatarRef.current?.value;
     mutation.mutate({
@@ -99,6 +122,12 @@ const UserProfile = () => {
       hidden: true,
     },
   ];
+
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 0,
+  });
 
   return (
     <form onSubmit={onSubmit}>
@@ -136,7 +165,7 @@ const UserProfile = () => {
               nativeInputValueSetter?.call(avatarRef.current, newAvatar);
               const ev2 = new Event("input", { bubbles: true });
               avatarRef.current?.dispatchEvent(ev2);
-              updateProfileHandler(ev2 as unknown as FormEvent<HTMLFormElement>);
+              updateProfileHandler(ev2);
               setImageSrc(newAvatar);
             }}
             imageSrc={imageSrc}
@@ -147,7 +176,7 @@ const UserProfile = () => {
         <Label className="text-default mb-2 block text-sm font-medium">{t("about")}</Label>
         <Editor
           getText={() => md.render(getValues("bio") || user?.bio || "")}
-          setText={(value: string) => setValue("bio", turndown(value))}
+          setText={(value) => setValue("bio", turndown(value))}
           excludedToolbarItems={["blockType"]}
           firstRender={firstRender}
           setFirstRender={setFirstRender}
@@ -156,6 +185,86 @@ const UserProfile = () => {
           {t("few_sentences_about_yourself")}
         </p>
       </fieldset>
+      <fieldset className="mb-3">
+        <Label className="mb-2 mt-8">Call charges</Label>
+        <Controller
+          control={control}
+          defaultValue={getValues("pricePerHour") || user?.pricePerHour || ""}
+          name="pricePerHour"
+          rules={{ required: true }}
+          render={({ field: { onChange, value } }) => (
+            <>
+              <Select
+                isSearchable={true}
+                className="mb-0 h-[38px] w-full capitalize md:min-w-[150px] md:max-w-[200px]"
+                defaultValue={{ label: formatter.format(value), value }}
+                onChange={onChange}
+                options={chargeOptions?.map((item) => ({
+                  label: formatter.format(item.value),
+                  value: item.value,
+                }))}
+              />
+            </>
+          )}
+        />
+        <p className="dark:text-inverted text-default mt-2 font-sans text-sm font-normal">
+          How much would you like to charge per hour?
+        </p>
+        {errors?.pricePerHour ? (
+          <p data-testid="required" className="text-xs text-red-500">
+            This field is required
+          </p>
+        ) : (
+          ""
+        )}
+      </fieldset>
+      {/* Things you can advise on */}
+      <div className="mt-8 w-full">
+        <div className="mb-2 flex items-center gap-x-2">
+          <Label className="mb-0" htmlFor="advises">
+            Things you can advise on
+          </Label>
+          <Xbutton
+            type="button"
+            size="sm"
+            className="h-auto px-2"
+            variant="outline"
+            onClick={() => {
+              prepend("");
+              clearErrors("advises");
+            }}>
+            <Plus size={12} className="mr-px" />
+            Add
+          </Xbutton>
+        </div>
+
+        <div className="flex flex-col gap-y-2">
+          {fields.map((item, index) => (
+            <section key={item.id} className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <Input
+                  className="border-default mb-0 w-full rounded-md border text-sm"
+                  placeholder="Enter your expertise"
+                  {...register(`advises.${index}`, {
+                    required: true,
+                  })}
+                />
+
+                <Xbutton variant="outline" onClick={() => remove(index)}>
+                  <X size={12} />
+                </Xbutton>
+              </div>
+            </section>
+          ))}
+          {errors?.advises?.length || errors?.advises?.message ? (
+            <p data-testid="required" className="text-xs text-red-500">
+              This field is required
+            </p>
+          ) : (
+            ""
+          )}
+        </div>
+      </div>
       <Button
         type="submit"
         className="text-inverted mt-8 flex w-full flex-row justify-center rounded-md border border-black bg-black p-2 text-center text-sm">

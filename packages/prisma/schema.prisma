@@ -249,6 +249,22 @@ model User {
   //linkedBy             User?                   @relation("linked_account", fields: [linkedByUserId], references: [id], onDelete: Cascade)
   //linkedUsers          User[]                  @relation("linked_account")*/
 
+  // Borg 
+  adviceOn      String[] @default([])
+  pricePerHour  Int?     @default(0)
+  priceCurrency String?  @default("usd")
+
+  socialLinks      SocialLink[]
+  facts            Fact[]
+  projects         Project[]
+  workExperiences  WorkExperience[]
+  publications     Publication[]
+  books            Book[]
+  podcasts         Podcast[]
+  podcastEpisodes  PodcastEpisode[]
+  videos           Video[]
+  mediaAppearances MediaAppearance[]
+
   @@unique([email])
   @@unique([email, username])
   @@unique([username, organizationId])
@@ -972,4 +988,227 @@ model CalendarCache {
 
   @@id([credentialId, key])
   @@unique([credentialId, key])
+}
+
+enum SocialLinkType {
+  FACEBOOK      @map("facebook")
+  TWITTER       @map("twitter")
+  INSTAGRAM     @map("instagram")
+  LINKEDIN      @map("linkedin")
+  YOUTUBE       @map("youtube")
+  GITHUB        @map("github")
+  MEDIUM        @map("medium")
+  DEVTO         @map("devto")
+  STACKEXCHANGE @map("stackexchange")
+  QUORA         @map("quora")
+  REDDIT        @map("reddit")
+  TWITCH        @map("twitch")
+  TIKTOK        @map("tiktok")
+  TELEGARM      @map("telegram")
+  DISCORD       @map("discord")
+  SLACK         @map("slack")
+  WHATSAPP      @map("whatsapp")
+  MASTODON      @map("mastodon")
+  SNAPCHAT      @map("snapchat")
+  PINTEREST     @map("pinterest")
+  TUMBLR        @map("tumblr")
+  VIMEO         @map("vimeo")
+  SOUNDCLOUD    @map("soundcloud")
+  SPOTIFY       @map("spotify")
+  APPLE_MUSIC   @map("apple_music")
+  BANDCAMP      @map("bandcamp")
+  BEHANCE       @map("behance")
+  DRIBBBLE      @map("dribbble")
+  FIVERR        @map("fiverr")
+  FLICKR        @map("flickr")
+  GUMROAD       @map("gumroad")
+  HACKERNEWS    @map("hackernews")
+  WEBSITE       @map("website")
+  UNSPLASH      @map("unsplash")
+  ANGELLIST     @map("angellist")
+  PRODUCTHUNT   @map("producthunt")
+  OTHER         @map("other")
+}
+
+model SocialLink {
+  id        Int            @id @default(autoincrement())
+  name      String
+  key       SocialLinkType
+  url       String
+  createdAt DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime       @updatedAt @db.Timestamptz(3)
+  userId    Int
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([url, userId])
+  @@index([userId])
+}
+
+model Fact {
+  id          Int      @id @default(autoincrement())
+  title       String
+  url         String
+  description String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([title, userId])
+  @@index([userId])
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  title       String
+  url         String
+  description String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([title, userId])
+  @@index([userId])
+}
+
+model Company {
+  id         Int      @id @default(autoincrement())
+  name       String
+  linkedInId String?
+  url        String?
+  createdAt  DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt  DateTime @updatedAt @db.Timestamptz(3)
+
+  workExperience WorkExperience[]
+
+  @@unique([name])
+  @@unique([linkedInId])
+}
+
+model WorkExperience {
+  id            Int      @id @default(autoincrement())
+  title         String
+  description   String?
+  startDay      Int?
+  startMonth    Int?
+  startYear     Int
+  isCurrentRole Boolean  @default(false)
+  endDay        Int?
+  endMonth      Int?
+  endYear       Int?
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(3)
+
+  companyId Int
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([companyId])
+}
+
+model Publication {
+  id          Int      @id @default(autoincrement())
+  title       String
+  url         String
+  description String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+
+  authors User[]
+
+  @@unique([title])
+  @@unique([url])
+}
+
+model Book {
+  isbn        String   @id
+  title       String
+  url         String
+  description String?
+  coverImage  String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+
+  authors User[]
+}
+
+model Podcast {
+  id          Int      @id @default(autoincrement())
+  title       String
+  url         String
+  description String?
+  coverImage  String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+
+  hosts            User[]
+  mediaAppearances MediaAppearance[]
+  podcastEpisodes  PodcastEpisode[]
+
+  @@unique([title])
+  @@unique([url])
+}
+
+model PodcastEpisode {
+  id          Int      @id @default(autoincrement())
+  title       String
+  url         String
+  description String?
+  coverImage  String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+
+  hosts            User[]
+  mediaAppearances MediaAppearance[]
+
+  podcastId Int
+  podcast   Podcast @relation(fields: [podcastId], references: [id], onDelete: Cascade)
+
+  @@unique([title])
+  @@unique([url])
+}
+
+model Video {
+  id          Int      @id @default(autoincrement())
+  title       String
+  url         String
+  description String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+
+  hosts            User[]
+  mediaAppearances MediaAppearance[]
+
+  @@unique([url])
+}
+
+model MediaAppearance {
+  id          Int      @id @default(autoincrement())
+  title       String
+  url         String
+  description String?
+  mediaType   String
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+
+  podcastId Int?
+  podcast   Podcast? @relation(fields: [podcastId], references: [id], onDelete: Cascade)
+
+  podcastEpisodeId Int?
+  podcastEpisode   PodcastEpisode? @relation(fields: [podcastEpisodeId], references: [id], onDelete: Cascade)
+
+  videoId Int?
+  video   Video? @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  guests User[]
+
+  @@unique([url])
+  @@index([podcastId])
+  @@index([videoId])
 }

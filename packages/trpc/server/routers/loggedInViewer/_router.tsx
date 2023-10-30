@@ -3,19 +3,46 @@ import { router } from "../../trpc";
 import { ZAppByIdInputSchema } from "./appById.schema";
 import { ZAppCredentialsByTypeInputSchema } from "./appCredentialsByType.schema";
 import { ZAwayInputSchema } from "./away.schema";
+import { ZBookAddSchema, ZBookUpdateSchema, ZBookRemoveSchema } from "./book.schema";
+import { ZCompanyAddSchema } from "./company.schema";
 import { ZConnectedCalendarsInputSchema } from "./connectedCalendars.schema";
 import { ZDeleteCredentialInputSchema } from "./deleteCredential.schema";
 import { ZDeleteMeInputSchema } from "./deleteMe.schema";
 import { ZEventTypeOrderInputSchema } from "./eventTypeOrder.schema";
+import { ZFactAddSchema, ZFactRemoveSchema, ZFactUpdateSchema } from "./fact.schema";
 import { ZGetCalVideoRecordingsInputSchema } from "./getCalVideoRecordings.schema";
 import { ZGetDownloadLinkOfCalVideoRecordingsInputSchema } from "./getDownloadLinkOfCalVideoRecordings.schema";
 import { ZIntegrationsInputSchema } from "./integrations.schema";
 import { ZLocationOptionsInputSchema } from "./locationOptions.schema";
+import {
+  ZMediaAppearanceAddSchema,
+  ZMediaAppearanceRemoveSchema,
+  ZMediaAppearanceUpdateSchema,
+} from "./mediaAppearance.schema";
+import { ZPodcastAddSchema, ZPodcastDeleteSchema, ZPodcastUpdateSchema } from "./podcast.schema";
+import { ZPodcastEpisodeAddSchema } from "./podcastEpisode.schema";
+import { ZProjectAddSchema, ZProjectUpdateSchema, ZProjectRemoveSchema } from "./project.schema";
+import {
+  ZPublicationAddSchema,
+  ZPublicationUpdateSchema,
+  ZPublicationRemoveSchema,
+} from "./publication.schema";
 import { ZRoutingFormOrderInputSchema } from "./routingFormOrder.schema";
 import { ZSetDestinationCalendarInputSchema } from "./setDestinationCalendar.schema";
+import {
+  ZSocialLinkInputSchema,
+  ZSocialLinkRemoveSchema,
+  ZSocialLinkUpdateSchema,
+} from "./socialLink.schema";
 import { ZSubmitFeedbackInputSchema } from "./submitFeedback.schema";
 import { ZUpdateProfileInputSchema } from "./updateProfile.schema";
 import { ZUpdateUserDefaultConferencingAppInputSchema } from "./updateUserDefaultConferencingApp.schema";
+import { ZVideoAddSchema, ZVideoUpdateSchema, ZVideoRemoveSchema } from "./video.schema";
+import {
+  ZWorkExperienceAddSchema,
+  ZWorkExperienceUpdateSchema,
+  ZWorkExperienceDeleteSchema,
+} from "./workExperience.schema";
 import { ZWorkflowOrderInputSchema } from "./workflowOrder.schema";
 
 type AppsRouterHandlerCache = {
@@ -44,6 +71,36 @@ type AppsRouterHandlerCache = {
   getUsersDefaultConferencingApp?: typeof import("./getUsersDefaultConferencingApp.handler").getUsersDefaultConferencingAppHandler;
   updateUserDefaultConferencingApp?: typeof import("./updateUserDefaultConferencingApp.handler").updateUserDefaultConferencingAppHandler;
   teamsAndUserProfilesQuery?: typeof import("./teamsAndUserProfilesQuery.handler").teamsAndUserProfilesQuery;
+  addSocialLink?: typeof import("./socialLink.handler").addSocialLinkHandler;
+  removeSocialLink?: typeof import("./socialLink.handler").removeSocialLinkHandler;
+  updateSocialLink?: typeof import("./socialLink.handler").updateSocialLinkHandler;
+  addFact?: typeof import("./fact.handler").addFactHandler;
+  updateFact?: typeof import("./fact.handler").updateFactHandler;
+  removeFact?: typeof import("./fact.handler").removeFactHandler;
+  addProject?: typeof import("./project.handler").addProjectHandler;
+  updateProject?: typeof import("./project.handler").updateProjectHandler;
+  removeProject?: typeof import("./project.handler").removeProjectHandler;
+  addWorkExperience?: typeof import("./workExperience.handler").addWorkExperienceHandler;
+  updateWorkExperience?: typeof import("./workExperience.handler").updateWorkExperienceHandler;
+  removeWorkExperience?: typeof import("./workExperience.handler").removeWorkExperienceHandler;
+  addCompany?: typeof import("./company.handler").addCompanyHandler;
+  addPublication?: typeof import("./publication.handler").addPublicationHandler;
+  updatePublication?: typeof import("./publication.handler").updatePublicationHandler;
+  removePublication?: typeof import("./publication.handler").removePublicationHandler;
+  addBook?: typeof import("./book.handler").addBookHandler;
+  updateBook?: typeof import("./book.handler").updateBookHandler;
+  removeBook?: typeof import("./book.handler").removeBookHandler;
+  addPodcast?: typeof import("./podcast.handler").addPodcastHandler;
+  updatePodcast?: typeof import("./podcast.handler").updatePodcastHandler;
+  removePodcast?: typeof import("./podcast.handler").removePodcastHandler;
+  addPodcastEp?: typeof import("./podcastEpisode.handler").addPodcastEpisodeHandler;
+  removePodcastEp?: typeof import("./podcastEpisode.handler").removePodcastEpisodeHandler;
+  addVideo?: typeof import("./video.handler").addVideoHandler;
+  updateVideo?: typeof import("./video.handler").updateVideoHandler;
+  removeVideo?: typeof import("./video.handler").removeVideoHandler;
+  addMediaAppearance?: typeof import("./mediaAppearance.handler").addMediaAppearanceHandler;
+  updateMediaAppearance?: typeof import("./mediaAppearance.handler").updateMediaAppearanceHandler;
+  removeMediaAppearance?: typeof import("./mediaAppearance.handler").removeMediaAppearanceHandler;
 };
 
 const UNSTABLE_HANDLER_CACHE: AppsRouterHandlerCache = {};
@@ -217,6 +274,432 @@ export const loggedInViewerRouter = router({
     }
 
     return UNSTABLE_HANDLER_CACHE.updateProfile({ ctx, input });
+  }),
+
+  addSocialLink: authedProcedure.input(ZSocialLinkInputSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addSocialLink) {
+      UNSTABLE_HANDLER_CACHE.addSocialLink = (await import("./socialLink.handler")).addSocialLinkHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addSocialLink) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addSocialLink({ ctx, input });
+  }),
+
+  removeSocialLink: authedProcedure.input(ZSocialLinkRemoveSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.removeSocialLink) {
+      UNSTABLE_HANDLER_CACHE.removeSocialLink = (
+        await import("./socialLink.handler")
+      ).removeSocialLinkHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.removeSocialLink) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.removeSocialLink({ ctx, input });
+  }),
+
+  updateSocialLink: authedProcedure.input(ZSocialLinkUpdateSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.updateSocialLink) {
+      UNSTABLE_HANDLER_CACHE.updateSocialLink = (
+        await import("./socialLink.handler")
+      ).updateSocialLinkHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.updateSocialLink) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.updateSocialLink({ ctx, input });
+  }),
+
+  addProject: authedProcedure.input(ZProjectAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addProject) {
+      UNSTABLE_HANDLER_CACHE.addProject = (await import("./project.handler")).addProjectHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addProject) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addProject({ ctx, input });
+  }),
+
+  updateProject: authedProcedure.input(ZProjectUpdateSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.updateProject) {
+      UNSTABLE_HANDLER_CACHE.updateProject = (await import("./project.handler")).updateProjectHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.updateProject) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.updateProject({ input });
+  }),
+
+  removeProject: authedProcedure.input(ZProjectRemoveSchema).mutation(async ({ input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.removeProject) {
+      UNSTABLE_HANDLER_CACHE.removeProject = (await import("./project.handler")).removeProjectHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.removeProject) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.removeProject({ input });
+  }),
+
+  addWorkExperience: authedProcedure.input(ZWorkExperienceAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addWorkExperience) {
+      UNSTABLE_HANDLER_CACHE.addWorkExperience = (
+        await import("./workExperience.handler")
+      ).addWorkExperienceHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addWorkExperience) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addWorkExperience({ ctx, input });
+  }),
+
+  updateWorkExperience: authedProcedure
+    .input(ZWorkExperienceUpdateSchema)
+    .mutation(async ({ ctx, input }) => {
+      if (!UNSTABLE_HANDLER_CACHE.updateWorkExperience) {
+        UNSTABLE_HANDLER_CACHE.updateWorkExperience = (
+          await import("./workExperience.handler")
+        ).updateWorkExperienceHandler;
+      }
+
+      // Unreachable code but required for type safety
+      if (!UNSTABLE_HANDLER_CACHE.updateWorkExperience) {
+        throw new Error("Failed to load handler");
+      }
+
+      return UNSTABLE_HANDLER_CACHE.updateWorkExperience({ input });
+    }),
+
+  removeWorkExperience: authedProcedure
+    .input(ZWorkExperienceDeleteSchema)
+    .mutation(async ({ ctx, input }) => {
+      if (!UNSTABLE_HANDLER_CACHE.removeWorkExperience) {
+        UNSTABLE_HANDLER_CACHE.removeWorkExperience = (
+          await import("./workExperience.handler")
+        ).removeWorkExperienceHandler;
+      }
+
+      // Unreachable code but required for type safety
+      if (!UNSTABLE_HANDLER_CACHE.removeWorkExperience) {
+        throw new Error("Failed to load handler");
+      }
+
+      return UNSTABLE_HANDLER_CACHE.removeWorkExperience({ ctx, input });
+    }),
+
+  addCompany: authedProcedure.input(ZCompanyAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addCompany) {
+      UNSTABLE_HANDLER_CACHE.addCompany = (await import("./company.handler")).addCompanyHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addCompany) {
+      throw new Error("Failed to load handler");
+    }
+
+    const res = await UNSTABLE_HANDLER_CACHE.addCompany({ ctx, input });
+    console.log("res", res);
+    return res;
+  }),
+
+  addPublication: authedProcedure.input(ZPublicationAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addPublication) {
+      UNSTABLE_HANDLER_CACHE.addPublication = (await import("./publication.handler")).addPublicationHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addPublication) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addPublication({ ctx, input });
+  }),
+
+  updatePublication: authedProcedure.input(ZPublicationUpdateSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.updatePublication) {
+      UNSTABLE_HANDLER_CACHE.updatePublication = (
+        await import("./publication.handler")
+      ).updatePublicationHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.updatePublication) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.updatePublication({ ctx, input });
+  }),
+
+  removePublication: authedProcedure.input(ZPublicationRemoveSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.removePublication) {
+      UNSTABLE_HANDLER_CACHE.removePublication = (
+        await import("./publication.handler")
+      ).removePublicationHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.removePublication) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.removePublication({ ctx, input });
+  }),
+
+  addBook: authedProcedure.input(ZBookAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addBook) {
+      UNSTABLE_HANDLER_CACHE.addBook = (await import("./book.handler")).addBookHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addBook) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addBook({ ctx, input });
+  }),
+
+  updateBook: authedProcedure.input(ZBookUpdateSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.updateBook) {
+      UNSTABLE_HANDLER_CACHE.updateBook = (await import("./book.handler")).updateBookHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.updateBook) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.updateBook({ input });
+  }),
+
+  removeBook: authedProcedure.input(ZBookRemoveSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.removeBook) {
+      UNSTABLE_HANDLER_CACHE.removeBook = (await import("./book.handler")).removeBookHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.removeBook) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.removeBook({ ctx, input });
+  }),
+
+  addPodcast: authedProcedure.input(ZPodcastAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addPodcast) {
+      UNSTABLE_HANDLER_CACHE.addPodcast = (await import("./podcast.handler")).addPodcastHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addPodcast) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addPodcast({ ctx, input });
+  }),
+
+  updatePodcast: authedProcedure.input(ZPodcastUpdateSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.updatePodcast) {
+      UNSTABLE_HANDLER_CACHE.updatePodcast = (await import("./podcast.handler")).updatePodcastHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.updatePodcast) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.updatePodcast({ input });
+  }),
+
+  removePodcast: authedProcedure.input(ZPodcastDeleteSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.removePodcast) {
+      UNSTABLE_HANDLER_CACHE.removePodcast = (await import("./podcast.handler")).removePodcastHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.removePodcast) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.removePodcast({ ctx, input });
+  }),
+
+  addPodcastEp: authedProcedure.input(ZPodcastEpisodeAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addPodcastEp) {
+      UNSTABLE_HANDLER_CACHE.addPodcastEp = (
+        await import("./podcastEpisode.handler")
+      ).addPodcastEpisodeHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addPodcastEp) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addPodcastEp({ ctx, input });
+  }),
+
+  removePodcastEp: authedProcedure.input(ZPodcastDeleteSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.removePodcastEp) {
+      UNSTABLE_HANDLER_CACHE.removePodcastEp = (
+        await import("./podcastEpisode.handler")
+      ).removePodcastEpisodeHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.removePodcastEp) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.removePodcastEp({ ctx, input });
+  }),
+
+  addVideo: authedProcedure.input(ZVideoAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addVideo) {
+      UNSTABLE_HANDLER_CACHE.addVideo = (await import("./video.handler")).addVideoHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addVideo) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addVideo({ ctx, input });
+  }),
+
+  updateVideo: authedProcedure.input(ZVideoUpdateSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.updateVideo) {
+      UNSTABLE_HANDLER_CACHE.updateVideo = (await import("./video.handler")).updateVideoHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.updateVideo) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.updateVideo({ input });
+  }),
+
+  removeVideo: authedProcedure.input(ZVideoRemoveSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.removeVideo) {
+      UNSTABLE_HANDLER_CACHE.removeVideo = (await import("./video.handler")).removeVideoHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.removeVideo) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.removeVideo({ ctx, input });
+  }),
+
+  addMediaAppearance: authedProcedure.input(ZMediaAppearanceAddSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addMediaAppearance) {
+      UNSTABLE_HANDLER_CACHE.addMediaAppearance = (
+        await import("./mediaAppearance.handler")
+      ).addMediaAppearanceHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addMediaAppearance) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.addMediaAppearance({ ctx, input });
+  }),
+
+  updateMediaAppearance: authedProcedure
+    .input(ZMediaAppearanceUpdateSchema)
+    .mutation(async ({ ctx, input }) => {
+      if (!UNSTABLE_HANDLER_CACHE.updateMediaAppearance) {
+        UNSTABLE_HANDLER_CACHE.updateMediaAppearance = (
+          await import("./mediaAppearance.handler")
+        ).updateMediaAppearanceHandler;
+      }
+
+      // Unreachable code but required for type safety
+      if (!UNSTABLE_HANDLER_CACHE.updateMediaAppearance) {
+        throw new Error("Failed to load handler");
+      }
+
+      return UNSTABLE_HANDLER_CACHE.updateMediaAppearance({ input });
+    }),
+
+  removeMediaAppearance: authedProcedure
+    .input(ZMediaAppearanceRemoveSchema)
+    .mutation(async ({ ctx, input }) => {
+      if (!UNSTABLE_HANDLER_CACHE.removeMediaAppearance) {
+        UNSTABLE_HANDLER_CACHE.removeMediaAppearance = (
+          await import("./mediaAppearance.handler")
+        ).removeMediaAppearanceHandler;
+      }
+
+      // Unreachable code but required for type safety
+      if (!UNSTABLE_HANDLER_CACHE.removeMediaAppearance) {
+        throw new Error("Failed to load handler");
+      }
+
+      return UNSTABLE_HANDLER_CACHE.removeMediaAppearance({ ctx, input });
+    }),
+
+  addFact: authedProcedure.input(ZFactAddSchema).mutation(async ({ input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.addFact) {
+      UNSTABLE_HANDLER_CACHE.addFact = (await import("./fact.handler")).addFactHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.addFact) {
+      throw new Error("Failed to load handler");
+    }
+
+    const res = await UNSTABLE_HANDLER_CACHE.addFact({ input });
+
+    return res;
+  }),
+
+  updateFact: authedProcedure.input(ZFactUpdateSchema).mutation(async ({ input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.updateFact) {
+      UNSTABLE_HANDLER_CACHE.updateFact = (await import("./fact.handler")).updateFactHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.updateFact) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.updateFact({ input });
+  }),
+
+  removeFact: authedProcedure.input(ZFactRemoveSchema).mutation(async ({ ctx, input }) => {
+    if (!UNSTABLE_HANDLER_CACHE.removeFact) {
+      UNSTABLE_HANDLER_CACHE.removeFact = (await import("./fact.handler")).removeFactHandler;
+    }
+
+    // Unreachable code but required for type safety
+    if (!UNSTABLE_HANDLER_CACHE.removeFact) {
+      throw new Error("Failed to load handler");
+    }
+
+    return UNSTABLE_HANDLER_CACHE.removeFact({ ctx, input });
   }),
 
   eventTypeOrder: authedProcedure.input(ZEventTypeOrderInputSchema).mutation(async ({ ctx, input }) => {

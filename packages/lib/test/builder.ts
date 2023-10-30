@@ -224,6 +224,9 @@ export const buildUser = <T extends Partial<UserPayload>>(user?: T): UserPayload
     organizationId: null,
     allowSEOIndexing: null,
     receiveMonthlyDigestEmail: null,
+    adviceOn: ["Crypto", "Stocks", "Options"],
+    pricePerHour: 200,
+    priceCurrency: "usd",
     ...user,
   };
 };
