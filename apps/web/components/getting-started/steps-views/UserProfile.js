@@ -32,7 +32,7 @@ const UserProfile = () => {
     defaultValues: {
       bio: user?.bio || "",
       advises: user?.adviceOn ?? [""],
-      pricePerHour: user?.pricePerHour || 300,
+      pricePerHour: user?.pricePerHour || 250,
     },
   });
 
@@ -86,9 +86,11 @@ const UserProfile = () => {
     const payload = {
       bio: data?.bio,
       adviceOn: data?.advises,
-      pricePerHour: data?.pricePerHour?.value,
+      pricePerHour: data?.pricePerHour,
       completedOnboarding: true,
     };
+
+    console.info({ payload });
 
     telemetry.event(telemetryEventTypes.onboardingFinished);
 
