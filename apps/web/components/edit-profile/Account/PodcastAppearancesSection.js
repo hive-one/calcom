@@ -21,6 +21,7 @@ const PodcastAppearancesSection = ({
               <div className="col-span-full">
                 <Label>Title</Label>
                 <Input
+                  placeholder="e.g State of the web 2021"
                   value={appearance.title}
                   onChange={(e) => {
                     const newAppearances = [...profile.mediaAppearances];
@@ -36,6 +37,7 @@ const PodcastAppearancesSection = ({
                 <Label>URL</Label>
                 <Input
                   type="url"
+                  placeholder="https://yoursite.com/podcast-appearences"
                   value={appearance.url}
                   onChange={(e) => {
                     const newAppearances = [...profile.mediaAppearances];

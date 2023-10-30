@@ -7,7 +7,8 @@ import {
   linkedinPublicationsTransformer,
 } from "@ui/utilities/utils";
 import { useState } from "react";
-import toast from "react-hot-toast";
+
+import { showToast } from "@calcom/ui";
 
 import FormBlock from "./FormBlock";
 
@@ -24,7 +25,7 @@ const handleSubmit = async (url, setLoading, setLinkedinData) => {
     setLoading(false);
   } catch (error) {
     console.log(error);
-    toast.error("Something went wrong 😕");
+    showToast("Something went wrong 😕");
   }
 };
 
@@ -48,7 +49,7 @@ const LinkedinImporter = ({ setProfile }) => {
     };
     console.log(newProfile);
     setProfile((prev) => ({ ...prev, ...newProfile }));
-    toast.success("Profile filled successfully, dont forget to save it");
+    showToast("Profile filled successfully, dont forget to save it");
   }
 
   return (

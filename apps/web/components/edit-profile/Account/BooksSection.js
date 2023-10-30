@@ -17,6 +17,7 @@ const BooksSection = ({ profile, setProfile, addBook, removeBook }) => {
                 <Label>ISBN</Label>
                 <Input
                   label="ISBN"
+                  placeholder="Enter book's ISBN e.g 9780471696483"
                   value={book.isbn}
                   onChange={(e) => {
                     const newBook = profile?.books?.length ? [...profile.books] : [];

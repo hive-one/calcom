@@ -55,38 +55,38 @@ export const linkedinExperienceTransformer = (roles) => {
   Object.entries(groupedRoles).forEach(([id, entry]) => {
     const key = entry[0];
     experience.push({
-      name: key?.org_name,
-      url: key?.org_url,
+      name: key?.org_name ?? "",
+      url: key?.org_url ?? "",
       description: "",
       roles: [
         {
-          description: key?.role_description || "",
+          description: key?.role_description ?? "",
           startMonth: parseInt(key?.role_start_date?.split("-")[1]),
           startYear: parseInt(key?.role_start_date?.split("-")[0]),
           startDay: 1,
-          endDay: key?.role_end_date ? "01" : null,
+          endDay: key?.role_end_date ? 1 : null,
           endMonth: key.role_end_date ? parseInt(key.role_end_date.split("-")[1]) : null,
           endYear: key.role_end_date ? parseInt(key.role_end_date.split("-")[0]) : null,
-          title: key?.role_job_title,
+          title: key?.role_job_title ?? "",
           isCurrentRole: key.role_end_date ? false : true,
         },
       ],
     });
 
     workExperiences.push({
-      title: key?.role_job_title,
-      description: key?.role_description || "",
+      title: key?.role_job_title ?? "",
+      description: key?.role_description ?? "",
       startMonth: parseInt(key?.role_start_date?.split("-")[1]),
       startYear: parseInt(key?.role_start_date?.split("-")[0]),
       startDay: 1,
-      endDay: key?.role_end_date ? "01" : null,
+      endDay: key?.role_end_date ? 1 : null,
       endMonth: key?.role_end_date ? parseInt(key.role_end_date.split("-")[1]) : null,
       endYear: key?.role_end_date ? parseInt(key.role_end_date.split("-")[0]) : null,
       isCurrentRole: key.role_end_date ? false : true,
       company: {
-        name: key?.org_name,
-        linkedInId: key?.id,
-        url: key?.org_url,
+        name: key?.org_name ?? "",
+        linkedInId: key?.id ?? "",
+        url: key?.org_url ?? "",
       },
     });
   });
