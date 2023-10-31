@@ -81,6 +81,10 @@ const LinksSection = ({ links }) => {
 };
 
 const ProfilePage = ({ user, userEvents, userSession }) => {
+  if (!user) {
+    return <div>User not found</div>;
+  }
+
   const profileData = JSON.parse(user);
   const eventTypes = JSON.parse(userEvents);
   const session = userSession ? JSON.parse(userSession) : null;
@@ -411,7 +415,13 @@ export const getServerSideProps = async (context) => {
   });
 
   if (!user) {
-    throw new Error("User from session not found");
+    return {
+      props: {
+        user: false,
+        userEvents: [],
+        userSession: null,
+      },
+    };
   }
 
   return {

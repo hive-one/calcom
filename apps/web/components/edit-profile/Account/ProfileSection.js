@@ -1,13 +1,20 @@
-import { Input } from "@shadcdn/ui/input";
-import { Label } from "@shadcdn/ui/label";
+import { Input, Label } from "@shadcdn/ui";
 import { useState } from "react";
 
 import OrganizationAvatar from "@calcom/features/ee/organizations/components/OrganizationAvatar";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { md } from "@calcom/lib/markdownIt";
-import { ImageUploader, Editor } from "@calcom/ui";
+import { ImageUploader, Editor, Select } from "@calcom/ui";
+
+import { chargeOptions } from "@lib/firebase/constants";
 
 import FormBlock from "./FormBlock";
+
+const formatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 0,
+});
 
 const ProfileSection = ({ profile, setProfile, updateAvatar, avatarRef }) => {
   const { t } = useLocale();
@@ -30,6 +37,7 @@ const ProfileSection = ({ profile, setProfile, updateAvatar, avatarRef }) => {
           <Label>Write a bio about yourself</Label>
           <div className="mt-2">
             <Editor
+              height="200px"
               getText={() => md.render(profile?.bio || "")}
               setText={(value) => {
                 setProfile({ ...profile, bio: value });
@@ -40,6 +48,22 @@ const ProfileSection = ({ profile, setProfile, updateAvatar, avatarRef }) => {
             />
           </div>
         </div>
+        <fieldset className="mb-3">
+          <Label className="mb-2 mt-10">Call charges</Label>
+          <Select
+            isSearchable={true}
+            className="mb-0 mt-2 h-[38px] w-full capitalize md:min-w-[150px] md:max-w-[200px]"
+            defaultValue={{ label: formatter.format(profile?.pricePerHour), value: profile?.pricePerHour }}
+            onChange={(e) => setProfile((prev) => ({ ...prev, pricePerHour: e.value }))}
+            options={chargeOptions?.map((item) => ({
+              label: formatter.format(item.value),
+              value: item.value,
+            }))}
+          />
+          <p className="dark:text-inverted text-default mt-2 font-sans text-sm font-normal">
+            How much would you like to charge per hour?
+          </p>
+        </fieldset>
         <input
           ref={avatarRef}
           type="hidden"
