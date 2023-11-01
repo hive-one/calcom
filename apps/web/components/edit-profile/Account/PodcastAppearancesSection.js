@@ -21,6 +21,7 @@ const PodcastAppearancesSection = ({
               <div className="col-span-full">
                 <Label>Title</Label>
                 <Input
+                  required
                   placeholder="e.g State of the web 2021"
                   value={appearance.title}
                   onChange={(e) => {
