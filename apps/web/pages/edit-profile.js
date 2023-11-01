@@ -102,7 +102,7 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-    setProfile((prev) => ({ ...prev, experience: transformExpForUI(profile) }));
+    setProfile((prev) => ({ ...prev, experience: transformExpForUI(user) }));
   }, [user]);
 
   const mutation = trpc.viewer.updateProfile.useMutation({
@@ -722,7 +722,7 @@ const EditProfile = () => {
         <div className="my-5 md:my-20">
           <Container width="960px" className="">
             <div className="grid items-start md:grid-cols-[200px_1fr] md:gap-12">
-              <div className="flex h-[calc(100vh-200px)] max-w-full flex-row flex-nowrap gap-2 overflow-scroll whitespace-nowrap md:sticky md:top-[100px] md:flex-col md:gap-1 md:whitespace-normal">
+              <div className="flex h-[calc(100vh-100px)] max-w-full flex-row flex-nowrap gap-2 overflow-scroll whitespace-nowrap md:sticky md:top-[100px] md:flex-col md:gap-1 md:whitespace-normal">
                 {SETTINGS?.map((item) => (
                   <div key={item?.value} className="pb-3 md:w-full md:pb-0">
                     <Button
@@ -811,7 +811,6 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       trpcState: ssr.dehydrate(),
-      user: JSON.stringify(user),
     },
   };
 };

@@ -1,4 +1,7 @@
 import { Microphone } from "@phosphor-icons/react";
+import Link from "next/link";
+
+import ExternalLinkIcon from "../../ui/icons/external-link-icon";
 
 const PodcastItem = ({ podcast }) => {
   return (
@@ -18,8 +21,12 @@ const PodcastItem = ({ podcast }) => {
             </div>
           )}
         </div>
-        <div className="flex-col justify-between space-y-3 sm:flex sm:space-y-0">
+        <div className="flex-col space-y-3 sm:flex sm:space-y-0">
           <p className="font-semibold">{podcast?.title}</p>
+          <Link href={podcast?.url || "/"} className="mt-2 text-sm text-gray-400 hover:underline">
+            link
+            <ExternalLinkIcon className="mt-0.5 inline-block align-top text-gray-300" />
+          </Link>
           {/* <p className="text-gray-500">Recent episodes:</p>
           {podcast?.episodes?.length > 0 &&
             podcast?.episodes.map((episode, i) => (

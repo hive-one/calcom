@@ -68,7 +68,7 @@ const LinkedinImporter = ({ setProfile }) => {
             className={!isValidLinkedInUrl(linkedinUrl) && "cursor-not-allowed opacity-50"}
             loading={loading}
             onClick={() => handleSubmit(linkedinUrl, setLoading, setLinkedinData)}>
-            Start Importing
+            Fetch profile
           </Button>
         </div>
         <br />
@@ -76,10 +76,10 @@ const LinkedinImporter = ({ setProfile }) => {
         {linkedinData && linkedinData?.name && (
           <div className="mt-4">
             <p className="mb-4 font-mono text-sm">
-              ✅ Linkeding profile data available, click the button below to prefill the form.
+              ✅ LinkedIn profile data available, click the button below to prefill the form.
             </p>
             <Button type="button" variant="primary" onClick={startAutoFill}>
-              Confirm and Save
+              Add LinkedIn Data to Profile
             </Button>
           </div>
         )}
