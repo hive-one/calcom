@@ -30,6 +30,7 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
               <div className="sm:col-span-3">
                 <Label>Company/Institution</Label>
                 <Input
+                  required
                   value={company.name}
                   onChange={(e) => {
                     const newExperience = profile.experience;
@@ -71,6 +72,7 @@ const Experience = ({ profile, setProfile, addExperience, removeExperience, remo
                     <div className="sm:col-span-3">
                       <Label>Role/Title</Label>
                       <Input
+                        required
                         label="Role/Title"
                         value={role.title}
                         onChange={(e) => {

@@ -16,6 +16,7 @@ const VideosSection = ({ profile, setProfile, addVideo, removeVideo }) => {
               <div className="col-span-full">
                 <Label>Title</Label>
                 <Input
+                  required
                   value={video.title}
                   placeholder="Enter video title"
                   onChange={(e) => {
@@ -31,6 +32,7 @@ const VideosSection = ({ profile, setProfile, addVideo, removeVideo }) => {
               <div className="col-span-2">
                 <Label>URL</Label>
                 <Input
+                  required
                   value={video.url}
                   placeholder="e.g https://youtube.com/watch?v=1234"
                   onChange={(e) => {

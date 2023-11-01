@@ -16,6 +16,7 @@ const ProjectsSection = ({ profile, setProfile, addProject, removeProject }) => 
               <div className="sm:col-span-3">
                 <Label>Title</Label>
                 <Input
+                  required
                   placeholder="e.g Social media app for private circles"
                   value={project.title}
                   onChange={(e) => {

@@ -16,6 +16,7 @@ const BooksSection = ({ profile, setProfile, addBook, removeBook }) => {
               <div className="col-span-2">
                 <Label>ISBN</Label>
                 <Input
+                  required
                   label="ISBN"
                   placeholder="Enter book's ISBN e.g 9780471696483"
                   value={book.isbn}
