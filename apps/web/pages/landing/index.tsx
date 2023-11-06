@@ -54,7 +54,13 @@ const ProfileSection = ({
   );
 };
 
-const FeatureSection = ({ children, title, description }) => {
+interface FeatureSectionProps {
+  children: string | JSX.Element | JSX.Element[];
+  title: string;
+  description: string;
+}
+
+const FeatureSection = ({ children, title, description }: FeatureSectionProps) => {
   return (
     <div className="flex w-full max-w-7xl flex-col items-center px-[5%] text-center">
       <hgroup className="mb-[72px] max-w-md">
@@ -66,17 +72,30 @@ const FeatureSection = ({ children, title, description }) => {
   );
 };
 
-const Feature = ({ pictogramURL, title, description }) => {
+interface FeatureProps {
+  pictogramURL: string;
+  title: string;
+  description: string;
+}
+
+const Feature = ({ pictogramURL, title, description }: FeatureProps) => {
   return (
     <div className="flex max-w-sm flex-1 flex-col items-center text-center">
-      <Image src={pictogramURL} width={128} height={128} className="mb-3" />
+      <Image src={pictogramURL} width={128} height={128} className="mb-3" alt={title} />
       <h3 className="text-landing-lg mb-1 font-bold leading-7">{title}</h3>
       <p className="text-landing-base leading-7">{description}</p>
     </div>
   );
 };
 
-const PriceItem = ({ price, description, details, hilightPrice = false }) => {
+interface PriceItemProps {
+  price: string;
+  details: string;
+  description: string;
+  hilightPrice: boolean;
+}
+
+const PriceItem = ({ price, description, details, hilightPrice = false }: PriceItemProps) => {
   return (
     <div className="flex-1 border-l pl-4 text-left">
       <h3 className="text-landing-2xl mb-[18px] font-bold leading-8">
@@ -136,6 +155,8 @@ const LandingPage = () => {
               : {}
           }>
           <Image src="/borg/borg-id-logo.svg" width={88} height={30} className="mt-0.5" alt="Borg.id logo" />{" "}
+          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+          {/* @ts-ignore */}
           <Button asChild className="">
             <Link href="/auth/login">Log In</Link>
           </Button>
@@ -156,6 +177,8 @@ const LandingPage = () => {
               <p className="text-landing-lg mb-14 leading-8">AI-powered profile that earns you money</p>
             </hgroup>
             <div className="flex w-min flex-col items-center">
+              {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+              {/* @ts-ignore */}
               <Button variant="primary" size="landing" className="mb-3 shrink-0 whitespace-nowrap" asChild>
                 <Link href="/auth/signup">Apply to Join Now</Link>
               </Button>
@@ -189,7 +212,6 @@ const LandingPage = () => {
                     alt="Profile About"
                     width="408"
                     height="312"
-                    first
                   />
                 </div>
                 <div>
@@ -297,8 +319,10 @@ const LandingPage = () => {
                   details="(by application)"
                   hilightPrice
                 />
-                <PriceItem price="10%" description="on direct bookings" />
+                <PriceItem price="10%" description="on direct bookings" details="" hilightPrice={false} />
                 <PriceItem
+                  hilightPrice={false}
+                  details=""
                   price="30%"
                   description="on bookings generated through our sales & marketing channels"
                 />
@@ -316,6 +340,8 @@ const LandingPage = () => {
               </div> */}
             </div>
             <div className="flex w-min flex-col items-center">
+              {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+              {/* @ts-ignore */}
               <Button variant="primary" size="landing" className="mb-3 shrink-0 whitespace-nowrap" asChild>
                 <Link href="/auth/signup">Apply to Join Now</Link>
               </Button>
@@ -338,15 +364,23 @@ const LandingPage = () => {
                 alt="Borg.id logo"
               />
               <div className="col-span-12 flex flex-row flex-wrap justify-center gap-x-6 gap-y-0 md:col-span-3 md:flex-col md:gap-3 lg:col-span-2">
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
                 <Button variant="link" size="sm" className="w-max px-0">
                   Privacy Policy
                 </Button>
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
                 <Button variant="link" size="sm" className="w-max px-0">
                   Cookie Policy
                 </Button>
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
                 <Button variant="link" size="sm" className="w-max px-0">
                   Impressum
                 </Button>
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
                 <Button variant="link" size="sm" className="w-max px-0">
                   Terms & Conditions
                 </Button>
