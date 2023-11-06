@@ -2,6 +2,7 @@ import { Button } from "@shadcdn/ui";
 import { cx } from "class-variance-authority";
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Envelope, Twitter } from "react-bootstrap-icons";
 
@@ -135,7 +136,9 @@ const LandingPage = () => {
               : {}
           }>
           <Image src="/borg/borg-id-logo.svg" width={88} height={30} className="mt-0.5" alt="Borg.id logo" />{" "}
-          <Button className="">Log In</Button>
+          <Button asChild className="">
+            <Link href="/auth/login">Log In</Link>
+          </Button>
         </header>
         <main className="flex w-full flex-col items-center">
           {/* Hero */}
@@ -153,8 +156,8 @@ const LandingPage = () => {
               <p className="text-landing-lg mb-14 leading-8">AI-powered profile that earns you money</p>
             </hgroup>
             <div className="flex w-min flex-col items-center">
-              <Button variant="primary" size="landing" className="mb-3 shrink-0 whitespace-nowrap">
-                Apply to Join Now
+              <Button variant="primary" size="landing" className="mb-3 shrink-0 whitespace-nowrap" asChild>
+                <Link href="/auth/signup">Apply to Join Now</Link>
               </Button>
               <div className="text-landing-sm w-full text-center">
                 Create a profile and get paid for your time
@@ -313,8 +316,8 @@ const LandingPage = () => {
               </div> */}
             </div>
             <div className="flex w-min flex-col items-center">
-              <Button variant="primary" size="landing" className="mb-3 shrink-0 whitespace-nowrap">
-                Apply to Join Now
+              <Button variant="primary" size="landing" className="mb-3 shrink-0 whitespace-nowrap" asChild>
+                <Link href="/auth/signup">Apply to Join Now</Link>
               </Button>
               <div className="text-landing-sm w-full text-center">
                 Create a profile and get paid for your time
