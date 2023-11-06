@@ -16,6 +16,8 @@ const FactsSection = ({ profile, setProfile, addFact, removeFact }) => {
               <div className="sm:col-span-3">
                 <Label>Title</Label>
                 <Input
+                  placeHolder="e.g Published 500+ tech articles on Medium"
+                  required
                   value={fact.title}
                   onChange={(e) => {
                     const newFacts = [...profile.facts];
@@ -27,6 +29,7 @@ const FactsSection = ({ profile, setProfile, addFact, removeFact }) => {
               <div className="sm:col-span-3">
                 <Label>URL</Label>
                 <Input
+                  placeHolder="https://yoursite.com/articles"
                   type="url"
                   value={fact.url}
                   onChange={(e) => {

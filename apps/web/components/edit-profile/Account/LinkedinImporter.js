@@ -7,7 +7,8 @@ import {
   linkedinPublicationsTransformer,
 } from "@ui/utilities/utils";
 import { useState } from "react";
-import toast from "react-hot-toast";
+
+import { showToast } from "@calcom/ui";
 
 import FormBlock from "./FormBlock";
 
@@ -24,7 +25,7 @@ const handleSubmit = async (url, setLoading, setLinkedinData) => {
     setLoading(false);
   } catch (error) {
     console.log(error);
-    toast.error("Something went wrong 😕");
+    showToast("Something went wrong 😕");
   }
 };
 
@@ -37,7 +38,10 @@ const LinkedinImporter = ({ setProfile }) => {
     const newProfile = {
       name: linkedinData.name,
       bio: linkedinData.description,
-      workExperiences: linkedinData.roles ? linkedinExperienceTransformer(linkedinData.roles) : [],
+      workExperiences: linkedinData.roles
+        ? linkedinExperienceTransformer(linkedinData.roles)?.workExperiences
+        : [],
+      experience: linkedinData.roles ? linkedinExperienceTransformer(linkedinData.roles)?.experience : [],
       projects: linkedinData.projects ? linkedinProjectsTransformer(linkedinData.projects) : [],
       publications: linkedinData.publications
         ? linkedinPublicationsTransformer(linkedinData.publications)
@@ -45,7 +49,7 @@ const LinkedinImporter = ({ setProfile }) => {
     };
     console.log(newProfile);
     setProfile((prev) => ({ ...prev, ...newProfile }));
-    toast.success("Profile filled successfully, dont forget to save it");
+    showToast("Profile filled successfully, dont forget to save it");
   }
 
   return (
@@ -64,7 +68,7 @@ const LinkedinImporter = ({ setProfile }) => {
             className={!isValidLinkedInUrl(linkedinUrl) && "cursor-not-allowed opacity-50"}
             loading={loading}
             onClick={() => handleSubmit(linkedinUrl, setLoading, setLinkedinData)}>
-            Start Importing
+            Fetch profile
           </Button>
         </div>
         <br />
@@ -72,10 +76,10 @@ const LinkedinImporter = ({ setProfile }) => {
         {linkedinData && linkedinData?.name && (
           <div className="mt-4">
             <p className="mb-4 font-mono text-sm">
-              ✅ Linkeding profile data available, click the button below to prefill the form.
+              ✅ LinkedIn profile data available, click the button below to prefill the form.
             </p>
             <Button type="button" variant="primary" onClick={startAutoFill}>
-              Confirm and Save
+              Add LinkedIn Data to Profile
             </Button>
           </div>
         )}

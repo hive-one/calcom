@@ -40,36 +40,58 @@ export const extractUserNameFromLinkedinUrl = (url) => {
   return null;
 };
 
+const groupBy = function (xs, key) {
+  return xs.reduce(function (rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});
+};
+
 export const linkedinExperienceTransformer = (roles) => {
-  const transformedData = [];
-  const companies = {};
+  let experience = [],
+    workExperiences = [];
+  const groupedRoles = roles?.length ? groupBy(roles, "org_id") : [];
 
-  for (const role of roles) {
-    if (role.org_id && role.org_type !== "school") {
-      if (!companies[role.org_id]) {
-        companies[role.org_id] = {
-          company: role.org_name ?? "",
-          url: role.org_url ?? "",
-          roles: [],
-        };
-      }
+  Object.entries(groupedRoles).forEach(([id, entry]) => {
+    const key = entry[0];
+    experience.push({
+      name: key?.org_name ?? "",
+      url: key?.org_url ?? "",
+      description: "",
+      roles: [
+        {
+          description: key?.role_description ?? "",
+          startMonth: parseInt(key?.role_start_date?.split("-")[1]),
+          startYear: parseInt(key?.role_start_date?.split("-")[0]),
+          startDay: 1,
+          endDay: key?.role_end_date ? 1 : null,
+          endMonth: key.role_end_date ? parseInt(key.role_end_date.split("-")[1]) : null,
+          endYear: key.role_end_date ? parseInt(key.role_end_date.split("-")[0]) : null,
+          title: key?.role_job_title ?? "",
+          isCurrentRole: key.role_end_date ? false : true,
+        },
+      ],
+    });
 
-      const formattedRole = {
-        title: role.role_job_title ?? "",
-        start_date: role.role_start_date,
-        end_date: role.role_end_date === null ? "Present" : role.role_end_date,
-        description: role.role_description ?? "",
-      };
+    workExperiences.push({
+      title: key?.role_job_title ?? "",
+      description: key?.role_description ?? "",
+      startMonth: parseInt(key?.role_start_date?.split("-")[1]),
+      startYear: parseInt(key?.role_start_date?.split("-")[0]),
+      startDay: 1,
+      endDay: key?.role_end_date ? 1 : null,
+      endMonth: key?.role_end_date ? parseInt(key.role_end_date.split("-")[1]) : null,
+      endYear: key?.role_end_date ? parseInt(key.role_end_date.split("-")[0]) : null,
+      isCurrentRole: key.role_end_date ? false : true,
+      company: {
+        name: key?.org_name ?? "",
+        linkedInId: key?.id ?? "",
+        url: key?.org_url ?? "",
+      },
+    });
+  });
 
-      companies[role.org_id].roles.push(formattedRole);
-    }
-  }
-
-  for (const companyId in companies) {
-    transformedData.push(companies[companyId]);
-  }
-
-  return transformedData;
+  return { experience, workExperiences };
 };
 
 export const linkedinProjectsTransformer = (projects) => {

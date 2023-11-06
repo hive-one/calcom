@@ -22,7 +22,7 @@ function ExperienceItem({ experience, className }) {
               "-" +
               formatDate(experience.startYear)}{" "}
             –{" "}
-            {experience.end_date === "Present"
+            {experience.isCurrentRole
               ? "Present"
               : formatDate(experience.endDay) +
                 "-" +

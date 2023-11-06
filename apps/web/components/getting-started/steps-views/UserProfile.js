@@ -32,7 +32,7 @@ const UserProfile = () => {
     defaultValues: {
       bio: user?.bio || "",
       advises: user?.adviceOn ?? [""],
-      pricePerHour: user?.pricePerHour || 300,
+      pricePerHour: user?.pricePerHour || 250,
     },
   });
 
@@ -48,8 +48,6 @@ const UserProfile = () => {
   const createEventType = trpc.viewer.eventTypes.create.useMutation();
   const telemetry = useTelemetry();
   const [firstRender, setFirstRender] = useState(true);
-
-  const linksMutation = trpc.viewer.updateLinks.useMutation({});
 
   const mutation = trpc.viewer.updateProfile.useMutation({
     onSuccess: async (_data, context) => {
@@ -90,10 +88,11 @@ const UserProfile = () => {
       completedOnboarding: true,
     };
 
+    console.info({ payload });
+
     telemetry.event(telemetryEventTypes.onboardingFinished);
 
     mutation.mutate(payload);
-    linksMutation.mutate(data?.socialLinks);
   });
 
   async function updateProfileHandler(event) {
@@ -243,6 +242,7 @@ const UserProfile = () => {
             <section key={item.id} className="flex flex-col">
               <div className="flex items-center gap-2">
                 <Input
+                  autoFocus
                   className="border-default mb-0 w-full rounded-md border text-sm"
                   placeholder="Enter your expertise"
                   {...register(`advises.${index}`, {

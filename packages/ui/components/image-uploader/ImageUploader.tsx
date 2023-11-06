@@ -127,8 +127,6 @@ export default function ImageUploader({
     method: "readAsDataURL",
   });
 
-  console.log("imageSrc", props.imageSrc);
-
   useEffect(() => {
     if (props.imageSrc) setImageSrc(props.imageSrc);
   }, [props.imageSrc]);
