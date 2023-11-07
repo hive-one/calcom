@@ -5,7 +5,7 @@ import Footer from "@components/shared/footer";
 import Header from "@components/shared/header";
 
 const Impressum = () => (
-  <div className="">
+  <div className="min-h-screen bg-white">
     <NextSeo title="Impressum - Borg.id" />
     <Header />
     <div className="mx-auto w-full max-w-[800px] pt-48">
@@ -23,6 +23,7 @@ const Impressum = () => (
                 Collective GmbH represented by its responsible Managing Director (Geschäftsführer) Maciej
                 Laskus.
               </p>
+              <br />
               <p>Contact details:</p>
               <span>Borg Collective GmbH</span>
               <br />
@@ -58,6 +59,7 @@ const Impressum = () => (
               <br />
               <br />
             </li>
+            <br />
             <li>
               <p>
                 <strong>Online Dispute Resolution.</strong>
@@ -69,6 +71,7 @@ const Impressum = () => (
                 process.
               </p>
             </li>
+            <br />
             <li>
               <p>
                 <strong>Liability For Contents.</strong>
@@ -81,6 +84,7 @@ const Impressum = () => (
                 any damages of any material or notional nature caused by making use of the service, unless
                 this can be shown to have been caused by deliberate intent or gross negligence.
               </p>
+              <br />
               <p>
                 The laws, regulations and directives which might in certain cases be published in this
                 Internet offer have been compiled with care, however no claim is made to their being fully up
@@ -88,12 +92,14 @@ const Impressum = () => (
                 publication organs (in particular the Bulletin of the Federal State of North Rhine-Westphalia,
                 Official Gazette).
               </p>
+              <br />
               <p>
                 This Internet offer makes reference to numerous offers on the Internet. The contents of the
                 linked pages are created by, among other bodies, companies and institutions over which Borg
                 Collective GmbH has no influence. Borg Collective GmbH does not claim the contents contained
                 in these as its own. Absolutely no liability is accepted for third-party offers.
               </p>
+              <br />
               <p>
                 If in respect of the pages of this Internet offer or pages to which reference is made, you
                 should identify dubious or illegal content, Borg Collective GmbH would be grateful if you
@@ -102,6 +108,7 @@ const Impressum = () => (
                 any specific notice. The temporary suspension or definitive termination of publication is also
                 possible without notice.
               </p>
+              <br />
               <p>
                 In accordance with § 7 Para. 1 of the Telemedia Act, Borg Collective GmbH is responsible for
                 its own content in this site under the general legal regulations. Under the terms of §§ 8 to
@@ -115,6 +122,7 @@ const Impressum = () => (
                 immediately.
               </p>
             </li>
+            <br />
             <li>
               <p>
                 <strong>Copyright And Rights Of Use.</strong>
@@ -129,6 +137,7 @@ const Impressum = () => (
                 and eliminate the breach of law.
               </p>
             </li>
+            <br />
             <li>
               <p>
                 <strong>Data Protection Conditions.</strong>
@@ -140,6 +149,7 @@ const Impressum = () => (
                 by Borg Collective GmbH.
               </p>
             </li>
+            <br />
             <li>
               <p>
                 <strong>Data Storage.</strong>
@@ -155,6 +165,7 @@ const Impressum = () => (
                 elements on HTML pages (JavaScript, ActiveX, etc.).
               </p>
             </li>
+            <br />
             <li>
               <p>
                 <strong>Data Transmission.</strong>

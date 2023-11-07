@@ -5,8 +5,8 @@ import Footer from "@components/shared/footer";
 import Header from "@components/shared/header";
 
 const ZoomSupport = () => (
-  <div className="">
-    <NextSeo title="Impressum - Borg.id" />
+  <div className="min-h-screen bg-white">
+    <NextSeo title="Zoom Support - Borg.id" />
     <Header />
     <div className="mx-auto w-full max-w-[800px] pt-48">
       <div>

@@ -169,7 +169,7 @@ const EditProfile = () => {
 
       if (socialLink?.id) {
         updateSocialLinkMutation.mutate(socialLinkData);
-      } else {
+      } else if (socialLink?.url) {
         addSocialLinkMutation.mutate(socialLinkData);
       }
     });
@@ -184,7 +184,7 @@ const EditProfile = () => {
 
       if (fact?.id) {
         updateFactMutation.mutate(factsData);
-      } else {
+      } else if (fact?.title) {
         addFactMutation.mutate(factsData);
       }
     });
@@ -198,7 +198,7 @@ const EditProfile = () => {
 
       if (project?.id) {
         updateProjectMutation.mutate(projectData);
-      } else {
+      } else if (project?.title) {
         addProjectMutation.mutate(projectData);
       }
     });
@@ -225,7 +225,7 @@ const EditProfile = () => {
 
       if (pub?.id) {
         updatePublicationMutation.mutate(pubData);
-      } else {
+      } else if (pub?.title) {
         addPublicationMutation.mutate(pubData);
       }
     });
@@ -239,7 +239,7 @@ const EditProfile = () => {
       if (book?.createdAt) {
         removeBookMutation.mutate({ isbn: book.isbn });
         addBookMutation.mutate(bookData);
-      } else {
+      } else if (book?.isbn) {
         addBookMutation.mutate(bookData);
       }
     });
@@ -256,7 +256,7 @@ const EditProfile = () => {
       };
       if (app?.id) {
         updateMediaAppearenceMutation.mutate(appData);
-      } else {
+      } else if (app?.title) {
         addMediaAppearenceMutation.mutate(appData);
       }
     });
@@ -270,7 +270,7 @@ const EditProfile = () => {
 
       if (podData?.id) {
         updatePodcastMutation.mutate({ ...podData, id: podData.id });
-      } else {
+      } else if (pod?.title) {
         addPodcastMutation.mutate(podData);
       }
     });

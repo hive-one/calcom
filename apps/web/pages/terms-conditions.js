@@ -6,7 +6,7 @@ import Footer from "@components/shared/footer";
 import Header from "@components/shared/header";
 
 const TermsConditions = () => (
-  <div className="">
+  <div className="min-h-screen bg-white">
     <NextSeo title="Terms & Conditions - Borg.id" />
     <Header />
     <div className="mx-auto w-full max-w-[800px] pt-48">
