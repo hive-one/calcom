@@ -4,11 +4,12 @@ import type { StaticImageData } from "next/image";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Envelope, Twitter } from "react-bootstrap-icons";
 
 import { HeadSeo } from "@calcom/ui";
 
 import PageWrapper from "@components/PageWrapper";
+import Footer from "@components/shared/footer";
+import Header from "@components/shared/header";
 
 // For some reason, tailwind JIT doesn't work with dynamic classes
 // if they are generated in a function
@@ -142,25 +143,7 @@ const LandingPage = () => {
       />
       <div className="flex w-full flex-col items-center bg-white font-sans">
         {/* Header */}
-        <header
-          className="fixed flex w-full max-w-7xl items-start justify-between px-[5%] pb-6 pt-6"
-          style={
-            isScrolled
-              ? {
-                  background: "rgba(255,255,255,0.92)",
-                  maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 35%, 50%, rgba(0,0,0,0))",
-                  WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 35%, 50%, rgba(0,0,0,0))",
-                  backdropFilter: "blur(5px)",
-                }
-              : {}
-          }>
-          <Image src="/borg/borg-id-logo.svg" width={88} height={30} className="mt-0.5" alt="Borg.id logo" />{" "}
-          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-          {/* @ts-ignore */}
-          <Button asChild className="">
-            <Link href="/auth/login">Log In</Link>
-          </Button>
-        </header>
+        <Header isScrolled={isScrolled} />
         <main className="flex w-full flex-col items-center">
           {/* Hero */}
           <div
@@ -352,46 +335,7 @@ const LandingPage = () => {
           </div>
 
           {/* Footer */}
-          <footer className="flex w-full max-w-7xl flex-col gap-10 px-[5%] pb-4 pt-10 md:gap-6 md:pt-14">
-            <div
-              className="grid w-full grid-flow-dense gap-y-10 md:gap-y-0"
-              style={{ gridTemplateColumns: "repeat(12, minmax(0, 1fr))" }}>
-              <Image
-                src="/borg/borg-id-logo.svg"
-                width={88}
-                height={30}
-                className="col-span-6 md:col-span-7 lg:col-span-9"
-                alt="Borg.id logo"
-              />
-              <div className="col-span-12 flex flex-row flex-wrap justify-center gap-x-6 gap-y-0 md:col-span-3 md:flex-col md:gap-3 lg:col-span-2">
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-ignore */}
-                <Button variant="link" size="sm" className="w-max px-0">
-                  Privacy Policy
-                </Button>
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-ignore */}
-                <Button variant="link" size="sm" className="w-max px-0">
-                  Cookie Policy
-                </Button>
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-ignore */}
-                <Button variant="link" size="sm" className="w-max px-0">
-                  Impressum
-                </Button>
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-ignore */}
-                <Button variant="link" size="sm" className="w-max px-0">
-                  Terms & Conditions
-                </Button>
-              </div>
-              <div className="col-span-6 flex h-9 items-center justify-end gap-6 md:col-span-2 lg:col-span-1">
-                <Twitter size={16} />
-                <Envelope size={16} />
-              </div>
-            </div>
-            <div className="text-landing-xs">Copyright © 2023 Borg Collective GmbH. All rights reserved.</div>
-          </footer>
+          <Footer />
         </main>
       </div>
     </>

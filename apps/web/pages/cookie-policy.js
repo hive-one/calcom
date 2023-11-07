@@ -6,7 +6,7 @@ import Footer from "@components/shared/footer";
 import Header from "@components/shared/header";
 
 const CookiePolicy = () => (
-  <div cla>
+  <div className="min-h-screen bg-white">
     <NextSeo title="Cookie Policy - Borg.id" />
     <Header />
     <div className="mx-auto w-full max-w-[800px] pt-48">
