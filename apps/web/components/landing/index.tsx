@@ -114,7 +114,7 @@ const PriceItem = ({ price, description, details, hilightPrice = false }: PriceI
   );
 };
 
-const LandingPage = () => {
+const LandingPage = ({ session }: any) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   // If the user scrolls, we set the isScrolled state to true
@@ -143,7 +143,7 @@ const LandingPage = () => {
       />
       <div className="flex w-full flex-col items-center bg-white font-sans">
         {/* Header */}
-        <Header isScrolled={isScrolled} />
+        <Header session={session} isScrolled={isScrolled} />
         <main className="flex w-full flex-col items-center">
           {/* Hero */}
           <div
@@ -163,7 +163,7 @@ const LandingPage = () => {
               {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
               {/* @ts-ignore */}
               <Button variant="primary" size="landing" className="mb-3 shrink-0 whitespace-nowrap" asChild>
-                <Link href="/auth/signup">Apply to Join Now</Link>
+                <Link href="/signup">Join Now</Link>
               </Button>
               <div className="text-landing-sm w-full text-center">
                 Create a profile and get paid for your time
@@ -326,7 +326,7 @@ const LandingPage = () => {
               {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
               {/* @ts-ignore */}
               <Button variant="primary" size="landing" className="mb-3 shrink-0 whitespace-nowrap" asChild>
-                <Link href="/auth/signup">Apply to Join Now</Link>
+                <Link href="/signup">Join Now</Link>
               </Button>
               <div className="text-landing-sm w-full text-center">
                 Create a profile and get paid for your time

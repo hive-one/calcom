@@ -174,6 +174,7 @@ const UserProfile = () => {
       <fieldset className="mt-8">
         <Label className="text-default mb-2 block text-sm font-medium">{t("about")}</Label>
         <Editor
+          height="150px"
           getText={() => md.render(getValues("bio") || user?.bio || "")}
           setText={(value) => setValue("bio", turndown(value))}
           excludedToolbarItems={["blockType"]}
