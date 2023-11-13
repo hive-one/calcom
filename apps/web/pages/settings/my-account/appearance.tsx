@@ -5,7 +5,6 @@ import type { z } from "zod";
 import { BookerLayoutSelector } from "@calcom/features/settings/BookerLayoutSelector";
 import ThemeLabel from "@calcom/features/settings/ThemeLabel";
 import { getLayout } from "@calcom/features/settings/layouts/SettingsLayout";
-import { APP_NAME } from "@calcom/lib/constants";
 import { checkWCAGContrastColor } from "@calcom/lib/getBrandColours";
 import { useHasPaidPlan } from "@calcom/lib/hooks/useHasPaidPlan";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
@@ -22,8 +21,6 @@ import {
   SkeletonButton,
   SkeletonContainer,
   SkeletonText,
-  Switch,
-  UpgradeTeamsBadge,
 } from "@calcom/ui";
 
 import PageWrapper from "@components/PageWrapper";
@@ -235,7 +232,7 @@ const AppearanceView = () => {
         onClick={() => window.open(`${WEBAPP_URL}/${user.username}/${user.eventTypes[0].title}`, "_blank")}>
         Preview
       </Button> */}
-      <hr className="border-subtle my-8 border" />
+      {/* <hr className="border-subtle my-8 border" />
       <Controller
         name="hideBranding"
         control={formMethods.control}
@@ -265,7 +262,7 @@ const AppearanceView = () => {
             </div>
           </>
         )}
-      />
+      /> */}
       <Button
         disabled={isDisabled}
         type="submit"

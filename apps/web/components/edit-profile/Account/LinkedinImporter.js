@@ -29,7 +29,7 @@ const handleSubmit = async (url, setLoading, setLinkedinData) => {
   }
 };
 
-const LinkedinImporter = ({ setProfile }) => {
+const LinkedinImporter = ({ profile, setProfile }) => {
   const [loading, setLoading] = useState(false);
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [linkedinData, setLinkedinData] = useState(null);
@@ -41,7 +41,10 @@ const LinkedinImporter = ({ setProfile }) => {
       workExperiences: linkedinData.roles
         ? linkedinExperienceTransformer(linkedinData.roles)?.workExperiences
         : [],
-      experience: linkedinData.roles ? linkedinExperienceTransformer(linkedinData.roles)?.experience : [],
+      experience: linkedinData.roles
+        ? linkedinExperienceTransformer({ roles: linkedinData.roles, existingExp: profile?.workExperiences })
+            ?.experience
+        : [],
       projects: linkedinData.projects ? linkedinProjectsTransformer(linkedinData.projects) : [],
       publications: linkedinData.publications
         ? linkedinPublicationsTransformer(linkedinData.publications)

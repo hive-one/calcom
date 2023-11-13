@@ -47,13 +47,19 @@ const groupBy = function (xs, key) {
   }, {});
 };
 
-export const linkedinExperienceTransformer = (roles) => {
+export const linkedinExperienceTransformer = ({ roles, existingExp }) => {
   let experience = [],
     workExperiences = [];
   const groupedRoles = roles?.length ? groupBy(roles, "org_id") : [];
 
   Object.entries(groupedRoles).forEach(([id, entry]) => {
     const key = entry[0];
+
+    // Don't overwrite existing experience
+    if (existingExp?.some((exp) => exp?.company?.name?.toLowerCase()?.includes(key?.org_name))) return;
+    if (existingExp?.some((exp) => key?.org_name?.toLowerCase()?.includes(exp?.company?.name))) return;
+    if (existingExp?.some((exp) => exp?.startYear == parseInt(key?.role_start_date?.split("-")[0]))) return;
+
     experience.push({
       name: key?.org_name ?? "",
       url: key?.org_url ?? "",
