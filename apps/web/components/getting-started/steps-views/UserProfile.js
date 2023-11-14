@@ -84,7 +84,7 @@ const UserProfile = () => {
     const payload = {
       bio: data?.bio,
       adviceOn: data?.advises,
-      pricePerHour: data?.pricePerHour?.value,
+      pricePerHour: data?.pricePerHour?.value || data?.pricePerHour,
       completedOnboarding: true,
     };
 
