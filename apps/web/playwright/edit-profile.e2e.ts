@@ -192,4 +192,17 @@ test.describe.only("Edit Profile", () => {
     await expect(page.locator('[src="https://img.youtube.com/vi/ZEcqHA7dbwM/hqdefault.jpg"]')).toBeVisible();
     await page.locator(`[href="https://www.youtube.com/watch?v=ZEcqHA7dbwM"]`).click();
   });
+
+  test("import linkedin data", async ({ page }) => {
+    await page.locator('[class^="pb-3"] button').locator("nth=11").click();
+    await page.locator("form input").fill("https://linkedin.com/in/danishabdullah");
+    await page.locator("input+div button").click();
+    await page.getByText("Add LinkedIn Data to Profile").click();
+    await page.locator('[class^="sticky bottom"] button').click();
+    await page.locator('[class^="sticky bottom"] a').click();
+    await page.waitForSelector(`[id="name"]`);
+    await expect(page.locator('[id="role"]')).toHaveText("Chief Technology Officer");
+    await expect(page.locator('[id="company"]')).toHaveText("Borg Collective GmbH");
+    await expect(page.getByText("Experience")).toBeVisible();
+  });
 });
