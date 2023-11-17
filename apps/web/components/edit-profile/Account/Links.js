@@ -19,9 +19,9 @@ import {
 } from "react-bootstrap-icons";
 
 import { trpc } from "@calcom/trpc/react";
+import { Form } from "@calcom/ui";
 
 import EmptyState from "./EmptyState";
-import FormBlock from "./FormBlock";
 
 const linkTypes = [
   {
@@ -108,6 +108,30 @@ const linkTypes = [
 ];
 
 const LinkSection = ({ profile, setProfile }) => {
+  const [user] = trpc.viewer.me.useSuspenseQuery();
+  console.log("user", user);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    showToast("Changes saved", "success");
+
+    links?.map((socialLink) => {
+      const now = new Date();
+      const socialLinkData = {
+        ...socialLink,
+        userId: user?.id,
+        updatedAt: now,
+      };
+
+      if (socialLink?.id) {
+        updateSocialLinkMutation.mutate(socialLinkData);
+      } else if (socialLink?.url) {
+        addSocialLinkMutation.mutate(socialLinkData);
+      }
+    });
+  };
+
   const handleLinkTypeChange = (e, i) => {
     const newLinks = [...profile.socialLinks];
     newLinks[i].key = e.target.value;
@@ -151,13 +175,12 @@ const LinkSection = ({ profile, setProfile }) => {
   };
 
   if (!profile?.socialLinks) {
-    return ``;
+    return <Form>Henlo</Form>;
   }
 
   return (
-    <FormBlock
-      title="Add your links"
-      description="Add your social media or some other links you want to show on your profile.">
+    <div>
+      Henlo World
       {!profile?.socialLinks ||
         (profile?.socialLinks?.length === 0 && <EmptyState label="Add some links and get started." />)}
       <div className="space-y-4 divide-y">
@@ -209,7 +232,7 @@ const LinkSection = ({ profile, setProfile }) => {
           Add link
         </Button>
       </div>
-    </FormBlock>
+    </div>
   );
 };
 
