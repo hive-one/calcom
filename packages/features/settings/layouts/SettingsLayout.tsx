@@ -46,6 +46,7 @@ const tabs: VerticalTabItemProps[] = [
       { name: "Advice", href: "/settings/profile/advice" },
       { name: "Projects", href: "/settings/profile/projects" },
       { name: "Experience", href: "/settings/profile/experience" },
+      { name: "Publications", href: "/settings/profile/publications" },
       // TODO
       // { name: "referrals", href: "/settings/my-account/referrals" },
     ],
