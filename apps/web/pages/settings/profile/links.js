@@ -267,8 +267,8 @@ const GeneralView = ({ user }) => {
                     />
                   </div>
                   <div className="col-span-full">
-                    <Button type="button" variant="icon">
-                      <X className="h-5 w-5" onClick={() => removeLink({ i, id: link.id })} />
+                    <Button type="button" variant="icon" onClick={() => removeLink({ i, id: link.id })}>
+                      <X className="h-5 w-5" />
                     </Button>
                   </div>
                 </div>
