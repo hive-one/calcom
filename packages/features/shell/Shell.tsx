@@ -582,7 +582,7 @@ const navigation: NavigationItemType[] = [
   // },
   {
     name: "Edit Profile",
-    href: "/edit-profile",
+    href: "/settings/my-account/general",
     icon: Edit,
   },
 ];

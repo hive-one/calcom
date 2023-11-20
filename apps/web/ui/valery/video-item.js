@@ -37,7 +37,7 @@ function VideoItem({ video, className }) {
               getYtCoverImage(video?.url) ||
               `https://i.vimeocdn.com/video/499134794-0e30b7b4f310669590490d68c546fe9a4c00f2a16a66579bfb7cff3451fd3ea3-d`
             }
-            alt="Book Cover"
+            alt={video?.title || "Book Cover"}
             className="relative h-full w-full rounded-lg object-cover md:max-w-full"
           />
           {/* TODO: when we have view count - change view count to the appropriate variable */}

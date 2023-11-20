@@ -192,7 +192,7 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
         <div className="flex items-center gap-2">
           {isLoggedInUser ? (
             <Button variant="outline" size="sm" asChild>
-              <Link href="/edit-profile">Edit profile</Link>
+              <Link href="/settings/my-account/general">Edit profile</Link>
             </Button>
           ) : (
             ""

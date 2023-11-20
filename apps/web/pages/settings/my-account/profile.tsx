@@ -441,6 +441,7 @@ const ProfileForm = ({
       <div className="mt-8">
         <Label>{t("about")}</Label>
         <Editor
+          height="220px"
           getText={() => md.render(formMethods.getValues("bio") || "")}
           setText={(value: string) => {
             formMethods.setValue("bio", turndown(value), { shouldDirty: true });
