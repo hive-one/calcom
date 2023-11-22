@@ -66,7 +66,6 @@ import {
   MoreHorizontal,
   Settings,
   User as UserIcon,
-  Edit,
 } from "@calcom/ui/components/icon";
 import { IS_VISUAL_REGRESSION_TESTING } from "@calcom/web/constants";
 
@@ -580,11 +579,6 @@ const navigation: NavigationItemType[] = [
   //   href: "/insights",
   //   icon: BarChart,
   // },
-  {
-    name: "Edit Profile",
-    href: "/settings/my-account/general",
-    icon: Edit,
-  },
 ];
 
 const moreSeparatorIndex = navigation.findIndex((item) => item.name === MORE_SEPARATOR_NAME);
