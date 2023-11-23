@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import classNames from "@calcom/lib/classNames";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc/react";
@@ -12,6 +14,7 @@ interface ConnectedAppStepProps {
 }
 
 const ConnectedVideoStep = (props: ConnectedAppStepProps) => {
+  const [hasDefaultConferenceApp, setHasDefaultConferenceApp] = useState(false);
   const { nextStep } = props;
   const { data: queryConnectedVideoApps, isLoading } = trpc.viewer.integrations.useQuery({
     variant: "conferencing",
@@ -23,8 +26,28 @@ const ConnectedVideoStep = (props: ConnectedAppStepProps) => {
   const hasAnyInstalledVideoApps = queryConnectedVideoApps?.items.some(
     (item) => item.userCredentialIds.length > 0
   );
+  const defaultConferencingApp = trpc.viewer.getUsersDefaultConferencingApp.useQuery();
+  const updateDefaultAppMutation = trpc.viewer.updateUserDefaultConferencingApp.useMutation();
 
   const showConferencingApps = ["google-meet", "zoom"];
+
+  const setDefaultConferenceApp = () => {
+    queryConnectedVideoApps?.items?.map((item: any) => {
+      if (showConferencingApps.includes(item.slug) && item?.isInstalled) {
+        updateDefaultAppMutation.mutate({
+          appSlug: item.slug,
+        });
+
+        setHasDefaultConferenceApp(true);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (!hasDefaultConferenceApp) {
+      setDefaultConferenceApp();
+    }
+  }, [defaultConferencingApp, showConferencingApps]);
 
   return (
     <>
