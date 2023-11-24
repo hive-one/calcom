@@ -11,7 +11,7 @@ export const credentialForCalendarServiceSelect = Prisma.validator<Prisma.Creden
     },
   },
   teamId: true,
-  key: true,
+  // key: true,
   invalid: true,
 });
 
