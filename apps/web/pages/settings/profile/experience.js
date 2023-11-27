@@ -111,7 +111,10 @@ const GeneralView = ({ user }) => {
   };
 
   useEffect(() => {
-    setData((prev) => ({ ...prev, experience: transformExpForUI(user) }));
+    setData((prev) => ({
+      ...prev,
+      experience: prev?.experience?.length ? prev.experience : transformExpForUI(user),
+    }));
   }, [user]);
 
   const onSave = (e) => {
