@@ -125,12 +125,12 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
           description: `${profileData?.bio ? userPlainTextBio : `${profileData?.name} profile on Borg.id`}`,
           images: [
             {
-              url: `${process.env.NEXT_PUBLIC_APP_URL}/api/og?p=${encodeURIComponent(userPhoto())}&n=${
+              url: `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/og?id=${encodeURIComponent(userPhoto())}&n=${
                 profileData?.name
-              }&w=${encodeURIComponent(profileData?.company)}&r=${encodeURIComponent(
-                profileData?.role
-              )}&t=${encodeURIComponent(profileData?.advice_on)}`,
-              // url: `${process.env.NEXT_PUBLIC_APP_URL}/api/og?profileID=${profileID}`,
+              }&w=${encodeURIComponent(currentCompany)}&r=${encodeURIComponent(
+                currentRole
+              )}&t=${encodeURIComponent(profileData?.adviceOn)}`,
+              // url: `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/og?profileID=${profileData?.username}`,
               width: 1200,
               height: 630,
             },

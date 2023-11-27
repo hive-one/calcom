@@ -98,6 +98,7 @@
     "@tiptap/pm": "^2.1.11",
     "@tiptap/react": "^2.1.11",
     "@tiptap/starter-kit": "^2.1.11",
+    "@vercel/og": "^0.5.20",
     "city-timezones": "^1.2.1",
     "eslint": "^8.34.0",
     "lucide-react": "^0.171.0",
