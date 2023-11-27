@@ -125,9 +125,9 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
           description: `${profileData?.bio ? userPlainTextBio : `${profileData?.name} profile on Borg.id`}`,
           images: [
             {
-              url: `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/og?id=${encodeURIComponent(userPhoto())}&n=${
-                profileData?.name
-              }&w=${encodeURIComponent(currentCompany)}&r=${encodeURIComponent(
+              url: `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/og?id=${encodeURIComponent(
+                `https://api.dicebear.com/7.x/shapes/svg?seed=${profileData.uid}`
+              )}&n=${profileData?.name}&w=${encodeURIComponent(currentCompany)}&r=${encodeURIComponent(
                 currentRole
               )}&t=${encodeURIComponent(profileData?.adviceOn)}`,
               // url: `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/og?profileID=${profileData?.username}`,
