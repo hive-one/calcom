@@ -125,8 +125,8 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
           description: `${profileData?.bio ? userPlainTextBio : `${profileData?.name} profile on Borg.id`}`,
           images: [
             {
-              url: `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/og?id=${encodeURIComponent(
-                `https://api.dicebear.com/7.x/shapes/svg?seed=${profileData.uid}`
+              url: `${process.env.NEXT_PUBLIC_WEBAPP_URL}/api/og?username=${encodeURIComponent(
+                profileData?.username
               )}&n=${profileData?.name}&w=${encodeURIComponent(currentCompany)}&r=${encodeURIComponent(
                 currentRole
               )}&t=${encodeURIComponent(profileData?.adviceOn)}`,
