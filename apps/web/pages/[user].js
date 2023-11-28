@@ -100,10 +100,7 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
     return `https://api.dicebear.com/7.x/shapes/svg?seed=${profileData.uid}`;
   };
 
-  const userPlainTextBio =
-    profileData?.bio?.content?.length && profileData?.bio?.content[0]?.content
-      ? profileData.bio.content[0].content.map((item) => item?.text ?? "").join("")
-      : "";
+  const userPlainTextBio = profileData?.bio?.length ? profileData.bio.slice(0, 300) : "";
 
   const isLoggedInUser = profileData?.id === session?.user?.id;
 

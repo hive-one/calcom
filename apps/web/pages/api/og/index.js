@@ -101,7 +101,7 @@ export default async function handler(request) {
                   justifyContent: "center",
                 }}>
                 <img
-                  src={`/${username}/avatar.png`}
+                  src={`${process.env.NEXT_PUBLIC_WEBAPP_URL}/${username}/avatar.png`}
                   style={{ borderRadius: "100%" }}
                   width="170"
                   height="170"
