@@ -48,14 +48,14 @@ export default async function handler(request) {
 
   try {
     const { searchParams } = new URL(request.url);
-    const profileID = searchParams.get("profileID");
+    const username = searchParams.get("username");
     const photo = searchParams.get("p");
     const name = searchParams.get("n");
     const talks = searchParams.get("t");
     const role = searchParams.get("r");
     const company = searchParams.get("c");
     const advice_on = talks.split(",");
-    console.log({ profileID, photo, name, advice_on, role, company });
+    console.log({ username, photo, name, advice_on, role, company });
 
     return new ImageResponse(
       (
@@ -100,28 +100,12 @@ export default async function handler(request) {
                   alignItems: "center",
                   justifyContent: "center",
                 }}>
-                {photo ? (
-                  <img
-                    src={`https://firebasestorage.googleapis.com/v0/b/${
-                      request?.url?.includes("next.borg.id") || request?.url?.includes("localhost")
-                        ? "borg-id-staging.appspot.com/o"
-                        : "borgcloud.appspot.com/o"
-                    }/avatars${photo}`}
-                    style={{ borderRadius: "100%" }}
-                  />
-                ) : (
-                  <div
-                    style={{
-                      display: "flex",
-                      fontWeight: "bold",
-                      fontSize: "48px",
-                    }}>
-                    {name
-                      ?.split(" ")
-                      ?.map((n) => n[0])
-                      ?.join(".")}
-                  </div>
-                )}
+                <img
+                  src={`/${username}/avatar.png`}
+                  style={{ borderRadius: "100%" }}
+                  width="170"
+                  height="170"
+                />
               </div>
               <div
                 style={{
