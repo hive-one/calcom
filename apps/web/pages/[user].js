@@ -188,9 +188,14 @@ const ProfilePage = ({ user, userEvents, userSession }) => {
 
         <div className="flex items-center gap-2">
           {isLoggedInUser ? (
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/settings/my-account/general">Edit profile</Link>
-            </Button>
+            <div className="flex items-center gap-3 ">
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/settings/my-account/general">Edit profile</Link>
+              </Button>
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/bookings/upcoming">Your bookings</Link>
+              </Button>
+            </div>
           ) : (
             ""
           )}
